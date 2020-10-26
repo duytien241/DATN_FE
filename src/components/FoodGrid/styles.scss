@@ -1,0 +1,13 @@
+.FoodGrid {
+  display: flex;
+  flex-wrap: wrap;
+  .cards {
+    justify-content: center;
+    margin: 0 !important;
+    padding: 10px;
+
+    a {
+      margin: 5px;
+    }
+  }
+}

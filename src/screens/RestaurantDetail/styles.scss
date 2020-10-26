@@ -1,0 +1,33 @@
+.RestaurantDetail {
+  min-width: 1200px;
+
+  .Content {
+    margin: 5px 10px;
+    padding: 10px;
+    border: 1px solid gray;
+  }
+
+  .Menu {
+    display: flex;
+    .ui.sidebar {
+      position: relative;
+      background: #f5f5f5 !important;
+
+      height: auto !important;
+
+      .item {
+        color: #000 !important;
+        font-weight: bold;
+        border: 1px solid #e2e5de;
+
+        &:nth-child(even) {
+          border-bottom: none;
+        }
+      }
+    }
+
+    .RelativeFood {
+      width: 100%;
+    }
+  }
+}

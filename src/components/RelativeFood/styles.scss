@@ -1,0 +1,90 @@
+.FoodItem {
+  display: flex;
+
+  .Image {
+    width: 80px;
+
+    img {
+      width: 100%;
+      border-radius: 5px;
+    }
+  }
+
+  .Info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding-left: 20px;
+    .General {
+      display: flex;
+      flex-direction: column;
+
+      .Name {
+        font-size: 18px;
+        font-weight: bold;
+      }
+
+      .Detail {
+        margin-top: 4px;
+        display: flex;
+        color: #888888;
+
+        > div {
+          &:first-child {
+            padding-right: 5px;
+            border-right: 1px solid #888888;
+
+            span {
+              color: #000;
+              font-weight: bold;
+            }
+          }
+
+          &:last-child {
+            margin-left: 5px;
+          }
+        }
+      }
+    }
+    .PriceAndOrder {
+      font-size: 18px;
+      display: flex;
+      color: #206b9b;
+
+      .Price {
+        margin-right: 10px;
+        font-weight: bold;
+      }
+      i {
+        font-size: 22px;
+        color: #cf2127;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.RelativeFood {
+  padding: 10px 100px;
+  background-color: #f5f5f5;
+  .FoodsAndOrder {
+    display: flex;
+    .OrderFood {
+      flex: 1;
+    }
+    .Foods {
+      flex: 2;
+      max-height: 300px;
+      overflow: auto;
+      .FoodItem {
+        &:nth-child(odd) {
+          background-color: #fbfbfb;
+        }
+        &:nth-child(even) {
+          background-color: #fff;
+        }
+      }
+    }
+  }
+}

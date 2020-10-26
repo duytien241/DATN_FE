@@ -1,0 +1,40 @@
+.Home {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  > div {
+    padding: 10px;
+
+    &:first-child {
+      padding: 0;
+    }
+
+    &:nth-child(2) {
+      .slick-slider .slick-track {
+        display: flex !important;
+        width: 100% !important;
+
+        .slick-slide {
+          margin: 10px;
+        }
+      }
+    }
+  }
+  .ShopCard {
+    width: 100%;
+    img {
+      height: 200px !important;
+    }
+    .description {
+      /* autoprefixer: off */
+      -webkit-box-orient: vertical;
+      /* autoprefixer: on */
+      display: block;
+      display: -webkit-box !important;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}

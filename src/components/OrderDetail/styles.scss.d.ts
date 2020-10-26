@@ -1,0 +1,20 @@
+declare const styles: {
+  readonly OrderDetail: string;
+  readonly Quantity: string;
+  readonly Food: string;
+  readonly Total: string;
+  readonly Note: string;
+  readonly Discount: string;
+  readonly DiscountCode: string;
+  readonly DiscountButton: string;
+  readonly PayMethod: string;
+  readonly Address: string;
+  readonly Order: string;
+  readonly DiscountDetail: string;
+  readonly Title: string;
+  readonly DiscountItem: string;
+  readonly Name: string;
+  readonly Value: string;
+  readonly Apply: string;
+};
+export = styles;

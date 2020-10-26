@@ -1,0 +1,18 @@
+.SectionHeader {
+  h3 {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+    color: #206b9b;
+
+    &:after {
+      content: '';
+      display: block;
+      height: 4px;
+      width: 30%;
+      background-color: #206b9b;
+    }
+  }
+
+  margin-bottom: 15px;
+}

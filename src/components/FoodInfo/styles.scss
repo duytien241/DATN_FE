@@ -1,0 +1,92 @@
+.FoodInfo {
+  padding: 50px 100px 100px 100px;
+
+  .FoodContent {
+    display: flex;
+  }
+  .Image {
+    flex: 2;
+    img {
+      width: 100%;
+      border-radius: 10px;
+    }
+  }
+
+  .Info {
+    flex: 3;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    h3 {
+      margin: 0;
+      margin-bottom: 0.5em;
+      font-size: 2.5em;
+    }
+    p {
+      margin: 0 0 0.5em 0;
+    }
+    .Rate {
+      display: flex;
+      margin-bottom: 0.3em;
+      .Stars {
+        color: #ffc107;
+      }
+      > div {
+        &:last-child {
+          span {
+            &:first-child {
+              background-color: #ffc107;
+              color: #fff;
+              padding: 3px;
+              border-radius: 3px;
+            }
+
+            &:last-child {
+              color: #000;
+            }
+          }
+        }
+      }
+    }
+
+    .OpenTime {
+      display: flex;
+      margin-bottom: 0.5em;
+      i {
+        color: #329900;
+      }
+      span {
+        color: #329900;
+      }
+    }
+
+    .Price {
+      margin-bottom: 0.5em;
+    }
+
+    .Describe {
+      border: 1px solid #000;
+      border-style: dashed;
+      height: 100%;
+      padding: 10px;
+    }
+
+    .Add {
+      position: absolute;
+      right: 0;
+      background-color: #206b9b;
+      border: none;
+      padding: 15px;
+      color: #fff;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 10px;
+
+      &:focus,
+      &:active {
+        outline: none;
+      }
+    }
+  }
+}

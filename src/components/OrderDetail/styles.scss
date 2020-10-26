@@ -1,0 +1,153 @@
+.OrderDetail {
+  > div {
+    margin: 10px 0;
+  }
+  .Quantity {
+    .Food {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      > div {
+        padding: 5px 0;
+        flex: 1;
+        span {
+          &:first-child {
+            padding: 0 5px;
+            background-color: #206b9b;
+            border-radius: 5px;
+            color: #fff;
+          }
+          &:last-child {
+            padding-left: 10px;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+
+  .Total,
+  .Note {
+    display: flex;
+    justify-content: space-between;
+    label {
+      flex: 1;
+    }
+    span {
+      flex: 1;
+    }
+  }
+
+  .Discount {
+    display: flex;
+    justify-content: space-between;
+    label {
+      flex: 1;
+    }
+    > div {
+      flex: 1;
+      color: gray;
+    }
+  }
+
+  .DiscountCode {
+    display: flex;
+    justify-content: space-between;
+
+    label {
+      padding: 3px 5px;
+      color: #ffffff;
+      background-color: #cf2127;
+      border-radius: 5px;
+    }
+
+    .DiscountButton {
+      padding: 3px 5px;
+      color: #206b9b;
+      border: 1px solid #206b9b;
+      cursor: pointer;
+      border-radius: 5px;
+
+      input {
+        color: #206b9b;
+        border: 1px solid #206b9b;
+        font-weight: bold;
+
+        &:focus {
+          border: 1px solid #206b9b;
+          outline: none;
+        }
+      }
+    }
+  }
+
+  .PayMethod {
+    display: flex;
+    justify-content: space-between;
+
+    > span {
+      &:last-child {
+        padding: 3px 5px;
+        color: #206b9b;
+        border: 1px solid #206b9b;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+    }
+  }
+
+  .Address {
+    display: flex;
+    justify-content: space-between;
+
+    > span {
+      &:last-child {
+        padding: 3px 5px;
+        color: #206b9b;
+        border: 1px solid #206b9b;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+    }
+  }
+
+  .Order {
+    float: right;
+  }
+}
+
+.DiscountDetail {
+  min-width: 500px;
+
+  .Title {
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+  .DiscountItem {
+    display: flex;
+    justify-content: space-between;
+
+    &:nth-child(odd) {
+      background-color: #fbfbfb;
+    }
+
+    .Name {
+      font-size: bold;
+    }
+
+    .Value {
+      span {
+        color: #206b9b;
+        font-weight: bold;
+      }
+    }
+
+    .Apply {
+      padding: 3px 5px;
+      color: #206b9b;
+      border: 1px solid #206b9b;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+  }
+}

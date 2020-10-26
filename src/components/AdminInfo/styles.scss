@@ -1,0 +1,10 @@
+.AdminInfo {
+  display: block;
+  .FormImage {
+    display: flex;
+    flex-direction: row;
+    img {
+      height: 150px;
+    }
+  }
+}

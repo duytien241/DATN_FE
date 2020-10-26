@@ -1,0 +1,17 @@
+.UpdateUser {
+  font-size: 14px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  .UpdateUserContainer {
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+    .UpdateUserShopBody {
+      flex: 1;
+      padding: 0 !important;
+      background-color: #f4f6f9;
+      padding: 10px 20px !important;
+    }
+  }
+}

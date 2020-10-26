@@ -1,0 +1,41 @@
+.RegisterCus {
+  display: flex;
+  .LoginForm {
+    background-color: #fff;
+    box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.14);
+    border-radius: 0.25rem;
+    overflow: hidden;
+    width: 31.25rem;
+    min-height: 29.6875rem;
+    margin-right: 20px;
+    .FormHeader {
+      height: 5rem;
+      display: flex;
+      align-items: center;
+      padding: 0 1.875rem;
+      .HeaderContent {
+        font-size: 1.25rem;
+        color: #222;
+        text-transform: capitalize;
+      }
+    }
+    .FormInput {
+      padding: 0 1.875rem 1.875rem;
+      overflow: hidden;
+      .UsernameInput {
+        margin-bottom: 0.625rem;
+      }
+      .PasswordInput {
+        margin-bottom: 1.25rem;
+      }
+      .LoginButton {
+        width: 100%;
+        color: #fff;
+        background-color: #ee4d2d;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.09);
+        width: 100%;
+        opacity: 0.7;
+      }
+    }
+  }
+}

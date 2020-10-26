@@ -1,0 +1,84 @@
+.OrderFood {
+  margin: 0 20px;
+  .FoodList {
+    max-height: 200px;
+    overflow: auto;
+    .OrderFoodItem {
+      display: flex;
+      justify-content: space-between;
+      > div {
+        &:first-child {
+          display: flex;
+          .Image {
+            width: 60px;
+            img {
+              border-radius: 5px;
+              width: 100%;
+            }
+          }
+
+          .Name {
+            margin-left: 10px;
+            font-weight: bold;
+          }
+        }
+
+        &:last-child {
+          .OrderQuantity {
+            border: 1px solid #000;
+            border-radius: 5px;
+            overflow: hidden;
+            display: flex;
+            .Quantity {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              border-right: none;
+              padding: 9px;
+            }
+            .ControlButtons {
+              display: flex;
+              flex-direction: column;
+
+              button {
+                border-radius: 0;
+                border: none;
+                border-left: 1px solid #000;
+                &:focus,
+                &:active {
+                  outline: none;
+                }
+
+                &:last-child {
+                  border-top: 1px solid #000;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .TotalPrice {
+    padding: 10px 0;
+    font-weight: bold;
+  }
+
+  .Note {
+    textarea {
+      width: 100%;
+      background-color: #feff9c;
+      border: 1px dashed;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  .OrderButton {
+    display: flex;
+    justify-content: flex-end;
+  }
+}

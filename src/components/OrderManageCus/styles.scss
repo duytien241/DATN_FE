@@ -1,0 +1,49 @@
+.OrderManageCus {
+  display: flex;
+  flex: 1;
+  flex-grow: 1;
+  position: relative;
+  width: 100% !important;
+  flex-direction: column;
+  overflow: hidden;
+  align-items: flex-end;
+  > .button {
+    width: 200px;
+  }
+
+  .DataTable {
+    padding: 10px;
+    th {
+      height: 52px;
+    }
+    tbody {
+      overflow: hidden !important;
+
+      > div {
+        overflow: hidden !important;
+      }
+
+      td {
+        .button {
+          padding: 0;
+          height: 30px;
+          width: 85%;
+          color: #fff !important;
+          opacity: 0.8;
+
+          &:hover {
+            opacity: 1;
+          }
+
+          &.Update {
+            color: initial;
+          }
+
+          &.Hidden {
+            color: initial;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "presets": [
+    "@babel/preset-env",
+    "@babel/preset-typescript",
+    [
+      "@babel/preset-react",
+      {
+        "targets": {
+          "browsers": ["Chrome >= 52", "FireFox >= 44", "Safari >= 7", "last 4 Edge versions"]
+        }
+      }
+    ]
+  ],
+  "plugins": [
+    "@babel/plugin-transform-modules-commonjs",
+    "@babel/plugin-syntax-dynamic-import",
+    "@babel/proposal-class-properties",
+    "@babel/proposal-object-rest-spread",
+    [
+      "transform-remove-console",
+      {
+        "exclude": ["error", "warn"]
+      }
+    ],
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "regenerator": true
+      }
+    ]
+  ]
+}

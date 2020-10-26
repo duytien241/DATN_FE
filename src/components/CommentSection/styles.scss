@@ -1,0 +1,68 @@
+.CommentSection {
+  padding: 10px 100px;
+  background-color: #f8efe0;
+  i {
+    font-size: 30px;
+    position: relative;
+    top: 5px;
+  }
+
+  .Input {
+    height: 45px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fff;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    border-radius: 10px;
+
+    input {
+      height: 100%;
+      border: none;
+      border-bottom: 1px solid #000;
+      font-size: 20px;
+      width: 100%;
+      &:focus {
+        outline: none;
+      }
+    }
+
+    i {
+      &:last-child {
+        color: #206b9b;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .CommentList {
+    display: flex;
+    flex-direction: column-reverse;
+
+    .Comment {
+      margin: 15px 0;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      background-color: #fff;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+      border-radius: 10px;
+      flex-direction: column;
+
+      .UserInfo {
+        display: flex;
+
+        .Info {
+          div {
+            font-size: 18px;
+            font-weight: bold;
+          }
+        }
+      }
+      .Content {
+        margin-top: 20px;
+      }
+    }
+  }
+}
