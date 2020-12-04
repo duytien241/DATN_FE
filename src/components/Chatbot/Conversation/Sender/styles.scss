@@ -1,0 +1,58 @@
+.Sender {
+  align-items: center;
+  display: flex;
+  border-radius: 0 0 10px 10px;
+
+  input {
+    padding: 20px;
+    margin: 10px;
+    border-radius: 10px;
+    border: 1px solid #d1d1d6;
+  }
+
+  &.expand {
+    height: 55px;
+  }
+}
+
+.InputMessage {
+  width: 100%;
+  border: 0;
+  height: 36px;
+  padding-left: 15px;
+  resize: none;
+  margin: 8px 0;
+
+  &:focus {
+    outline: none;
+  }
+
+  &.expand {
+    height: 40px;
+  }
+}
+
+.ButtonSend {
+  background-color: transparent !important;
+  border: 0;
+
+  .icon {
+    width: 22px;
+    height: 22px !important;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    color: #3239db;
+  }
+
+  .ButtonSendIcon {
+    height: 25px;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .rcw-sender {
+    border-radius: 0;
+    flex-shrink: 0;
+  }
+}

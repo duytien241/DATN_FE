@@ -1,0 +1,56 @@
+.ChatWidgetContainer {
+  bottom: 0;
+  left: calc(100% - 375px);
+  display: flex;
+  flex-direction: column;
+  width: 365px;
+  height: 0;
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+
+  &.Active {
+    height: 600px;
+  }
+
+  .RegisterForm {
+    left: 17%;
+    position: absolute;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    bottom: 13.8%;
+    height: 76%;
+
+    .Title {
+      border-top-right-radius: 10px;
+      border-top-left-radius: 10px;
+    }
+
+    .Content {
+      height: 100%;
+      border-bottom-right-radius: 10px;
+      border-bottom-left-radius: 10px;
+    }
+  }
+
+  .OrderFormChatbot {
+    left: 18%;
+    position: absolute;
+    width: 375px;
+    bottom: 13.8%;
+    height: 76%;
+
+    .Order {
+      .OrderForm {
+        padding: 10px;
+
+        form {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

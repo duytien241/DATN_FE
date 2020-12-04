@@ -61,20 +61,8 @@ export default () => {
         },
       },
       {
-        Header: 'Price',
-        accessor: 'price',
-        className: 'Center',
-        width: 70,
-      },
-      {
-        Header: 'Quantity',
-        accessor: 'qty',
-        className: 'Center',
-        width: 70,
-      },
-      {
-        Header: 'pay',
-        accessor: 'pay',
+        Header: 'HTTT',
+        accessor: 'payType',
         className: 'Center',
         width: 70,
       },
@@ -85,25 +73,25 @@ export default () => {
         width: 70,
       },
       {
-        Header: 'status',
+        Header: 'Trạng thái',
         accessor: 'status',
         className: 'Center',
         width: 70,
       },
       {
-        Header: 'Total',
+        Header: 'Tổng tiền',
         accessor: 'total',
         className: 'Center',
         width: 70,
       },
       {
-        Header: 'create_at',
+        Header: 'Tạo lúc',
         accessor: 'create_at',
         className: 'Center',
         width: 70,
       },
       {
-        Header: 'update_at',
+        Header: 'Cập nhật lúc',
         accessor: 'update_at',
         className: 'Center',
         width: 70,
@@ -192,7 +180,10 @@ export default () => {
 
   useEffect(() => {
     if (orderList && orderList.data) {
+      console.log(orderList.data);
+
       ref.current.data = orderList?.data as Obj[];
+      console.log(ref.current.data);
     }
     setRedraw({});
   }, [orderList]);
@@ -221,7 +212,7 @@ export default () => {
       id_user: userLogin.data.id,
       ...(type === FORM_TYPE.UPDATE && {
         id: ref.current.id,
-        status: ref.current.status,
+        status: ref.current.orderStatusList.find((obj) => obj.value === ref.current.status)!.key,
       }),
     };
 

@@ -1,3 +1,9 @@
 .FoodDetail {
   min-width: 1200px;
+  .Topbar {
+    position: unset !important;
+  }
+  .FoodContainer {
+    margin-top: 0px;
+  }
 }

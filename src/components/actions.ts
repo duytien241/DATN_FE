@@ -7,10 +7,18 @@ import {
   GLOBAL_QUERY_LOCATION,
   GLOBAL_QUERY_SHOP_LIST,
   FOOD_QUERY_FOOD_TYPE,
-  COMMENT,
+  QUERY_COMMENT,
+  REQUEST_COMMENT,
+  REQUEST_RATING,
+  QUERY_RATING,
   ORDER_FOOD,
   DELETE_FOOD,
   FOOD_DELETE_FOOD_MANAGE,
+  FOOD_QUERY_FOOD_DETAIL,
+  FOOD_QUERY_FOOD_LIST_CATEGORY,
+  SHOP_QUERY_SHOP_LIST_CATEGORY,
+  QUERY_LIST_CATEGORY,
+  QUERY_LIST_DISTRICT,
 } from 'redux-saga/actions';
 import {
   FOOD_CREATE_FOOD_FAILED,
@@ -29,14 +37,30 @@ import {
   GLOBAL_QUERY_SHOP_LIST_FAILED,
   FOOD_QUERY_FOOD_TYPE_SUCCESS,
   FOOD_QUERY_FOOD_TYPE_FAILED,
-  COMMENT_SUCCESS,
-  COMMENT_FAILED,
+  QUERY_COMMENT_SUCCESS,
+  QUERY_COMMENT_FAILED,
   ORDER_SUCCESS,
   ORDER_FAILURE,
   DELETE_SUCCESS,
   DELETE_FAILURE,
   FOOD_DELETE_FOOD_MANAGE_SUCCESS,
   FOOD_DELETE_FOOD_MANAGE_FAILED,
+  COMMENT_RESULT_SUCCESS,
+  COMMENT_RESULT_FAILED,
+  QUERY_RATING_SUCCESS,
+  QUERY_RATING_FAILED,
+  REQUEST_RATING_SUCCESS,
+  REQUEST_RATING_FAILED,
+  FOOD_QUERY_FOOD_DETAIL_SUCCESS,
+  FOOD_QUERY_FOOD_DETAIL_FAILED,
+  FOOD_QUERY_FOOD_LIST_CATEGORY_SUCCESS,
+  FOOD_QUERY_FOOD_LIST_CATEGORY_FAILED,
+  SHOP_QUERY_SHOP_LIST_CATEGORY_SUCCESS,
+  SHOP_QUERY_SHOP_LIST_CATEGORY_FAILED,
+  QUERY_LIST_CATEGORY_SUCCESS,
+  QUERY_LIST_CATEGORY_FAILED,
+  QUERY_LIST_DISTRICT_SUCCESS,
+  QUERY_LIST_DISTRICT_FAILED,
 } from './reducers';
 
 export const queryFoodList = (data?: any) => ({
@@ -45,6 +69,24 @@ export const queryFoodList = (data?: any) => ({
   response: {
     success: FOOD_QUERY_FOOD_LIST_SUCCESS,
     failed: FOOD_QUERY_FOOD_LIST_FAILED,
+  },
+});
+
+export const queryFoodListByCategoty = (data?: any) => ({
+  type: FOOD_QUERY_FOOD_LIST_CATEGORY,
+  data,
+  response: {
+    success: FOOD_QUERY_FOOD_LIST_CATEGORY_SUCCESS,
+    failed: FOOD_QUERY_FOOD_LIST_CATEGORY_FAILED,
+  },
+});
+
+export const queryFoodDetail = (data?: any) => ({
+  type: FOOD_QUERY_FOOD_DETAIL,
+  data,
+  response: {
+    success: FOOD_QUERY_FOOD_DETAIL_SUCCESS,
+    failed: FOOD_QUERY_FOOD_DETAIL_FAILED,
   },
 });
 
@@ -120,19 +162,44 @@ export const queryFoodType = (data?: any) => ({
   },
 });
 
-export const comment = (data?: any) => ({
-  type: COMMENT,
-  action: 'COMMENT',
+export const queryComment = (data?: any) => ({
+  type: QUERY_COMMENT,
   data,
   response: {
-    success: COMMENT_SUCCESS,
-    failed: COMMENT_FAILED,
+    success: QUERY_COMMENT_SUCCESS,
+    failed: QUERY_COMMENT_FAILED,
+  },
+});
+
+export const comment = (data?: any) => ({
+  type: REQUEST_COMMENT,
+  data,
+  response: {
+    success: COMMENT_RESULT_SUCCESS,
+    failed: COMMENT_RESULT_FAILED,
+  },
+});
+
+export const queryRating = (data?: any) => ({
+  type: QUERY_RATING,
+  data,
+  response: {
+    success: QUERY_RATING_SUCCESS,
+    failed: QUERY_RATING_FAILED,
+  },
+});
+
+export const rating = (data?: any) => ({
+  type: REQUEST_RATING,
+  data,
+  response: {
+    success: REQUEST_RATING_SUCCESS,
+    failed: REQUEST_RATING_FAILED,
   },
 });
 
 export const orderFood = (data?: any) => ({
   type: ORDER_FOOD,
-  action: 'ORDER_FOOD',
   data,
   response: {
     success: ORDER_SUCCESS,
@@ -142,10 +209,36 @@ export const orderFood = (data?: any) => ({
 
 export const deleteFood = (data?: any) => ({
   type: DELETE_FOOD,
-  action: 'DELETE_FOOD',
   data,
   response: {
     success: DELETE_SUCCESS,
     failed: DELETE_FAILURE,
+  },
+});
+
+export const queryShopListCategory = (data?: any) => ({
+  type: SHOP_QUERY_SHOP_LIST_CATEGORY,
+  data,
+  response: {
+    success: SHOP_QUERY_SHOP_LIST_CATEGORY_SUCCESS,
+    failed: SHOP_QUERY_SHOP_LIST_CATEGORY_FAILED,
+  },
+});
+
+export const queryListCategory = (data?: any) => ({
+  type: QUERY_LIST_CATEGORY,
+  data,
+  response: {
+    success: QUERY_LIST_CATEGORY_SUCCESS,
+    failed: QUERY_LIST_CATEGORY_FAILED,
+  },
+});
+
+export const queryListDistrict = (data?: any) => ({
+  type: QUERY_LIST_DISTRICT,
+  data,
+  response: {
+    success: QUERY_LIST_DISTRICT_SUCCESS,
+    failed: QUERY_LIST_DISTRICT_FAILED,
   },
 });

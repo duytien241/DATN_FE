@@ -1,0 +1,81 @@
+.BannerCenterHome {
+  background-position: center center;
+  background-repeat: no-repeat;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  border-radius: 5px;
+  overflow: hidden;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  width: 100%;
+  height: 350px;
+  margin-bottom: 20px;
+  position: relative;
+  .wrapper {
+    color: #fff;
+    padding: 60px;
+    &.opacity-mask {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 2;
+    }
+    &.align-items-center {
+      -ms-flex-align: center !important;
+      align-items: center !important;
+    }
+    &.d-flex {
+      display: -ms-flexbox !important;
+      display: flex !important;
+    }
+    small {
+      text-transform: uppercase;
+      font-size: 14px;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+    h3 {
+      color: #fff;
+      font-size: 32px;
+      font-size: 2rem;
+      font-weight: 500;
+      transition: all 0.3s ease-in-out;
+      line-height: 1.2;
+      margin: 10px 0 0 0;
+    }
+    p {
+      font-size: 21px;
+      margin-bottom: 20px;
+      font-size: 1.3125rem;
+    }
+    .btn_1.gradient {
+      background-size: 100%;
+      background-image: -webkit-linear-gradient(right, #f3723b, #e54750);
+      background-image: linear-gradient(to right, #f3723b, #e54750);
+      position: relative;
+      z-index: 1;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      border: none;
+      background-color: #e54750;
+      outline: none;
+      cursor: pointer;
+      display: inline-block;
+      text-decoration: none;
+      padding: 8px 25px;
+      color: #fff;
+      font-weight: 500;
+      font-size: 0.875rem;
+      transition: all 0.3s ease-in-out;
+      border-radius: 3px;
+      line-height: normal;
+      text-align: center;
+    }
+  }
+}

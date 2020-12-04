@@ -2,7 +2,7 @@ import Axios from 'axios';
 import qs from 'querystring';
 import { put, takeLatest } from 'redux-saga/effects';
 import { Obj, Request } from 'interfaces/common';
-import { USER_QUERY_CUS_INFO, USER_UPDATE_INFO_CUS } from 'redux-saga/actions';
+import { ADMIN_DELETE_CUS, QUERY_CUS_LIST, USER_QUERY_CUS_INFO, USER_UPDATE_INFO_CUS } from 'redux-saga/actions';
 import { BASE_URI, configHeaderAxios, notificationError, notificationSuccess } from 'utils/common';
 
 const uploadFile = (input: FileList, id: number) => {
@@ -29,6 +29,16 @@ const queryCusInfo = async (param: any) => {
   });
 };
 
+const queryCusList = async (param: any) => {
+  return await Axios.get(`${BASE_URI}api/v1/cus/list`, {
+    params: param,
+  });
+};
+
+const queryDeleteCus = async (param: any) => {
+  return await Axios.put(`${BASE_URI}api/v1/admin/active`, qs.stringify(param), configHeaderAxios);
+};
+
 const updateCusInfo = async (param: any) => {
   return await Axios.put(`${BASE_URI}api/v1/user/update`, qs.stringify(param), configHeaderAxios);
 };
@@ -46,6 +56,10 @@ function* doActionCus(request: Request<Obj>) {
       request.data.image = res.data.id;
       payload = yield updateCusInfo(request.data);
       notificationSuccess({ content: 'Cập nhật thành công' });
+    } else if (request.type === QUERY_CUS_LIST) {
+      payload = yield queryCusList(request.data);
+    } else if (request.type === ADMIN_DELETE_CUS) {
+      payload = yield queryDeleteCus(request.data);
     }
     yield put({
       type: (request.response as any).success,
@@ -65,4 +79,12 @@ export function* watchQueryCusInfo() {
 
 export function* watchUpdateCusInfo() {
   yield takeLatest(USER_UPDATE_INFO_CUS, doActionCus);
+}
+
+export function* watchQueryCusList() {
+  yield takeLatest(QUERY_CUS_LIST, doActionCus);
+}
+
+export function* watchDeleteCusList() {
+  yield takeLatest(ADMIN_DELETE_CUS, doActionCus);
 }

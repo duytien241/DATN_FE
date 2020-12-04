@@ -9,12 +9,12 @@ const queryShopType = async (param: Obj) => {
 };
 
 const queryShopInfo = async (param: Obj) => {
-  console.log(param);
-  return await Axios.get(`${BASE_URI}api/v1/user/info`, { params: param, headers: configHeaderAxios });
+  return await Axios.get(`${BASE_URI}api/restaurant/${param.id}`, { params: param, headers: configHeaderAxios });
 };
 
 const queryShopList = async (param: Obj) => {
-  return await Axios.get(`${BASE_URI}api/v1/user/list`, { params: param, headers: configHeaderAxios });
+  console.log(param);
+  return await Axios.get(`${BASE_URI}api/restaurant`, { params: param, headers: configHeaderAxios });
 };
 
 function* doQueryShop(request: Request<Obj>) {

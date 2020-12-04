@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import TextBox, { TEXTBOX_TYPE } from 'elements/TextBox';
 import { Button } from 'semantic-ui-react';
 import { useDispatch } from 'react-redux';
-import { login } from 'components/Login/actions';
+import { loginAdmin } from 'components/Login/actions';
 import styles from './styles.scss';
 
 export default () => {
@@ -29,7 +29,7 @@ export default () => {
       username: loginRef.current.username,
       password: loginRef.current.password,
     };
-    dispatch(login(params));
+    dispatch(loginAdmin(params));
   };
 
   return (

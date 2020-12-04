@@ -1,4 +1,4 @@
-import login from './Login';
+import { watchLogin as login, watchLoginAdmin as loginAdmin } from './Login';
 import {
   watchRegister as register,
   watchUpdateInfoUser as updateInfoUser,
@@ -10,12 +10,17 @@ import {
   watchQueryShopInfo as queryShopInfo,
   watchQueryShopList as queryShopList,
 } from './QueryShopType';
-import comment from './Comment';
-import order from './OrderFood';
+import { watchRequestComment as requestComment, watchQueryComment as queryComment } from './Comment';
+import { watchRequestRating as requestRating, watchQueryRating as queryRating } from './Rating';
+import { watchAddOrderFood as addOrder, watchDelOrderFood as delOrder } from './OrderFood';
 
 export {
-  comment,
+  requestComment,
+  queryComment,
+  queryRating,
+  requestRating,
   login,
+  loginAdmin,
   register,
   updateInfoUser,
   logOut,
@@ -23,5 +28,6 @@ export {
   queryShopInfo,
   changePassword,
   queryShopList,
-  order,
+  addOrder,
+  delOrder,
 };

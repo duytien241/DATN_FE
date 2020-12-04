@@ -36,20 +36,24 @@ function* doActionMenu(request: Request<Obj>) {
     let payload = null;
     if (request.type === MENU_CREATE_MENU_SHOP) {
       payload = yield createMenu(request.data);
+      notificationSuccess({ content: 'Thêm thành công' });
     } else if (request.type === MENU_UPDATE_MENU_SHOP) {
       payload = yield updateMenu(request.data);
+      notificationSuccess({ content: 'Cập nhật thành công' });
     } else if (request.type === MENU_INSERT_FOOD_MENU_SHOP) {
       payload = yield insertFoodInMenu(request.data);
+      notificationSuccess({ content: 'Thêm thành công' });
     } else if (request.type === MENU_DELETE_FOOD_MENU_SHOP) {
       payload = yield deleteFoodInMenu(request.data);
+      notificationSuccess({ content: 'Xóa thành công' });
     } else if (request.type === MENU_DELETE_MENU_SHOP) {
       payload = yield deleteMenu(request.data);
+      notificationSuccess({ content: 'Xóa thành công' });
     }
     yield put({
       type: (request.response as any).success,
       payload,
     });
-    notificationSuccess({ content: 'Cập nhật thành công' });
   } catch (error) {
     console.log(error.message);
     notificationError({ content: error.message });

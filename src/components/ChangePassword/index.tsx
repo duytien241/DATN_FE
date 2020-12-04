@@ -43,6 +43,8 @@ export default () => {
     let errorNewPasswordContent = '';
     if (isBlank(ref.current.newPassword)) {
       errorNewPasswordContent = 'Mật khẩu mới không được để trống';
+    } else if (ref.current.newPassword.length < 8) {
+      errorNewPasswordContent = 'Mật khẩu mới phải nhiều hơn 8 ký tự';
     }
 
     return errorNewPasswordContent;
@@ -54,6 +56,8 @@ export default () => {
       errorRetypeNewPasswordContent = 'Mật khẩu mới không được để trống';
     } else if (ref.current.retypeNewPassword !== ref.current.newPassword) {
       errorRetypeNewPasswordContent = 'Mật khẩu xác nhận cần giống mật khẩu mới';
+    } else if (ref.current.newPassword.length < 8) {
+      errorRetypeNewPasswordContent = 'Mật khẩu mới phải nhiều hơn 8 ký tự';
     }
 
     return errorRetypeNewPasswordContent;

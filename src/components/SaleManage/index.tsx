@@ -8,7 +8,7 @@ import TextBox, { TEXTBOX_TYPE } from 'elements/TextBox';
 import DataTable from 'elements/Datatable';
 import Fallback from 'components/Fallback';
 import { Obj } from 'interfaces/common';
-import { handleError } from 'utils/common';
+import { FIELD_VALID, handleError, notificationErrorValidate } from 'utils/common';
 import { createSaleCode, querySaleCodeList, querySaleType } from './actions';
 import { State } from 'redux-saga/reducers';
 import styles from './styles.scss';
@@ -96,6 +96,7 @@ export default () => {
             value: item.id,
           };
         });
+        ref.current.sale_type = ref.current.saleTypeList[0].text as string;
       }
     }
     setRedraw({});
@@ -131,13 +132,16 @@ export default () => {
   };
 
   const submitCreate = () => {
-    const params = {
-      id_user: userLogin.data.id,
-      id_sale: ref.current.id_sale,
-      expired: ref.current.expired,
-    };
+    const isValidNumberSale = notificationErrorValidate(ref.current.expired, FIELD_VALID.NUMBER, 'số ngày hiệu lực');
+    if (isValidNumberSale === true) {
+      const params = {
+        id_user: userLogin.data.id,
+        id_sale: ref.current.id_sale,
+        expired: ref.current.expired,
+      };
 
-    dispatch(createSaleCode(params));
+      dispatch(createSaleCode(params));
+    }
   };
 
   const changeSaleType = (event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) => {
@@ -164,6 +168,7 @@ export default () => {
             floating
             labeled
             options={ref.current.saleTypeList}
+            value
             text={(ref.current.sale_type as string) ? ref.current.sale_type : 'Choose Type'}
             onChange={changeSaleType}
           />

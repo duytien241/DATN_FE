@@ -12,6 +12,31 @@
     width: 200px;
   }
 
+  > .modals {
+    .modal {
+      height: calc(100% - 100px);
+      .content {
+        height: 100%;
+        .FoodForm {
+          height: 100%;
+          > div {
+            height: 100%;
+            .segment {
+              height: calc(100% - 40px);
+              .FoodManage {
+                height: 100% !important;
+              }
+              .UserInfoForm {
+                height: 100%;
+                overflow-x: hidden;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
   .DataTable {
     th {
       height: 52px;

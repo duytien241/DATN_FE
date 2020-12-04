@@ -7,11 +7,17 @@ import Fallback from 'components/Fallback';
 import TextBox, { TEXTBOX_TYPE } from 'elements/TextBox';
 import DatePicker from 'elements/DatePicker';
 import { State } from 'redux-saga/reducers';
-import { BASE_IMAGE_URL, handleError, formatStringToDate, formatDateToString } from 'utils/common';
+import { BASE_IMAGE_URL, handleError, formatStringToDate, formatDateToString, COMP_TYPE } from 'utils/common';
 import { queryCusInfo, updateCusInfo } from './actions';
 import styles from './styles.scss';
 
-export default () => {
+interface UpdateInfoCusProps {
+  compType?: COMP_TYPE;
+  id_cus?: any;
+}
+
+export const UpdateInfoCus: React.FC<UpdateInfoCusProps> = (props: UpdateInfoCusProps) => {
+  const { compType, id_cus } = props;
   const dispatch = useDispatch();
   const [, setRedraw] = useState();
   const cusInfo = useSelector((state: State) => state.cusInfo);
@@ -62,7 +68,7 @@ export default () => {
 
   const requestData = () => {
     const params = {
-      id_user: userLogin.id,
+      id: compType === COMP_TYPE.MODAL ? id_cus : userLogin.id,
     };
     dispatch(queryCusInfo(params));
   };
@@ -104,9 +110,11 @@ export default () => {
   return (
     <ErrorBoundary FallbackComponent={Fallback} onError={handleError}>
       <div className={styles.UpdateInfoCus}>
-        <Header as="h3" textAlign="center">
-          Thông tin tài khoản
-        </Header>
+        {compType !== COMP_TYPE.MODAL && (
+          <Header as="h3" textAlign="center">
+            Thông tin tài khoản
+          </Header>
+        )}
         <Grid centered columns={3}>
           <Grid.Column>
             <div className={styles.FormImage}>
@@ -118,7 +126,9 @@ export default () => {
                 }
                 size="small"
               />
-              <Input type="file" onChange={updateImage} accept="image/x-png,image/gif,image/jpeg" />
+              {compType !== COMP_TYPE.MODAL && (
+                <Input type="file" onChange={updateImage} accept="image/x-png,image/gif,image/jpeg" />
+              )}
             </div>
             <TextBox
               className={'UsernameInput'}
@@ -162,7 +172,7 @@ export default () => {
               type={TEXTBOX_TYPE.TEXT}
               value={userInfoRef.current.Email_P}
             />
-            <Button content="Lưu thông tin" onClick={updateInfo} color="blue" />
+            {compType !== COMP_TYPE.MODAL && <Button content="Lưu thông tin" onClick={updateInfo} color="blue" />}
           </Grid.Column>
         </Grid>
       </div>

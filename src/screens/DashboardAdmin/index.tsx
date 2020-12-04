@@ -6,8 +6,8 @@ import { Segment } from 'semantic-ui-react';
 import styles from './styles.scss';
 
 const menus = [
-  { title: 'Quản lý danh sách đăng ký bán hàng', target: 'manage_shop_list', isLeaf: true },
   { title: 'Danh sách đăng ký bán hàng chờ duyệt', target: 'manage_shop_pending_list', isLeaf: true },
+  { title: 'Quản lý danh sách đăng ký bán hàng', target: 'manage_shop_list', isLeaf: true },
   { title: 'Quản lý khách đăng ký', target: 'manage_cus_list', isLeaf: true },
   { title: 'Thông tin tài khoản', target: 'admin_info', isLeaf: true },
   { title: 'Đăng xuất', target: 'log_out', isLeaf: true },
@@ -51,10 +51,10 @@ class DashboardAdmin extends React.Component<DashboardAdminProps, DashboardAdmin
     }
 
     return (
-      <div className={styles.DashboardAdmin}>
+      <div className={`${styles.DashboardAdmin} ParentContainer`}>
         <TopBar />
         <div className={styles.DashboardAdminContainer}>
-          <Sidebar menus={menus} onClickItem={this.onClickItem} activeTab={this.activeTarget} />
+          <Sidebar title="Quản lý" menus={menus} onClickItem={this.onClickItem} activeTab={this.activeTarget} />
           <Segment attached className={styles.DashboardAdminBody}>
             {Comp && (
               //@ts-ignore

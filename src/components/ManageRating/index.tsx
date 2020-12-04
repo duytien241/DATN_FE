@@ -10,6 +10,7 @@ import { handleError } from 'utils/common';
 import { State } from 'redux-saga/reducers';
 import { queryRatingList } from './actions';
 import styles from './styles.scss';
+import { Header, Icon } from 'semantic-ui-react';
 
 export default () => {
   const dispatch = useDispatch();
@@ -28,13 +29,16 @@ export default () => {
       {
         Header: 'STT',
         maxWidth: 50,
-        accessor: 'id',
+        accessor: 'index',
         filterable: false,
         className: 'Center',
+        Cell: (data: any) => {
+          return <span>{data.row.index + 1}</span>;
+        },
       },
       {
         Header: 'Người đánh giá',
-        accessor: 'id_cus',
+        accessor: 'Name',
         className: 'Center',
         width: 70,
       },
@@ -76,6 +80,10 @@ export default () => {
   };
   return (
     <ErrorBoundary FallbackComponent={Fallback} onError={handleError}>
+      <Header>
+        <Icon name="food" />
+        Quản lý đánh giá
+      </Header>
       <div className={styles.ManageRating}>
         <DataTable columns={(ref.current.columnDefs as unknown) as Column<object>[]} data={ref.current.data as Obj[]} />
       </div>

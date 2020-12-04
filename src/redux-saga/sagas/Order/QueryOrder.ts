@@ -25,6 +25,7 @@ function* doQueryOrder(request: Request<Obj>) {
     let payload = null;
     if (request.type === ORDER_QUERY_ORDER) {
       payload = yield queryOrder(request.data);
+      console.log(payload);
     } else if (request.type === ORDER_QUERY_ORDER_STATUS) {
       payload = yield queryOrderStatus();
     } else if (request.type === ORDER_QUERY_ORDER_DETAIL) {

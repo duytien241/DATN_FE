@@ -4,5 +4,6 @@ import {
   watchQueryOrderDetailShop as queryOrderDetailShop,
 } from './QueryOrder';
 import updateOrder from './UpdateOrder';
+import placeOrder from './PlaceOrder';
 
-export { queryOrder, queryOrderStatus, updateOrder, queryOrderDetailShop };
+export { placeOrder, queryOrder, queryOrderStatus, updateOrder, queryOrderDetailShop };

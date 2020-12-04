@@ -1,6 +1,7 @@
 import { all } from 'redux-saga/effects';
 import {
   login,
+  loginAdmin,
   register,
   logOut,
   queryShopType,
@@ -8,10 +9,24 @@ import {
   queryShopInfo,
   changePassword,
   queryShopList,
-  comment,
-  order,
+  queryComment,
+  requestComment,
+  addOrder,
+  delOrder,
+  queryRating,
+  requestRating,
 } from './sagas/User';
-import { createFood, deleteFoodManage, queryFoodList, queryFoodType, updateFood } from './sagas/Food';
+import {
+  changeStatusFood,
+  createFood,
+  deleteFoodManage,
+  queryFoodDetail,
+  queryFoodList,
+  queryFoodListByCategory,
+  queryFoodListSearch,
+  queryFoodType,
+  updateFood,
+} from './sagas/Food';
 import {
   queryMenuList,
   createMenu,
@@ -22,13 +37,16 @@ import {
   deleteMenu,
 } from './sagas/Menu';
 import { queryStatisticalOrder } from './sagas/Statistical';
-import { queryOrder, queryOrderDetailShop, queryOrderStatus, updateOrder } from './sagas/Order';
+import { placeOrder, queryOrder, queryOrderDetailShop, queryOrderStatus, updateOrder } from './sagas/Order';
 import { querySaleCode, createSaleCode, querySaleType } from './sagas/Sale';
-import { queryLocation } from './sagas/Common';
+import { initSocket, queryLocation } from './sagas/Common';
 import { queryRatingList } from './sagas/Rating';
-import { queryCusInfo, updateCusInfo } from './sagas/Customer';
+import { queryCusInfo, queryCustList, updateCusInfo } from './sagas/Customer';
 import { decisionShopRegister, queryAdminInfo, queryShopPendingList } from './sagas/Admin';
 import { queryHistory } from './sagas/History';
+import { sendMessage } from './sagas/Chatbot';
+import { queryListDistrict, queryShopListCategory } from './sagas/Restaurant';
+import { queryListCategory } from './sagas/CateGory';
 
 export default function* () {
   yield all([
@@ -36,9 +54,9 @@ export default function* () {
     queryLocation(),
     queryShopList(),
     queryFoodType(),
-
     //user
     login(),
+    loginAdmin(),
     register(),
     logOut(),
     queryStatisticalOrder(),
@@ -46,21 +64,30 @@ export default function* () {
     updateInfoUser(),
     queryShopInfo(),
     changePassword(),
-    comment(),
-    order(),
+    queryComment(),
+    requestComment(),
+    queryRating(),
+    requestRating(),
+    delOrder(),
+    addOrder(),
     queryRatingList(),
 
     //food
     createFood(),
     queryFoodList(),
+    queryFoodDetail(),
     updateFood(),
     deleteFoodManage(),
+    changeStatusFood(),
+    queryFoodListByCategory(),
+    queryFoodListSearch(),
 
     //order
     queryOrder(),
     updateOrder(),
     queryOrderStatus(),
     queryOrderDetailShop(),
+    placeOrder(),
 
     //sale
     querySaleCode(),
@@ -79,6 +106,7 @@ export default function* () {
     //cus
     queryCusInfo(),
     updateCusInfo(),
+    queryCustList(),
 
     //admin
     queryShopPendingList(),
@@ -87,5 +115,13 @@ export default function* () {
 
     // history
     queryHistory(),
+
+    sendMessage(),
+    initSocket(),
+
+    queryShopListCategory(),
+
+    queryListCategory(),
+    queryListDistrict(),
   ]);
 }

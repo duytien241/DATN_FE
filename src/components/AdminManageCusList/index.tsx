@@ -1,23 +1,24 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ErrorBoundary } from 'react-error-boundary';
-import Cookie from 'js-cookie';
-import { Breadcrumb, Button, Header, Icon, Modal } from 'semantic-ui-react';
+// import Cookie from 'js-cookie';
+import { Breadcrumb, Button, Header, Icon, Modal, Tab } from 'semantic-ui-react';
 import { Column } from 'react-table';
 import { Obj } from 'interfaces/common';
 import Fallback from 'components/Fallback';
 import DataTable from 'elements/Datatable';
 import { queryCusList, deleteCus } from './actions';
-import { BASE_IMAGE_URL, handleError } from 'utils/common';
+import { BASE_IMAGE_URL, COMP_TYPE, handleError } from 'utils/common';
 import { State } from 'redux-saga/reducers';
 import styles from './styles.scss';
+import { UpdateInfoCus } from 'components/UpdateInfoCus';
+import { OrderManageCus } from 'components/OrderManageCus';
 
 export default () => {
   const dispatch = useDispatch();
   const [, setRedraw] = useState();
   const [openModal, setOpenModal] = useState(false);
-
-  const userLogin = Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string) : null;
+  const [openDetailModal, setOpenDetailModal] = useState(false);
 
   const cusList = useSelector((state: State) => state.cusList);
   const deleteCusResult = useSelector((state: State) => state.deleteCusResult);
@@ -71,19 +72,37 @@ export default () => {
       },
       {
         Header: 'Tên khách hàng',
-        accessor: 'name',
+        accessor: 'Name',
         className: 'Center',
         width: 70,
       },
       {
         Header: 'SĐT',
-        accessor: 'info',
+        accessor: 'SDT',
+        className: 'Center',
+        width: 70,
+      },
+      {
+        Header: 'Ngày sinh',
+        accessor: 'Birth',
+        className: 'Center',
+        width: 70,
+      },
+      {
+        Header: 'CMND/CCCD',
+        accessor: 'IdNo',
         className: 'Center',
         width: 70,
       },
       {
         Header: 'Địa chỉ',
         accessor: 'price',
+        className: 'Center',
+        width: 70,
+      },
+      {
+        Header: 'Thông tin thêm',
+        accessor: 'desc',
         className: 'Center',
         width: 70,
       },
@@ -95,6 +114,19 @@ export default () => {
         Cell: (data: any) => {
           return <img src={`${BASE_IMAGE_URL}${data.row.original.image}`} className={styles.FoodImage} />;
         },
+      },
+      {
+        Header: 'Chi tiết',
+        accessor: 'detail',
+        Cell: (data: any) => {
+          return (
+            <Button className={styles.Hidden} positive onClick={() => showDetail(data.row.original)}>
+              {'Chi tiết'}
+            </Button>
+          );
+        },
+        className: 'Right',
+        width: 55,
       },
       {
         Header: 'Hủy kích hoạt',
@@ -114,16 +146,17 @@ export default () => {
   });
 
   const requestData = () => {
-    const params = {
-      id_user: userLogin.data.id,
-    };
-
-    dispatch(queryCusList(params));
+    dispatch(queryCusList());
   };
 
   const showDeleteForm = (data: Obj) => {
     cusListRef.current.id = data.id as number;
     setOpenModal(true);
+  };
+
+  const showDetail = (data: Obj) => {
+    cusListRef.current.id = data.id as number;
+    setOpenDetailModal(true);
   };
 
   const submitDelete = () => {
@@ -139,6 +172,10 @@ export default () => {
     cusListRef.current.price = 0;
     cusListRef.current.image = undefined;
     setOpenModal(false);
+  };
+
+  const onCloseDetail = () => {
+    setOpenDetailModal(false);
   };
 
   return (
@@ -166,13 +203,46 @@ export default () => {
         mountNode={document.querySelector('.AdminManageCusList')}
       >
         <Modal.Header>Hủy kích hoạt người dùng</Modal.Header>
-
         <Modal.Content>
           <div className={'FoodForm'}>
             <div className={'HeaderFoodForm'}>Bạn có chắc muốn hủy kích hoạt người dùng này</div>
             <div className={'InputFoodForm'}>
               <Button onClick={submitDelete} content="Xác nhận" />
             </div>
+          </div>
+        </Modal.Content>
+      </Modal>
+      <Modal
+        size="large"
+        closeIcon={true}
+        open={openDetailModal}
+        onClose={onCloseDetail}
+        onOpen={() => setOpenDetailModal(true)}
+        mountNode={document.querySelector('.AdminManageCusList')}
+      >
+        <Modal.Header>{'Chi tiết khách đăng ký'}</Modal.Header>
+        <Modal.Content>
+          <div className={'FoodForm'}>
+            <Tab
+              panes={[
+                {
+                  menuItem: 'Thông tin cá nhân',
+                  render: () => (
+                    <Tab.Pane>
+                      <UpdateInfoCus compType={COMP_TYPE.MODAL} id_cus={cusListRef.current.id} />
+                    </Tab.Pane>
+                  ),
+                },
+                {
+                  menuItem: 'Lịch sử đặt hàng',
+                  render: () => (
+                    <Tab.Pane>
+                      <OrderManageCus compType={COMP_TYPE.MODAL} id_cus={cusListRef.current.id} />
+                    </Tab.Pane>
+                  ),
+                },
+              ]}
+            />
           </div>
         </Modal.Content>
       </Modal>

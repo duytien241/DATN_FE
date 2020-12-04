@@ -1,18 +1,18 @@
 .FoodManage {
-  display: flex;
-  flex: 1;
-  flex-grow: 1;
-  position: relative;
+  display: block;
   width: 100% !important;
-  flex-direction: column;
   overflow: hidden;
-  align-items: flex-end;
-  height: calc(100% - 100px);
+  max-height: calc(100% - 100px);
+  overflow-x: auto;
+  height: 100%;
+  position: relative;
   > .button {
     width: 200px;
   }
 
   .DataTable {
+    height: calc(100% - 50px) !important;
+    position: absolute !important;
     th {
       height: 52px;
     }

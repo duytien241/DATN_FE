@@ -129,6 +129,7 @@ module.exports = {
       // Options similar to the same options in webpackOptions.output
       // both options are optional
       filename: 'styles.css',
+      filename: 'flaticon.css',
     }),
     new HTMLwebpackplugin({
       template: './public/index.html',

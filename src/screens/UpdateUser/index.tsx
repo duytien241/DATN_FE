@@ -62,7 +62,12 @@ class UpdateUser extends React.Component<UpdateUserProps, UpdateUserState> {
       <div className={styles.UpdateUser}>
         <TopBar />
         <div className={styles.UpdateUserContainer}>
-          <Sidebar menus={menus} onClickItem={this.onClickItem} activeTab={this.activeTarget} />
+          <Sidebar
+            title="Quản lý tài khoản"
+            menus={menus}
+            onClickItem={this.onClickItem}
+            activeTab={this.activeTarget}
+          />
           <Segment attached className={styles.UpdateUserShopBody}>
             {Comp && (
               //@ts-ignore

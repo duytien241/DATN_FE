@@ -1,5 +1,6 @@
-import { queryFoodList, queryShopInfo } from 'components/actions';
-import { queryMenuShop, queryFoodInMenu } from 'components/MenuManage/actions';
+import { queryShopInfo } from 'components/actions';
+import { queryMenuShop } from 'components/MenuManage/actions';
+import CommentSection, { Comment } from 'components/CommentSection';
 import RelativeFood from 'components/RelativeFood';
 import RestaurantInfo from 'components/RestaurantInfo';
 import TopBar from 'components/TopBar';
@@ -7,82 +8,78 @@ import { Obj } from 'interfaces/common';
 import React, { useEffect, useRef, useState } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import GoogleMapReact from 'google-map-react';
+import { queryComment } from 'components/actions';
 import { State } from 'redux-saga/reducers';
-import { Menu, Sidebar, Tab, TabProps } from 'semantic-ui-react';
 import styles from './styles.scss';
+import Marker from 'components/Marker';
+import { Tab } from 'semantic-ui-react';
 
 export default () => {
   const { id } = useParams<{ id: string }>();
-  const { shopInfo, menu, foodInMenu, foodList } = useSelector(
+  const { shopInfo, menu, foodInMenu, comments } = useSelector(
     (state: State) => ({
       shopInfo: state.userShopInfo,
       menu: state.menuList,
       foodInMenu: state.foodInMenu,
-      foodList: state.foodList,
+      comments: state.comment,
     }),
     shallowEqual
   );
   const dispatch = useDispatch();
-  const ref = useRef<{ shopInfo?: Obj; menu?: Obj[]; foodInmenu?: Obj[]; foodList?: Obj[] }>({});
+  const ref = useRef<{ shopInfo?: Obj; menu?: Obj[]; foodInmenu?: Obj[]; comments?: Comment[] }>({});
   const [, redraw] = useState();
 
   useEffect(() => {
-    dispatch(queryShopInfo({ id_user: id }));
-    dispatch(queryMenuShop({ id_user: id }));
-    dispatch(queryFoodInMenu({ id_user: id, id_menu: 1 }));
+    dispatch(queryShopInfo({ id: id }));
+    dispatch(queryMenuShop({ id: id }));
+    requestDataComment();
   }, []);
 
   useEffect(() => {
-    if (shopInfo) {
-      ref.current.shopInfo = (shopInfo.data as Obj[])[0] as Obj;
-      ref.current.menu = menu?.data as Obj[];
-      ref.current.foodInmenu = foodInMenu?.data as Obj[];
-      ref.current.foodList = foodList?.data as Obj[];
-      redraw({});
+    if (shopInfo && shopInfo.data) {
+      if (typeof shopInfo?.data === 'object') {
+        ref.current.shopInfo = shopInfo?.data as Obj;
+      }
     }
-  }, [shopInfo, menu, foodInMenu, foodList]);
+    redraw({});
+  }, [shopInfo]);
 
   useEffect(() => {
-    console.log(foodInMenu);
+    if (foodInMenu && foodInMenu.data) {
+      if (typeof foodInMenu?.data === 'object') {
+        ref.current.foodInmenu = foodInMenu?.data as Obj[];
+      }
+    }
+    redraw({});
   }, [foodInMenu]);
 
-  const panes = [
-    {
-      menuItem: 'Menu',
-      render: () => (
-        <Tab.Pane>
-          <div className="Menu">
-            <Sidebar as={Menu} animation="overlay" icon="labeled" inverted vertical visible width="thin">
-              {ref.current.menu &&
-                ref.current.menu.map((item) => {
-                  return (
-                    <Menu.Item
-                      as="a"
-                      onClick={() => {
-                        dispatch(queryFoodInMenu({ id_user: id, id_menu: item.id }));
-                      }}
-                    >
-                      {item.name as string}
-                    </Menu.Item>
-                  );
-                })}
-            </Sidebar>
-            {ref.current.foodInmenu && <RelativeFood id_food={''} foodList={ref.current.foodInmenu} />}
-          </div>
-        </Tab.Pane>
-      ),
-    },
-    {
-      menuItem: 'Food list',
-      render: () => (
-        <Tab.Pane>
-          <div className="FoodList">
-            {ref.current.foodList && <RelativeFood id_food={''} foodList={ref.current.foodList} />}
-          </div>
-        </Tab.Pane>
-      ),
-    },
-  ];
+  useEffect(() => {
+    if (menu && menu.data) {
+      if (typeof menu?.data === 'object') {
+        ref.current.menu = (menu?.data as Obj).results as Obj[];
+        redraw({});
+      }
+    }
+  }, [menu]);
+
+  useEffect(() => {
+    if (comments && comments.data) {
+      if (typeof comments?.data === 'object') {
+        ref.current.comments = (comments?.data as Obj).results as Comment[];
+      }
+    }
+    redraw({});
+  }, [comments]);
+
+  const requestDataComment = () => {
+    const params = {
+      id: id,
+    };
+    dispatch(queryComment(params));
+  };
+
+  console.log(ref.current.shopInfo);
 
   return (
     <div className={styles.RestaurantDetail}>
@@ -90,31 +87,50 @@ export default () => {
       {ref.current.shopInfo && (
         <div className="Food">
           <RestaurantInfo
-            image={ref.current.shopInfo.image as string}
-            name={ref.current.shopInfo.NameR as string}
-            address={ref.current.shopInfo.Address_R as string}
-            rate={parseInt(ref.current.shopInfo.avg_rating as string)}
-            open="00:00"
-            close="23:59"
-            price={60000}
+            image={ref.current.shopInfo.image_url as string}
+            name={ref.current.shopInfo.name as string}
+            address={(ref.current.shopInfo.address as String[])[0] as string}
+            rate={parseInt(ref.current.shopInfo.rating as string)}
+            time={ref.current.shopInfo.time as string}
+            price={ref.current.shopInfo.cost as string}
             describe={ref.current.shopInfo.desc as string}
-            id_food={id}
+            id_res={id}
           />
         </div>
       )}
       <div className="Content">
+        <div className="FoodList">{<RelativeFood id_user={id} id_food={''} foodList={ref.current.menu} />}</div>
+      </div>
+      <div className={styles.TabMap}>
         <Tab
-          panes={panes}
-          onTabChange={(event: React.MouseEvent<HTMLDivElement, MouseEvent>, data: TabProps) => {
-            console.log(data.activeIndex);
-            if (data.activeIndex === 0) {
-              dispatch(queryFoodInMenu({ id_user: id, id_menu: 1 }));
-            } else {
-              dispatch(queryFoodList({ id_user: id }));
-            }
-          }}
+          panes={[
+            {
+              menuItem: 'Địa chỉ',
+              render: () => (
+                <div className={styles.Map}>
+                  {ref.current.shopInfo && (
+                    <GoogleMapReact
+                      bootstrapURLKeys={{ key: 'AIzaSyCDFs3j4amVQv-mejlsdc-vw7-UtLiTL2g' }}
+                      defaultCenter={{
+                        lat: (ref.current.shopInfo?.address as any[])[1] as number,
+                        lng: (ref.current.shopInfo?.address as any[])[2] as number,
+                      }}
+                      defaultZoom={15}
+                    >
+                      <Marker
+                        lat={(ref.current.shopInfo?.address as any[])[1] as number}
+                        lng={(ref.current.shopInfo?.address as any[])[2] as number}
+                        text={ref.current.shopInfo?.name as string}
+                      />
+                    </GoogleMapReact>
+                  )}
+                </div>
+              ),
+            },
+          ]}
         />
       </div>
+      {ref.current.comments && <CommentSection comments={ref.current.comments} id_food={id} />}
     </div>
   );
 };

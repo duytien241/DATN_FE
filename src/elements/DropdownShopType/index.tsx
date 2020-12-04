@@ -17,8 +17,10 @@ export default (props: DropdownLocationProps) => {
   const [, setRedraw] = useState();
   const ref = useRef<{
     lsShopType: Obj[];
+    value: string;
   }>({
     lsShopType: [],
+    value: '',
   });
 
   useEffect(() => {
@@ -29,9 +31,11 @@ export default (props: DropdownLocationProps) => {
   }, [shopType]);
 
   const onChangeValue = (event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) => {
+    ref.current.value = (data.options as any).find((item: any) => item.id === data.value).text;
     if (props.changeText) {
       props.changeText(data);
     }
+    setRedraw({});
   };
 
   console.log(props.text);
@@ -45,7 +49,7 @@ export default (props: DropdownLocationProps) => {
       icon="world"
       options={ref.current.lsShopType}
       search
-      text={isBlank(props.text) ? props.defaultText : props.text}
+      text={isBlank(ref.current.value) ? props.defaultText : ref.current.value}
       onChange={onChangeValue}
     />
   );

@@ -1,24 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ErrorBoundary } from 'react-error-boundary';
-import Cookie from 'js-cookie';
-import { Breadcrumb, Button, Header, Icon, Modal } from 'semantic-ui-react';
+import { Breadcrumb, Button, Header, Icon, Modal, Tab } from 'semantic-ui-react';
 import { Column } from 'react-table';
 import { Obj } from 'interfaces/common';
 import Fallback from 'components/Fallback';
 import DataTable from 'elements/Datatable';
-import { queryFoodList } from 'components/actions';
+import { queryShopList } from 'components/actions';
 import { decisionShopRegister } from 'components/ShopRegisterPending/actions';
-import { FORM_TYPE, handleError } from 'utils/common';
+import { COMP_TYPE, handleError } from 'utils/common';
 import { State } from 'redux-saga/reducers';
 import styles from './styles.scss';
+import { FoodManage } from 'components/FoodManage';
+import { UserInfoForm } from 'components/UserInfoForm';
+import { StatisticalManage } from 'components/StatisticalManage';
 
 export default () => {
   const dispatch = useDispatch();
   const [, setRedraw] = useState();
   const [openModal, setOpenModal] = useState(false);
-  const [type, setType] = useState(FORM_TYPE.CREATE);
-  const userLogin = Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string).data : null;
+  const [openDetailModal, setOpenDetailModal] = useState(false);
   const shopList = useSelector((state: State) => state.shopList);
   const decisionShopResult = useSelector((state: State) => state.decisionShopResult);
 
@@ -38,7 +39,6 @@ export default () => {
   useEffect(() => {
     if (shopList && shopList.data) {
       ref.current.data = shopList?.data as Obj[];
-      console.log(ref.current.data);
     }
     setRedraw({});
   }, [shopList]);
@@ -64,13 +64,13 @@ export default () => {
         Header: 'Tên cửa hàng',
         accessor: 'NameR',
         className: 'Center',
-        width: 70,
+        width: 170,
       },
       {
         Header: 'Địa chỉ',
         accessor: 'Address_R',
         className: 'Center',
-        width: 70,
+        width: 170,
       },
       {
         Header: 'Email',
@@ -82,19 +82,19 @@ export default () => {
         Header: 'Mô tả',
         accessor: 'desc',
         className: 'Center',
-        width: 70,
+        width: 170,
       },
       {
         Header: 'Ngân hàng thụ hưởng',
         accessor: 'BankCore',
         className: 'Center',
-        width: 70,
+        width: 170,
       },
       {
         Header: 'Số tài khoản',
         accessor: 'BankNum',
         className: 'Center',
-        width: 70,
+        width: 100,
       },
       {
         Header: 'Ngày đăng ký',
@@ -116,7 +116,20 @@ export default () => {
       },
       {
         Header: '',
-        accessor: 'sell',
+        accessor: 'detail',
+        Cell: (data: any) => {
+          return (
+            <Button className={styles.Hidden} positive onClick={() => showDetailForm(data.row.original)}>
+              {'Chi tiết'}
+            </Button>
+          );
+        },
+        className: 'Right',
+        width: 55,
+      },
+      {
+        Header: '',
+        accessor: 'delete',
         Cell: (data: any) => {
           return (
             <Button className={styles.Hidden} negative onClick={() => showRefuseForm(data.row.original)}>
@@ -132,18 +145,22 @@ export default () => {
   });
 
   const requestData = () => {
-    dispatch(queryFoodList());
+    dispatch(queryShopList());
   };
 
   const showRefuseForm = (data: Obj) => {
     foodFormRef.current.id = data.id as number;
-    setType(FORM_TYPE.DELETE);
     setOpenModal(true);
+  };
+
+  const showDetailForm = (data: Obj) => {
+    foodFormRef.current.id = data.id as number;
+    setOpenDetailModal(true);
   };
 
   const submit = () => {
     const params = {
-      id_user: userLogin.id,
+      id_user: foodFormRef.current.id,
       result: 'IGNORE',
     };
     dispatch(decisionShopRegister(params));
@@ -153,13 +170,17 @@ export default () => {
     setOpenModal(false);
   };
 
+  const onCloseDetail = () => {
+    setOpenDetailModal(false);
+  };
+
   return (
     <ErrorBoundary FallbackComponent={Fallback} onError={handleError}>
       <Breadcrumb>
         <Breadcrumb.Section link>Manage</Breadcrumb.Section>
         <Breadcrumb.Divider />
         <Breadcrumb.Section link active>
-          Pending shop list
+          Shop list
         </Breadcrumb.Section>
       </Breadcrumb>
       <Header>
@@ -177,15 +198,55 @@ export default () => {
         onOpen={() => setOpenModal(true)}
         mountNode={document.querySelector('.AdminManageShopList')}
       >
-        <Modal.Header>{type === FORM_TYPE.UPDATE ? 'Duyệt cửa hàng' : 'Từ chối đăng ký'}</Modal.Header>
+        <Modal.Header>{'Hủy kích hoạt cửa hàng'}</Modal.Header>
         <Modal.Content>
           <div className={'FoodForm'}>
-            <div className={'HeaderFoodForm'}>
-              {type === FORM_TYPE.CREATE ? 'Xác nhận duyệt đăng ký cửa hàng' : 'Từ chối đăng ký của cửa hàng'}
-            </div>
+            <div className={'HeaderFoodForm'}>Từ chối đăng ký của cửa hàng</div>
             <div className={'InputFoodForm'}>
               <Button onClick={submit} content="Xác nhận" />
             </div>
+          </div>
+        </Modal.Content>
+      </Modal>
+      <Modal
+        size="large"
+        closeIcon={true}
+        open={openDetailModal}
+        onClose={onCloseDetail}
+        onOpen={() => setOpenDetailModal(true)}
+        mountNode={document.querySelector('.AdminManageShopList')}
+      >
+        <Modal.Header>{'Chi tiết cửa hàng'}</Modal.Header>
+        <Modal.Content>
+          <div className={'FoodForm'}>
+            <Tab
+              panes={[
+                {
+                  menuItem: 'Thông tin cá nhân',
+                  render: () => (
+                    <Tab.Pane>
+                      <UserInfoForm compType={COMP_TYPE.MODAL} id_user={foodFormRef.current.id} />
+                    </Tab.Pane>
+                  ),
+                },
+                {
+                  menuItem: 'Thông tin món ăn',
+                  render: () => (
+                    <Tab.Pane>
+                      <FoodManage compType={COMP_TYPE.MODAL} id_user={foodFormRef.current.id} />
+                    </Tab.Pane>
+                  ),
+                },
+                {
+                  menuItem: 'Thống kê đơn hàng',
+                  render: () => (
+                    <Tab.Pane>
+                      <StatisticalManage compType={COMP_TYPE.MODAL} id_user={foodFormRef.current.id} />
+                    </Tab.Pane>
+                  ),
+                },
+              ]}
+            />
           </div>
         </Modal.Content>
       </Modal>

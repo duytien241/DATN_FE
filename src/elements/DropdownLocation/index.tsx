@@ -13,12 +13,6 @@ interface DropdownLocationProps {
   changeText?(data: Obj): void;
 }
 
-export enum DROPDOWN_TYPE {
-  LOCATION = 'location',
-  SHOP_TYPE = 'shop_type',
-  FOOD_TYPE = 'food_type',
-}
-
 export default (props: DropdownLocationProps) => {
   const locationData = useSelector(getLocationData);
 

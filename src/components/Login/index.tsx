@@ -5,6 +5,7 @@ import { Button } from 'semantic-ui-react';
 import { useDispatch } from 'react-redux';
 import { login } from './actions';
 import { Link } from 'react-router-dom';
+import { notificationErrorValidate } from 'utils/common';
 
 export default () => {
   const dispatch = useDispatch();
@@ -26,11 +27,15 @@ export default () => {
   };
 
   const loginWeb = () => {
-    const params = {
-      username: loginRef.current.username,
-      password: loginRef.current.password,
-    };
-    dispatch(login(params));
+    const isValidUserName = notificationErrorValidate(loginRef.current.username, undefined, 'tên đăng nhập');
+    const isValidPassword = notificationErrorValidate(loginRef.current.password, undefined, 'mật khẩu', 8);
+    if (isValidUserName === true && isValidPassword === true) {
+      const params = {
+        username: loginRef.current.username,
+        password: loginRef.current.password,
+      };
+      dispatch(login(params));
+    }
   };
   return (
     <div className={styles.Login}>

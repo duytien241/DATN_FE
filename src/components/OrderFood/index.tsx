@@ -5,12 +5,13 @@ import Cookie from 'js-cookie';
 import { Obj } from 'interfaces/common';
 import { useSelector } from 'react-redux';
 import { Button, Modal, Tab } from 'semantic-ui-react';
-import { formatNumber } from 'utils/common';
-import styles from './styles.scss';
 import Login from 'components/Login';
 import RegisterCus from 'components/RegisterCus';
 import RegisterAccount from 'components/RegisterShop';
 import OrderDetail from 'components/OrderDetail';
+import { State } from 'redux-saga/reducers';
+import { formatNumber } from 'utils/common';
+import styles from './styles.scss';
 
 export interface Order {
   name: string;
@@ -35,6 +36,7 @@ interface OrderFoodItemProps {
 interface OrderInfoProps {
   userImage?: string;
   username?: string;
+  id_user: any;
 }
 
 export const OrderFoodItem = (props: OrderFoodItemProps) => {
@@ -42,7 +44,7 @@ export const OrderFoodItem = (props: OrderFoodItemProps) => {
     <div className={styles.OrderFoodItem}>
       <div>
         <div className={styles.Image}>
-          <img src={`https://drive.google.com/uc?export=view&id=${props.image}`} alt={props.name} />
+          <img src={props.image} alt={props.name} />
         </div>
         <span className={styles.Name}>{props.name ? props.name : ''}</span>
       </div>
@@ -55,6 +57,8 @@ export const OrderFoodItem = (props: OrderFoodItemProps) => {
 
 export default (props: OrderInfoProps) => {
   const orderInfo = useSelector(getOrderList);
+  const orderResult = useSelector((state: State) => state.orderResult);
+  const userLogin1 = useSelector((state: State) => state.userLogin);
   const ref = useRef<{
     userLogin?: Obj;
     orderDetail: {
@@ -66,21 +70,25 @@ export default (props: OrderInfoProps) => {
     orderDetail: {},
   });
   const [openOrderDetail, setOpenOrderDetail] = useState(false);
-  const [openLogin, setOpenLogin] = useState(false);
+  const [open, setOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
-
-  useEffect(() => {}, []);
 
   const onConfirmOrder = () => {
     ref.current.userLogin = Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string).data : null;
     if ((orderInfo.orderInfo as Obj[]).length === 0) {
     } else if (ref.current.userLogin == null) {
-      setOpenLogin(true);
+      setOpen(true);
     } else {
       ref.current.orderDetail.orderInfo = orderInfo;
       setOpenOrderDetail(true);
     }
   };
+
+  useEffect(() => {
+    if (orderResult && orderResult.data) {
+      setOpenOrderDetail(false);
+    }
+  }, [orderResult]);
 
   const onTabChange = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     setActiveIndex((event.target as any).value);
@@ -89,6 +97,13 @@ export default (props: OrderInfoProps) => {
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     ref.current.orderDetail.note = event.target.value;
   };
+
+  useEffect(() => {
+    if (userLogin1 && userLogin1.data && open === true) {
+      ref.current.userLogin = Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string).data : null;
+      setOpen(false);
+    }
+  }, [userLogin1]);
 
   const panes = [
     {
@@ -147,7 +162,7 @@ export default (props: OrderInfoProps) => {
           </Button>
         </div>
       </div>
-      <Modal onClose={() => setOpenLogin(false)} onOpen={() => setOpenLogin(true)} open={openLogin} closeIcon={true}>
+      <Modal onClose={() => setOpen(false)} onOpen={() => setOpen(true)} open={open} closeIcon={true}>
         <Modal.Header>
           {activeIndex === 1 ? 'Đăng nhập' : activeIndex === 2 ? 'Đăng ký tài khoản' : 'Đăng ký tài khoản cửa hàng'}
         </Modal.Header>
@@ -160,7 +175,7 @@ export default (props: OrderInfoProps) => {
           <span>Chi tiết đơn</span>
         </Modal.Header>
         <Modal.Content>
-          <OrderDetail orderDetail={ref.current.orderDetail as Obj} />
+          <OrderDetail orderDetail={ref.current.orderDetail as Obj} id_user={props.id_user} />
         </Modal.Content>
       </Modal>
     </>

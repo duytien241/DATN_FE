@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Image } from 'semantic-ui-react';
-import { BASE_IMAGE_URL } from 'utils/common';
+import { BASE_IMAGE_URL, formatNumber } from 'utils/common';
 import foodLogo from '../../assets/defaultFood.png';
 import { Obj } from 'interfaces/common';
 import { Link } from 'react-router-dom';
@@ -11,7 +11,7 @@ interface FoodCardProps {
 }
 
 export default (props: FoodCardProps) => {
-  const { image, name, Address_R, tag, info, id_food } = props.foodItem;
+  const { image, name, Address_R, price, info, id_food } = props.foodItem;
 
   return (
     <Link to={`/food/${id_food}`}>
@@ -24,7 +24,7 @@ export default (props: FoodCardProps) => {
           </Card.Meta>
           <Card.Description>{info}</Card.Description>
         </Card.Content>
-        <Card.Content extra>{tag}</Card.Content>
+        <Card.Content extra>{`${formatNumber(price as number)} VND`}</Card.Content>
       </Card>
     </Link>
   );

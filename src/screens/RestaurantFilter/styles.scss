@@ -1,0 +1,133 @@
+.FoodPage {
+  height: 100vh;
+
+  .Topbar {
+    position: unset !important;
+  }
+
+  .HeaderPage {
+    padding: 20px 0 20px 0;
+    background-color: #f4f4f4;
+
+    .HeaderContainer {
+      max-width: 1320px;
+      width: 100%;
+      padding-right: 15px;
+      padding-left: 15px;
+      margin-right: auto;
+      margin-left: auto;
+
+      .Row {
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        margin-right: -15px;
+        margin-left: -15px;
+
+        .Left {
+          display: block !important;
+          flex: 0 0 66.666667%;
+          max-width: 66.666667%;
+          position: relative;
+          width: 100%;
+          padding-right: 15px;
+          padding-left: 15px;
+        }
+
+        .Right {
+          flex: 0 0 33.333333%;
+          max-width: 33.333333%;
+          position: relative;
+          width: 100%;
+          padding-right: 15px;
+          padding-left: 15px;
+        }
+      }
+    }
+  }
+
+  .FoodPageContainer {
+    padding-top: 30px;
+    padding-bottom: 20px;
+    max-width: 1320px;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    display: flex;
+
+    .LeftSide {
+      display: block;
+    }
+
+    .ContentSide {
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
+
+      .cards {
+        justify-content: center;
+        margin: 0 !important;
+        padding: 10px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+
+        .ShopGrid {
+          width: 100%;
+          padding-right: 15px;
+          padding-left: 15px;
+          margin-right: auto;
+          margin-left: auto;
+
+          .main_title {
+            margin-bottom: 25px;
+            position: relative;
+
+            h2 {
+              font-size: 26px;
+              font-size: 1.625rem;
+              max-width: 600px;
+              margin: 20px 0 0 0;
+              color: #222;
+              font-weight: 500;
+              transition: all 0.3s ease-in-out;
+            }
+
+            p {
+              max-width: 600px;
+              font-size: 18px;
+              font-size: 1.125rem;
+              font-weight: 300;
+            }
+
+            a {
+              position: absolute;
+              right: 0;
+              bottom: 0;
+              font-weight: 500;
+              color: #e54750;
+              text-decoration: none;
+              transition: all 0.3s ease-in-out;
+              outline: none;
+            }
+          }
+
+          .ShopGridSection {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            margin-right: -15px;
+            margin-left: -15px;
+            column-gap: 30px;
+            padding-right: 15px;
+            padding-left: 15px;
+          }
+        }
+
+        a {
+          margin: 5px;
+        }
+      }
+    }
+  }
+}

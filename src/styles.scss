@@ -1,0 +1,28 @@
+.ParentContainer {
+  > div {
+    .segment {
+      width: calc(100% - 270px) !important;
+      .FoodManage,
+      .OrderManage,
+      .MenuManage,
+      .SaleManage,
+      .ManageRating,
+      .ShopRegisterPending,
+      .AdminManageShopList,
+      .AdminManageCusList,
+      .OrderManageCus {
+        display: block;
+        width: 100% !important;
+        overflow: hidden;
+        // max-height: calc(100% - 100px);
+        overflow-x: auto;
+        height: 100%;
+        position: relative;
+        .DataTable {
+          height: calc(100% - 50px) !important;
+          position: absolute !important;
+        }
+      }
+    }
+  }
+}

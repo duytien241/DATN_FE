@@ -1,0 +1,203 @@
+// .footer-top {
+//     width: 100%;
+//     &.bg-black {
+//         background-color: #000;
+//     }
+//     &.section-padding {
+//         padding: 80px 0;
+//     }
+//     .container-fluid {
+//         width: 100%;
+//         padding-right: 15px;
+//         padding-left: 15px;
+//         margin-right: auto;
+//         margin-left: auto;
+//         .row {
+//             display: -ms-flexbox;
+//             display: flex;
+//             -ms-flex-wrap: wrap;
+//             flex-wrap: wrap;
+//             margin-right: -15px;
+//             margin-left: -15px;
+//             .col-md-2 {
+//                 -ms-flex: 0 0 16.666667%;
+//                 flex: 0 0 16.666667%;
+//                 max-width: 16.666667%;
+//                 position: relative;
+//                 width: 100%;
+//                 padding-right: 15px;
+//                 padding-left: 15px;
+//                 .icon-box {
+//                     margin: 0 auto;
+//                     text-align: center;
+//                     max-width: 150px;
+//                     word-break: break-all;
+//                     span {
+//                         display: block;
+//                         font-size: 12px;
+//                         font-family: Flaticon;
+//                         .flaticon-credit-card-1 {
+//                             &::before {
+//                                 font-family: Flaticon;
+//                                 content: "\f10f";
+//                             }
+//                         }
+//                     }
+//                     .text-light-green {
+//                         color: #ff0018;
+//                     }
+//                     .text-custom-white {
+//                         color: #ffffff;
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }
+
+.shape_element_2 {
+  background-color: #fff;
+  .container {
+    max-width: 1320px;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    &.margin_60_0 {
+      padding-top: 60px;
+      padding-bottom: 0;
+    }
+    .row {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+      margin-right: -15px;
+      margin-left: -15px;
+      .col-lg-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+        position: relative;
+        width: 100%;
+        padding-right: 15px;
+        padding-left: 15px;
+        .box_how {
+          background-color: #fff;
+          -webkit-border-radius: 5px;
+          -moz-border-radius: 5px;
+          -ms-border-radius: 5px;
+          border-radius: 5px;
+          -webkit-box-shadow: 0 0 32px -7px rgba(0, 0, 0, 0.1);
+          -moz-box-shadow: 0 0 32px -7px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 0 32px -7px rgba(0, 0, 0, 0.1);
+          padding: 30px 25px;
+          text-align: center;
+          margin-bottom: 20px;
+          figure {
+            margin: 0 0 1rem;
+            img {
+              vertical-align: middle;
+              border-style: none;
+            }
+          }
+          h3 {
+            font-size: 21px;
+            font-size: 1.3125rem;
+          }
+          p {
+            margin-bottom: 0;
+          }
+        }
+      }
+      .col-lg-5 {
+        -ms-flex: 0 0 41.666667%;
+        flex: 0 0 41.666667%;
+        max-width: 41.666667%;
+        position: relative;
+        width: 100%;
+        padding-right: 15px;
+        padding-left: 15px;
+        &.offset-lg-1 {
+          margin-left: 8.333333%;
+        }
+        .intro_txt {
+          position: relative;
+          &::before {
+            content: '';
+            background: url(http://www.ansonika.com/fooyes/img/shape_element_2.svg) no-repeat 0 0;
+            position: absolute;
+            display: block;
+            width: 195px;
+            height: 110px;
+            top: -160px;
+            right: -30px;
+            opacity: 0.6;
+          }
+          .intro_txt .main_title {
+            margin-bottom: 15px;
+            position: relative;
+          }
+          .lead {
+            font-size: 1.25rem;
+            font-weight: 300;
+          }
+          p {
+            margin-bottom: 20px;
+            .btn_1 {
+              border: none;
+              background-color: #e54750;
+              outline: none;
+              cursor: pointer;
+              display: inline-block;
+              text-decoration: none;
+              padding: 8px 25px;
+              color: #fff;
+              font-weight: 500;
+              text-align: center;
+              font-size: 14px;
+              font-size: 0.875rem;
+              -moz-transition: all 0.3s ease-in-out;
+              -o-transition: all 0.3s ease-in-out;
+              -webkit-transition: all 0.3s ease-in-out;
+              -ms-transition: all 0.3s ease-in-out;
+              transition: all 0.3s ease-in-out;
+              -webkit-border-radius: 3px;
+              -moz-border-radius: 3px;
+              -ms-border-radius: 3px;
+              border-radius: 3px;
+              line-height: normal;
+              &.gradient {
+                background-size: 100%;
+                background-image: -webkit-linear-gradient(right, #f3723b, #e54750);
+                background-image: linear-gradient(to right, #f3723b, #e54750);
+                position: relative;
+                z-index: 1;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+              }
+              &.medium {
+                font-size: 15px;
+                font-size: 0.9375rem;
+                padding: 12px 30px;
+              }
+              &.pulse_bt {
+                box-shadow: 0 0 0 rgba(229, 71, 80, 0.4);
+                animation: pulseanime 3s infinite;
+                -webkit-animation: pulseanime 3s infinite;
+              }
+              &.mt-2 {
+                margin-top: 0.5rem !important;
+              }
+            }
+          }
+        }
+      }
+      .align-self-center {
+        -ms-flex-item-align: center !important;
+        align-self: center !important;
+      }
+    }
+  }
+}

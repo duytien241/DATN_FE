@@ -8,13 +8,19 @@ import TextBox, { TEXTBOX_TYPE } from 'elements/TextBox';
 import TextArea from 'elements/TextArea';
 import { State } from 'redux-saga/reducers';
 import { Obj } from 'interfaces/common';
-import { BASE_IMAGE_URL, handleError } from 'utils/common';
+import { BASE_IMAGE_URL, COMP_TYPE, handleError } from 'utils/common';
 import { updateUserInfo } from 'components/RegisterShop/actions';
 import { queryShopInfo, queryShopType } from 'components/actions';
 import styles from './styles.scss';
 
-export default () => {
+interface UserInfoFormProps {
+  compType?: COMP_TYPE;
+  id_user?: any;
+}
+
+export const UserInfoForm: React.FC<UserInfoFormProps> = (props: UserInfoFormProps) => {
   const dispatch = useDispatch();
+  const { compType, id_user } = props;
   const [, setRedraw] = useState();
   const shopType = useSelector((state: State) => state.shopType);
   const userShopInfo = useSelector((state: State) => state.userShopInfo);
@@ -105,7 +111,7 @@ export default () => {
 
   const requestData = () => {
     const params = {
-      id_user: userLogin.id,
+      id: compType === COMP_TYPE.MODAL ? id_user : userLogin.id,
     };
     dispatch(queryShopInfo(params));
   };
@@ -164,9 +170,11 @@ export default () => {
   return (
     <ErrorBoundary FallbackComponent={Fallback} onError={handleError}>
       <div className={styles.UserInfoForm}>
-        <Header as="h3" textAlign="center">
-          Thông tin tài khoản
-        </Header>
+        {compType !== COMP_TYPE.MODAL && (
+          <Header as="h3" textAlign="center">
+            Thông tin tài khoản
+          </Header>
+        )}
         <Grid centered columns={3}>
           <Grid.Column>
             <div className={styles.FormImage}>
@@ -178,7 +186,9 @@ export default () => {
                 }
                 size="small"
               />
-              <Input type="file" onChange={updateImage} accept="image/x-png,image/gif,image/jpeg" />
+              {compType !== COMP_TYPE.MODAL && (
+                <Input type="file" onChange={updateImage} accept="image/x-png,image/gif,image/jpeg" />
+              )}
             </div>
             <TextBox
               className={'UsernameInput'}
@@ -262,7 +272,7 @@ export default () => {
               type={TEXTBOX_TYPE.TEXT}
             />
             <TextArea placeholder="Nhập mô tả cửa hàng" value={userInfoRef.current.desc} onChangeText={onChangeDesc} />
-            <Button content="Lưu thông tin" onClick={updateInfo} color="blue" />
+            {compType !== COMP_TYPE.MODAL && <Button content="Lưu thông tin" onClick={updateInfo} color="blue" />}
           </Grid.Column>
         </Grid>
       </div>

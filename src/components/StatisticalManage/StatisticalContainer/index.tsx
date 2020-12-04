@@ -8,7 +8,7 @@ import { Form } from 'semantic-ui-react';
 import { queryStatisticalOrder } from './actions';
 import { Obj } from 'interfaces/common';
 import Fallback from 'components/Fallback';
-import { handleError, quarterOfTheYear } from 'utils/common';
+import { COMP_TYPE, handleError, quarterOfTheYear } from 'utils/common';
 import DataTable from 'elements/Datatable';
 import { State } from 'redux-saga/reducers';
 import { STATISTICAL_TYPE } from '..';
@@ -17,10 +17,12 @@ import styles from './styles.scss';
 
 interface StatisticalContainerProps {
   type?: STATISTICAL_TYPE;
+  compType?: COMP_TYPE;
+  id_user?: any;
 }
 
 export default (props: StatisticalContainerProps) => {
-  const { type } = props;
+  const { type, compType, id_user } = props;
   const dispatch = useDispatch();
   const [, setRedraw] = useState();
   const [month, setMonth] = useState(new Date().getMonth() + 1);
@@ -48,26 +50,14 @@ export default (props: StatisticalContainerProps) => {
         },
       },
       {
-        Header: 'Price',
-        accessor: 'price',
+        Header: 'HTTT',
+        accessor: 'payType',
         className: 'Center',
         width: 70,
       },
       {
-        Header: 'Quantity',
-        accessor: 'qty',
-        className: 'Center',
-        width: 70,
-      },
-      {
-        Header: 'pay',
-        accessor: 'pay',
-        className: 'Center',
-        width: 70,
-      },
-      {
-        Header: 'Address',
-        accessor: 'Address',
+        Header: 'Địa chỉ',
+        accessor: 'address',
         className: 'Center',
         width: 70,
       },
@@ -78,25 +68,25 @@ export default (props: StatisticalContainerProps) => {
         width: 70,
       },
       {
-        Header: 'status',
+        Header: 'trạng thái',
         accessor: 'status',
         className: 'Center',
         width: 70,
       },
       {
-        Header: 'Total',
+        Header: 'Tổng',
         accessor: 'total',
         className: 'Center',
         width: 70,
       },
       {
-        Header: 'create_at',
+        Header: 'Tạo lúc',
         accessor: 'create_at',
         className: 'Center',
         width: 70,
       },
       {
-        Header: 'update_at',
+        Header: 'Cập nhật lúc',
         accessor: 'update_at',
         className: 'Center',
         width: 70,
@@ -115,6 +105,7 @@ export default (props: StatisticalContainerProps) => {
     setQuarter(quarterOfTheYear(new Date()));
     setYear(new Date().getFullYear());
     setDate(new Date());
+    requestData();
   }, [type]);
 
   useEffect(() => {
@@ -132,7 +123,7 @@ export default (props: StatisticalContainerProps) => {
 
   const requestData = () => {
     const params = {
-      id_user: userLogin.data.id,
+      id_user: compType === COMP_TYPE.MODAL ? id_user : userLogin.data.id,
       ...(type === STATISTICAL_TYPE.MONTH
         ? { month: month, year: year }
         : type === STATISTICAL_TYPE.QUATER

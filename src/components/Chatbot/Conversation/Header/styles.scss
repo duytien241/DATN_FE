@@ -1,0 +1,42 @@
+.ConversationContainer {
+  .ChatbotHeader {
+    border-radius: 10px 10px 0 0;
+    text-align: center;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    min-height: 60px;
+    padding: 0 12px 0 12px;
+  }
+
+  .ChatbotTitle {
+    font-size: 24px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    .TitleSection {
+      display: flex;
+      flex-direction: column;
+      .Title {
+        font-size: 1.0625rem;
+        text-align: left;
+      }
+      .SubTitle {
+        font-size: 0.8125rem;
+      }
+    }
+  }
+
+  .ChatbotCloseButton {
+    background-color: transparent;
+  }
+
+  .ChatbotAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+}

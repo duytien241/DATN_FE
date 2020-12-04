@@ -1,11 +1,61 @@
 .Home {
   width: 100%;
-  display: flex;
-  flex-direction: column;
   height: 100%;
-  > div {
-    padding: 10px;
+  align-items: center;
+  .Header {
+    background: #333;
+    position: relative;
+    width: 100%;
+    padding-bottom: 2px;
+    .HeaderWrapper {
+      width: 1170px;
+      margin: 0 auto;
+    }
+  }
 
+  .Slider {
+    width: 100%;
+    background-color: #000;
+    height: 440px;
+    padding: 10px 0;
+  }
+
+  .ContainerSection {
+    max-width: 1320px;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    .ShopSection {
+      min-height: 600px;
+    }
+    .FoodSection {
+      min-height: 600px;
+    }
+  }
+  .MenuSection {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    border-radius: 0;
+    .header {
+      padding-left: 20px;
+      display: flex;
+      .content {
+        font-size: 20px;
+        font-weight: 700;
+        float: left;
+      }
+    }
+  }
+  .segment {
+    margin: 0;
+    border-radius: 0;
+    background-color: #eee;
+  }
+  > div {
     &:first-child {
       padding: 0;
     }

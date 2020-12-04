@@ -2,15 +2,23 @@ import { combineReducers } from 'redux';
 import { UserLogin } from 'components/Login/reducers';
 import {
   Comment,
+  CommentResult,
   CreateFoodResult,
   DeleteFoodManageResult,
   FoodList,
   FoodType,
   LocationData,
+  RatingResult,
+  Rating,
   ShopList,
   ShopType,
   UpdateFoodResult,
   UserShopInfo,
+  FoodDetail,
+  FoodListCategory,
+  ShopListCategory,
+  ListCategory,
+  ListDistrict,
 } from 'components/reducers';
 import { Router } from 'components/Router/reducers';
 import {
@@ -33,6 +41,11 @@ import { CusInfo, UpdateCusInfoResult } from 'components/UpdateInfoCus/reducers'
 import { DecisionShopResult, ShopPendingList } from 'components/ShopRegisterPending/reducers';
 import { AdminInfo } from 'components/AdminInfo/reducers';
 import { CusList, DeleteCusResult } from 'components/AdminManageCusList/reducers';
+import { OrderResult } from 'components/OrderDetail/reducers';
+import { HistoryList } from 'components/AdminHistory/reducers';
+import { ChangeFoodStatusResult } from 'components/FoodManage/reducers';
+import { FoodListSearch } from 'screens/RestaurantList/reducers';
+import { Messages } from 'components/Chatbot/reducers';
 
 export const state = combineReducers({
   //common
@@ -42,9 +55,13 @@ export const state = combineReducers({
 
   //food
   foodList: FoodList,
+  foodDetail: FoodDetail,
   createFoodResult: CreateFoodResult,
   updateFoodResult: UpdateFoodResult,
   deleteFoodManageResult: DeleteFoodManageResult,
+  changeFoodStatusResult: ChangeFoodStatusResult,
+  foodListCategory: FoodListCategory,
+  foodListSearch: FoodListSearch,
 
   //user
   userLogin: UserLogin,
@@ -72,6 +89,7 @@ export const state = combineReducers({
   orderStatusList: OrderStatusList,
   orderFoodList: OrderFoodList,
   orderDetailShop: OrderDetailShop,
+  orderResult: OrderResult,
 
   //sale
   saleCodeList: SaleCodeList,
@@ -82,6 +100,9 @@ export const state = combineReducers({
   shopType: ShopType,
   userShopInfo: UserShopInfo,
   comment: Comment,
+  commentResult: CommentResult,
+  rating: Rating,
+  ratingResult: RatingResult,
   ratingList: RatingList,
 
   //cus
@@ -94,6 +115,13 @@ export const state = combineReducers({
   adminInfo: AdminInfo,
   cusList: CusList,
   deleteCusResult: DeleteCusResult,
+  historyList: HistoryList,
+  messages: Messages,
+
+  //shop
+  shopListCategory: ShopListCategory,
+  listCategory: ListCategory,
+  listDistrict: ListDistrict,
 });
 
 export type State = ReturnType<typeof state>;

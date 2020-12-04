@@ -3,10 +3,12 @@ import React from 'react';
 import { ProSidebar, Menu, MenuItem, SubMenu, SidebarHeader, SidebarContent, SidebarFooter } from 'react-pro-sidebar';
 import { Link } from 'react-router-dom';
 import sidebarBg from '../../assets/bgsidebar.jpg';
+import './styles.scss';
 
 interface SidebarProps {
   menus: Obj[];
   activeTab?: string;
+  title: string;
 
   onClickItem?(value: string): void;
 }
@@ -30,7 +32,7 @@ export default (props: SidebarProps) => {
             whiteSpace: 'nowrap',
           }}
         >
-          {'Quản lý cửa hàng'}
+          {props.title}
         </div>
       </SidebarHeader>
       <SidebarContent>

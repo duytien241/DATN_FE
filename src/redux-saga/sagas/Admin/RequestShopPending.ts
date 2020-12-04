@@ -10,7 +10,7 @@ const queryShopPendingList = async (param: any) => {
 };
 
 const decisionShopRegister = async (param: any) => {
-  return await Axios.put(`${BASE_URI}api/v1/user/approved`, qs.stringify(param), configHeaderAxios);
+  return await Axios.post(`${BASE_URI}api/v1/user/approved`, qs.stringify(param), configHeaderAxios);
 };
 
 function* doActionShopPending(request: Request<Obj>) {

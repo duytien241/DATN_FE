@@ -16,6 +16,18 @@ export function FoodList(state: Obj | null = null, action: Action<Obj>) {
   }
 }
 
+export const FOOD_QUERY_FOOD_DETAIL_SUCCESS = 'FOOD_QUERY_FOOD_DETAIL_SUCCESS';
+export const FOOD_QUERY_FOOD_DETAIL_FAILED = 'FOOD_QUERY_FOOD_DETAIL_FAILED';
+
+export function FoodDetail(state: Obj | null = null, action: Action<Obj>) {
+  switch (action.type) {
+    case FOOD_QUERY_FOOD_DETAIL_SUCCESS:
+      return action.payload ? { ...action.payload } : null;
+    default:
+      return state;
+  }
+}
+
 export const FOOD_CREATE_FOOD_SUCCESS = 'FOOD_CREATE_FOOD_LIST_SUCCESS';
 export const FOOD_CREATE_FOOD_FAILED = 'FOOD_CREATE_FOOD_LIST_FAILED';
 
@@ -68,14 +80,16 @@ export const shopType = (state: State) => state.shopType;
 
 export const getShopType: Selector<State, Obj[]> = createSelector([shopType], (shopType: any) => {
   if (shopType && shopType.data) {
-    return shopType.data.map((data: any) => {
-      return {
-        id: data.id,
-        key: data.id,
-        value: data.id,
-        text: data.name,
-      };
-    });
+    return [{ id: 0, key: 0, value: undefined, text: 'Tất cả loại cửa hàng' }].concat(
+      shopType.data.map((data: any) => {
+        return {
+          id: data.id,
+          key: data.id,
+          value: data.id,
+          text: data.name,
+        };
+      })
+    );
   }
   return [];
 });
@@ -110,14 +124,16 @@ export const locationData = (state: State) => state.locationData;
 
 export const getLocationData: Selector<State, Obj[]> = createSelector([locationData], (locationData: any) => {
   if (locationData && locationData.data) {
-    return Object.keys(locationData.data as Obj).map((key) => {
-      return {
-        id: Number(key),
-        key: Number(key),
-        value: Number(key),
-        text: locationData.data![key],
-      };
-    });
+    return [{ id: 0, key: 0, value: undefined, text: 'Tất cả' }].concat(
+      Object.keys(locationData.data as Obj).map((key) => {
+        return {
+          id: Number(key),
+          key: Number(key),
+          value: Number(key),
+          text: locationData.data![key],
+        };
+      }) as any[]
+    );
   }
   return [];
 });
@@ -146,30 +162,69 @@ export function FoodType(state: Obj | null = null, action: Action<Obj>) {
   }
 }
 
-export const COMMENT_SUCCESS = 'COMMENT_SUCCESS';
-export const COMMENT_FAILED = 'COMMENT_FAILED';
+export const QUERY_COMMENT_SUCCESS = 'QUERY_COMMENT_SUCCESS';
+export const QUERY_COMMENT_FAILED = 'QUERY_COMMENT_FAILED';
 
-export function Comment(state: Comment[] = [], action: Action<Obj>) {
+export function Comment(state: Obj | null = null, action: Action<Obj>) {
   switch (action.type) {
-    case COMMENT_SUCCESS:
-      state.push((action.payload as unknown) as Comment);
-      return state;
+    case QUERY_COMMENT_SUCCESS:
+      return action.payload ? { ...action.payload } : null;
     default:
       return state;
   }
 }
+
+export const COMMENT_RESULT_SUCCESS = 'COMMENT_RESULT_SUCCESS';
+export const COMMENT_RESULT_FAILED = 'COMMENT_RESULT_FAILED';
+
+export function CommentResult(state: Obj | null = null, action: Action<Obj>) {
+  switch (action.type) {
+    case COMMENT_RESULT_SUCCESS:
+      return action.payload ? { ...action.payload } : null;
+    default:
+      return state;
+  }
+}
+
+export const QUERY_RATING_SUCCESS = 'QUERY_RATING_SUCCESS';
+export const QUERY_RATING_FAILED = 'QUERY_RATING_FAILED';
+
+export function Rating(state: Obj | null = null, action: Action<Obj>) {
+  switch (action.type) {
+    case QUERY_RATING_SUCCESS:
+      // state.push((action.payload as unknown) as Comment);
+      return action.payload ? { ...action.payload } : null;
+    default:
+      return state;
+  }
+}
+
+export const REQUEST_RATING_SUCCESS = 'REQUEST_RATING_SUCCESS';
+export const REQUEST_RATING_FAILED = 'REQUEST_RATING_FAILED';
+
+export function RatingResult(state: Obj | null = null, action: Action<Obj>) {
+  switch (action.type) {
+    case REQUEST_RATING_SUCCESS:
+      return action.payload ? { ...action.payload } : null;
+    default:
+      return state;
+  }
+}
+
 export const foodType = (state: State) => state.foodType;
 
 export const getFoodType: Selector<State, Obj[]> = createSelector([foodType], (foodType: any) => {
   if (foodType && foodType.data) {
-    return foodType.data.map((data: any) => {
-      return {
-        id: data.id,
-        key: data.id,
-        value: data.id,
-        text: data.type,
-      };
-    });
+    return [{ id: 0, key: 0, value: undefined, text: 'Tất cả loại món ăn' }].concat(
+      foodType.data.map((data: any) => {
+        return {
+          id: data.id,
+          key: data.id,
+          value: data.id,
+          text: data.type,
+        };
+      })
+    );
   }
   return [];
 });
@@ -203,6 +258,7 @@ export const getOrderList: Selector<State, Obj> = createSelector([orderFoodList]
   let id: number[] = [];
   let orderInfo: Obj[] = [];
   let totalPrice: number = 0;
+  console.log(orderFoodList);
   if (orderList && orderList.length > 0) {
     orderList.map((food) => {
       if (id.includes(food.id_food as number) !== true) {
@@ -233,3 +289,51 @@ export const getOrderList: Selector<State, Obj> = createSelector([orderFoodList]
     totalPrice,
   };
 });
+
+export const FOOD_QUERY_FOOD_LIST_CATEGORY_SUCCESS = 'FOOD_QUERY_FOOD_LIST_CATEGORY_SUCCESS';
+export const FOOD_QUERY_FOOD_LIST_CATEGORY_FAILED = 'FOOD_QUERY_FOOD_LIST_CATEGORY_FAILED';
+
+export function FoodListCategory(state: Obj | null = null, action: Action<Obj>) {
+  switch (action.type) {
+    case FOOD_QUERY_FOOD_LIST_CATEGORY_SUCCESS:
+      return action.payload ? { ...action.payload } : null;
+    default:
+      return state;
+  }
+}
+
+export const SHOP_QUERY_SHOP_LIST_CATEGORY_SUCCESS = 'SHOP_QUERY_SHOP_LIST_CATEGORY_SUCCESS';
+export const SHOP_QUERY_SHOP_LIST_CATEGORY_FAILED = 'SHOP_QUERY_SHOP_LIST_CATEGORY_FAILED';
+
+export function ShopListCategory(state: Obj | null = null, action: Action<Obj>) {
+  switch (action.type) {
+    case SHOP_QUERY_SHOP_LIST_CATEGORY_SUCCESS:
+      return action.payload ? { ...action.payload } : null;
+    default:
+      return state;
+  }
+}
+
+export const QUERY_LIST_CATEGORY_SUCCESS = 'QUERY_LIST_CATEGORY_SUCCESS';
+export const QUERY_LIST_CATEGORY_FAILED = 'QUERY_LIST_CATEGORY_FAILED';
+
+export function ListCategory(state: Obj | null = null, action: Action<Obj>) {
+  switch (action.type) {
+    case QUERY_LIST_CATEGORY_SUCCESS:
+      return action.payload ? { ...action.payload } : null;
+    default:
+      return state;
+  }
+}
+
+export const QUERY_LIST_DISTRICT_SUCCESS = 'QUERY_LIST_DISTRICT_SUCCESS';
+export const QUERY_LIST_DISTRICT_FAILED = 'QUERY_LIST_DISTRICT_FAILED';
+
+export function ListDistrict(state: Obj | null = null, action: Action<Obj>) {
+  switch (action.type) {
+    case QUERY_LIST_DISTRICT_SUCCESS:
+      return action.payload ? { ...action.payload } : null;
+    default:
+      return state;
+  }
+}

@@ -1,7 +1,7 @@
 import { orderFood } from 'components/actions';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Icon, Rating } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 import { formatNumber } from 'utils/common';
 import styles from './styles.scss';
 
@@ -9,12 +9,12 @@ interface FoodInfoProps {
   image: string;
   name: string;
   address: string;
-  rate: number;
   open?: string;
   close?: string;
   price?: string | number;
   describe?: string;
-  id_food: string;
+  id_food: any;
+  id_user: any;
 }
 
 export default (props: FoodInfoProps) => {
@@ -33,12 +33,6 @@ export default (props: FoodInfoProps) => {
         <div className={styles.Info}>
           <h3>{props.name}</h3>
           <p>{props.address}</p>
-          <div className={'Rate'}>
-            <Rating icon="star" defaultRating={Math.ceil(props.rate)} maxRating={5} />
-            <div>
-              <span>999+</span> <span>lượt đánh giá từ TM FOOD</span>
-            </div>
-          </div>
           <div className={styles.OpenTime}>
             <Icon name="dot circle" />
             <span>{'Giờ mở cửa: '}</span>

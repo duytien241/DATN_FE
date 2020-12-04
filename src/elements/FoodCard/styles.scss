@@ -1,6 +1,13 @@
 .FoodCard {
+  width: 100% !important;
+  height: 100%;
   img {
-    height: 200px !important;
+    height: 142px !important;
+  }
+  .header {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .description {
     /* autoprefixer: off */

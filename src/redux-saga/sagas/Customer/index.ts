@@ -1,3 +1,7 @@
-import { watchQueryCusInfo as queryCusInfo, watchUpdateCusInfo as updateCusInfo } from './RequestCustomer';
+import {
+  watchQueryCusInfo as queryCusInfo,
+  watchUpdateCusInfo as updateCusInfo,
+  watchQueryCusList as queryCustList,
+} from './RequestCustomer';
 
-export { queryCusInfo, updateCusInfo };
+export { queryCusInfo, updateCusInfo, queryCustList };

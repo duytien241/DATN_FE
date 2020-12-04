@@ -50,10 +50,15 @@ class DashboardCus extends React.Component<DashboardCusProps, DashboardCusState>
     }
 
     return (
-      <div className={styles.DashboardCus}>
+      <div className={`${styles.DashboardCus} ParentContainer`}>
         <TopBar />
         <div className={styles.DashboardCusContainer}>
-          <Sidebar menus={menus} onClickItem={this.onClickItem} activeTab={this.activeTarget} />
+          <Sidebar
+            title="Quản lý tài khoản"
+            menus={menus}
+            onClickItem={this.onClickItem}
+            activeTab={this.activeTarget}
+          />
           <Segment attached className={styles.DashboardCusBody}>
             {Comp && (
               //@ts-ignore

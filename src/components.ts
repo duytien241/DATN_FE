@@ -1,18 +1,19 @@
-import FoodManage from 'components/FoodManage';
+import { FoodManage } from 'components/FoodManage';
 import MenuManage from 'components/MenuManage';
 import OrderManage from 'components/OrderManage';
-import UserInfoForm from 'components/UserInfoForm';
+import { UserInfoForm } from 'components/UserInfoForm';
 import SaleManage from 'components/SaleManage';
-import StatisticalManage from 'components/StatisticalManage';
+import { StatisticalManage } from 'components/StatisticalManage';
 import ChangePassword from 'components/ChangePassword';
-import OrderManageCus from 'components/OrderManageCus';
-import UpdateInfoCus from 'components/UpdateInfoCus';
+import { OrderManageCus } from 'components/OrderManageCus';
+import { UpdateInfoCus } from 'components/UpdateInfoCus';
 import FavoriteFoodCus from 'components/FavoriteFoodCus';
 import ManageRating from 'components/ManageRating';
 import ShopRegisterPending from 'components/ShopRegisterPending';
 import AdminManageShopList from 'components/AdminManageShopList';
 import AdminManageCusList from 'components/AdminManageCusList';
 import AdminInfo from 'components/AdminInfo';
+import AdminHistory from 'components/AdminHistory';
 
 const targetMap: { [s: string]: React.ComponentType } = {
   manage_order: OrderManage,
@@ -30,6 +31,7 @@ const targetMap: { [s: string]: React.ComponentType } = {
   manage_shop_list: AdminManageShopList,
   manage_cus_list: AdminManageCusList,
   admin_info: AdminInfo,
+  history: AdminHistory,
 };
 
 export { targetMap };

@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import TextBox, { TEXTBOX_TYPE } from 'elements/TextBox';
 import { Button } from 'semantic-ui-react';
 import { useDispatch } from 'react-redux';
-import { REGISTER_TYPE } from 'utils/common';
+import { FIELD_VALID, notificationErrorValidate, REGISTER_TYPE } from 'utils/common';
 import { register } from 'components/RegisterShop/actions';
 import styles from './styles.scss';
 
@@ -31,15 +31,29 @@ export default (props: RegisterCusProps) => {
   });
 
   const registerCus = () => {
-    const params = {
-      SDT: registerShopRef.current.SDT,
-      Address_P: registerShopRef.current.Address,
-      Email: registerShopRef.current.Email,
-      Role: registerShopRef.current.Role,
-      Username: registerShopRef.current.Username,
-      Password: registerShopRef.current.Password,
-    };
-    dispatch(register(params));
+    const isValidUsername = notificationErrorValidate(registerShopRef.current.Username, undefined, 'tên đăng nhập');
+    const isValidPass = notificationErrorValidate(registerShopRef.current.Password, undefined, 'mật khẩu', 8);
+    const isValidAddress = notificationErrorValidate(registerShopRef.current.Address, undefined, 'địa chỉ');
+    const isValidEmail = notificationErrorValidate(registerShopRef.current.Email, FIELD_VALID.MAIL, 'địa chỉ mail');
+    const isValidPhone = notificationErrorValidate(registerShopRef.current.SDT, FIELD_VALID.PHONE, 'số điện thoại');
+    if (
+      isValidUsername === true &&
+      isValidPass === true &&
+      isValidAddress === true &&
+      isValidEmail === true &&
+      isValidPhone === true
+    ) {
+      const params = {
+        SDT: registerShopRef.current.SDT,
+        Address_P: registerShopRef.current.Address,
+        Email: registerShopRef.current.Email,
+        Role: registerShopRef.current.Role,
+        Username: registerShopRef.current.Username,
+        Password: registerShopRef.current.Password,
+      };
+      console.log(params);
+      dispatch(register(params));
+    }
   };
 
   const onChangeUsername = (value: string) => {

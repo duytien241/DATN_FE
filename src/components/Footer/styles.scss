@@ -1,0 +1,153 @@
+// .Footer {
+//   position: relative;
+//   z-index: 11;
+//   width: 100%;
+//   background: #fff;
+//   clear: both;
+//   line-height: 1.7em;
+//   padding: 30px 0 10px;
+//   min-height: 90px;
+//   font-size: 12px;
+//   border-top: #ddd 1px solid;
+//   height: 210px;
+//   .FooterTop {
+//     width: 1170px;
+//     margin: 0 auto;
+//     overflow: hidden;
+//   }
+//   .FooterBottom {
+//     clear: both;
+//     text-align: center;
+//     padding: 15px 0;
+//     border-top: #eee 1px solid;
+//     margin-top: 53px;
+//   }
+// }
+.site-footer {
+  color: #999;
+  background-color: #f6f1d3;
+  padding: 1.618em 0 3.706325903em;
+  width: 100%;
+  .wave {
+    transform: scale(-1, -1);
+    top: 0 !important;
+    width: 100%;
+    background-attachment: fixed;
+    position: absolute;
+    width: 100%;
+    height: 65px;
+    left: 0;
+    background: url(http://www.ansonika.com/fooyes/img/wave_white.svg);
+    z-index: 99;
+    animation: waves 20s linear infinite;
+    &::after,
+    &::before {
+      content: '';
+      width: 100%;
+      height: 65px;
+      background: url(http://www.ansonika.com/fooyes/img/wave_white.svg);
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    &::before {
+      opacity: 0.4;
+      animation: waves-reverse 20s linear infinite;
+    }
+    &::after {
+      opacity: 0.6;
+      animation-delay: -5s;
+      animation: waves 30s linear infinite;
+    }
+  }
+  @keyframes waves {
+    0% {
+      background-position: 0;
+    }
+    100% {
+      background-position: 1600px;
+    }
+  }
+  @keyframes waves-reverse {
+    0% {
+      background-position: 1600px;
+    }
+    100% {
+      background-position: 0;
+    }
+  }
+  &.footer-v1 {
+    position: relative;
+    background-color: #f6f1d3;
+    text-align: center;
+    padding-top: 5.5em;
+    .footer-social-icons {
+      margin-bottom: 3.375em;
+      .social-icons {
+        button + button {
+          margin-left: 1.563em;
+        }
+      }
+    }
+    .footer-logo {
+      width: 200px;
+      margin: 0 auto 52px auto;
+      .custom-logo-link {
+        float: none;
+        display: block;
+        margin-bottom: 0;
+        color: #2d2b2d;
+        text-decoration: none;
+        #pizzaro-logo {
+          fill: #fff;
+          max-height: 54px;
+        }
+      }
+    }
+    .site-address {
+      margin-bottom: 8px;
+      .address {
+        list-style: none;
+        margin: 0;
+        li {
+          display: inline-block;
+          vertical-align: middle;
+          font-size: 0.875em;
+          color: #7f7f7f;
+        }
+      }
+    }
+
+    .site-info {
+      margin-bottom: 4.34em;
+      .copyright {
+        margin: 0;
+        font-size: 0.813em;
+        color: #7f7f7f;
+        line-height: 1.615em;
+      }
+    }
+    .footer-action-btn {
+      background-color: #f31438;
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #fff;
+      font-weight: 900;
+      font-size: 0.875em;
+      line-height: 1.929em;
+      display: inline-block;
+      padding: 1.214em 3.746em;
+      border-top-left-radius: 18px;
+      border-top-right-radius: 18px;
+    }
+  }
+  .col-full {
+    width: 1200px;
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}

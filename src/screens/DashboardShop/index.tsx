@@ -56,10 +56,10 @@ class DashboardShop extends React.Component<DashboardShopProps, DashboardShopSta
     }
 
     return (
-      <div className={styles.DashboardShop}>
+      <div className={`${styles.DashboardShop} ParentContainer`}>
         <TopBar />
         <div className={styles.DashboardShopContainer}>
-          <Sidebar menus={menus} onClickItem={this.onClickItem} activeTab={this.activeTarget} />
+          <Sidebar title="Quản lý" menus={menus} onClickItem={this.onClickItem} activeTab={this.activeTarget} />
           <Segment attached className={styles.DashboardShopBody}>
             {Comp && (
               //@ts-ignore

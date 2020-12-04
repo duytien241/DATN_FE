@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Checkbox, CheckboxProps, Header, Modal, Tab } from 'semantic-ui-react';
+import { Breadcrumb, Button, Checkbox, CheckboxProps, Header, Icon, Modal, Tab } from 'semantic-ui-react';
 import { Column } from 'react-table';
 import { ErrorBoundary } from 'react-error-boundary';
 import Cookie from 'js-cookie';
 import TextBox, { TEXTBOX_TYPE } from 'elements/TextBox';
 import Fallback from 'components/Fallback';
+import TextArea from 'elements/TextArea';
 import DataTable from 'elements/Datatable';
-import { FORM_TYPE, handleError } from 'utils/common';
+import { FORM_TYPE, handleError, notificationErrorValidate, FIELD_VALID } from 'utils/common';
 import { State } from 'redux-saga/reducers';
 import { Obj } from 'interfaces/common';
 import {
@@ -19,9 +20,8 @@ import {
   queryMenuShop,
   updateMenuShop,
 } from './actions';
-import TextArea from 'elements/TextArea';
-import styles from './styles.scss';
 import { queryFoodList } from 'components/actions';
+import styles from './styles.scss';
 
 export default () => {
   const dispatch = useDispatch();
@@ -91,7 +91,7 @@ export default () => {
         Header: 'Mô tả',
         accessor: 'desc',
         className: 'Center',
-        width: 70,
+        width: 170,
       },
       {
         Header: '',
@@ -142,7 +142,7 @@ export default () => {
         Header: 'Mô tả',
         accessor: 'info',
         className: 'Center',
-        width: 70,
+        width: 1,
       },
       {
         Header: 'Giá',
@@ -265,18 +265,28 @@ export default () => {
   };
 
   const submitCreate = () => {
-    const params = {
-      id_user: userLogin.data.id,
-      name: menuFormRef.current.name,
-      desc: menuFormRef.current.desc,
-      ...(type === FORM_TYPE.UPDATE && {
-        id: menuFormRef.current.id,
-      }),
-    };
-    if (type === FORM_TYPE.CREATE) {
-      dispatch(createMenuShop(params));
-    } else {
-      dispatch(updateMenuShop(params));
+    const isValidName = notificationErrorValidate(menuFormRef.current.name, FIELD_VALID.TEXT, 'tên menu', 50);
+    const isValidDesc = notificationErrorValidate(
+      menuFormRef.current.desc,
+      FIELD_VALID.TEXT,
+      'chi tiết menu',
+      500,
+      false
+    );
+    if (isValidName === true && isValidDesc === true) {
+      const params = {
+        id_user: userLogin.data.id,
+        name: menuFormRef.current.name,
+        desc: menuFormRef.current.desc,
+        ...(type === FORM_TYPE.UPDATE && {
+          id: menuFormRef.current.id,
+        }),
+      };
+      if (type === FORM_TYPE.CREATE) {
+        dispatch(createMenuShop(params));
+      } else {
+        dispatch(updateMenuShop(params));
+      }
     }
   };
 
@@ -366,6 +376,19 @@ export default () => {
 
   return (
     <ErrorBoundary FallbackComponent={Fallback} onError={handleError}>
+      <>
+        <Breadcrumb>
+          <Breadcrumb.Section link>Quản lý</Breadcrumb.Section>
+          <Breadcrumb.Divider />
+          <Breadcrumb.Section link active>
+            Menu
+          </Breadcrumb.Section>
+        </Breadcrumb>
+        <Header>
+          <Icon name="food" />
+          Quản lý menu
+        </Header>
+      </>
       <div className={styles.MenuManage}>
         <Button onClick={showCreateMenuModal} content="Thêm Menu" color="blue" />
         <DataTable

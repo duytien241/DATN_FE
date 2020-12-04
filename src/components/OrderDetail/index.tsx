@@ -1,8 +1,14 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Obj } from 'interfaces/common';
+import Cookie from 'js-cookie';
 import styles from './styles.scss';
 import { formatNumber } from 'utils/common';
 import { Button, CheckboxProps, Form, Icon, InputOnChangeData, Modal, Popup, Radio } from 'semantic-ui-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { placeOrder } from './actions';
+import { querySaleCodeList } from 'components/SaleManage/actions';
+import { State } from 'redux-saga/reducers';
+import { userInfo } from 'os';
 
 interface Discount {
   text: string;
@@ -10,6 +16,7 @@ interface Discount {
 }
 
 interface DiscountDetailProps {
+  id_user: string;
   userDiscounts: Discount[];
   shopDiscounts: Discount[];
   onApply: (discount: Discount) => void;
@@ -93,12 +100,18 @@ const DiscountDetail = (props: DiscountDetailProps) => {
   );
 };
 
-export default ({ orderDetail }: { orderDetail: Obj }) => {
+export default ({ orderDetail, id_user }: { orderDetail: Obj; id_user: any }) => {
+  const dispatch = useDispatch();
+  const [, setRedraw] = useState();
+  const saleCodeList = useSelector((state: State) => state.saleCodeList);
+
   const ref = useRef<{
     totalQuantity: number;
     discountCode: { text: string; value: number };
     payMethod: PayMethod;
     shipmentInfo: ShipmentInfo;
+    userLogin?: Obj;
+    saleList: Obj[];
   }>({
     totalQuantity: handleOrderDetail(),
     discountCode: {
@@ -107,14 +120,30 @@ export default ({ orderDetail }: { orderDetail: Obj }) => {
     },
     payMethod: {
       text: 'Tiền mặt',
-      value: 'CASH',
+      value: 'COD',
     },
     shipmentInfo: {
       name: '',
       phone: '',
       address: '',
     },
+    userLogin: Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string).data : null,
+    saleList: [],
   });
+
+  useEffect(() => {
+    requestDataSaleList();
+  }, []);
+
+  useEffect(() => {
+    if (saleCodeList && saleCodeList.data) {
+      if (typeof saleCodeList?.data === 'object') {
+        ref.current.saleList = saleCodeList?.data as Obj[];
+      }
+    }
+    setRedraw({});
+  }, [saleCodeList]);
+
   const [showTypeCode, setShowTypeCode] = useState(false);
   const [openConfirmOrder, setOpenConfirmOrder] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
@@ -156,14 +185,43 @@ export default ({ orderDetail }: { orderDetail: Obj }) => {
     redraw({});
   };
 
+  const requestDataSaleList = () => {
+    const params = {
+      id_user: id_user,
+    };
+
+    dispatch(querySaleCodeList(params));
+  };
+
+  const placeOrderFood = () => {
+    const params = {
+      id_cus: Number(ref.current.userLogin?.id),
+      id_user: id_user,
+      address: ref.current.shipmentInfo.address,
+      note: `${ref.current.shipmentInfo.name}${ref.current.shipmentInfo.name && ','} ${ref.current.shipmentInfo.phone}${
+        ref.current.shipmentInfo.phone && ','
+      } ${ref.current.shipmentInfo.address}`,
+      total: (orderDetail.orderInfo as Obj)?.totalPrice,
+      payType: ref.current.payMethod.value,
+      info: ((orderDetail.orderInfo as Obj)?.orderInfo as Obj[]).map((info: Obj) => {
+        return { qty: info.quantity, id_food: (info.food as Obj).id_food };
+      }),
+    };
+    console.log(params);
+
+    dispatch(placeOrder(params));
+  };
+
   const onSelectPayMethod = (event: React.MouseEvent<HTMLInputElement, MouseEvent>, data: CheckboxProps) => {
-    if (data.value === 'CASH') {
+    if (data.value === 'COD') {
       ref.current.payMethod = { text: 'Tiền mặt', value: 'CASH' };
     } else if (data.value === 'ONLINE') {
       ref.current.payMethod = { text: 'Online', value: 'ONLINE' };
     }
     redraw({});
   };
+
+  console.log(userInfo);
 
   return (
     <div className={styles.OrderDetail}>
@@ -224,7 +282,12 @@ export default ({ orderDetail }: { orderDetail: Obj }) => {
         >
           <Popup.Header> Khuyến mãi</Popup.Header>
           <Popup.Content>
-            <DiscountDetail userDiscounts={[]} shopDiscounts={Object.values(DISCOUNTS)} onApply={onApply} />
+            <DiscountDetail
+              id_user={id_user}
+              userDiscounts={[]}
+              shopDiscounts={Object.values(DISCOUNTS)}
+              onApply={onApply}
+            />
           </Popup.Content>
         </Popup>
       </div>
@@ -242,10 +305,12 @@ export default ({ orderDetail }: { orderDetail: Obj }) => {
           <Popup.Content>
             <Form>
               <Form.Field>
-                <Radio label="Tiền mặt" name="radioGroup" value="CASH" onClick={onSelectPayMethod} />
-              </Form.Field>
-              <Form.Field>
-                <Radio label="Online" name="radioGroup" value="ONLINE" onClick={onSelectPayMethod} />
+                <Radio
+                  label="Tiền mặt"
+                  name="radioGroup"
+                  checked={ref.current.payMethod.value === 'COD'}
+                  onClick={onSelectPayMethod}
+                />
               </Form.Field>
             </Form>
           </Popup.Content>
@@ -301,7 +366,9 @@ export default ({ orderDetail }: { orderDetail: Obj }) => {
           onClick={() => {
             if (ref.current.shipmentInfo.phone === '' || ref.current.shipmentInfo.address === '') {
               setOpenAlert(true);
-            } else setOpenConfirmOrder(true);
+            } else {
+              placeOrderFood();
+            }
           }}
         >
           ĐẶT HÀNG

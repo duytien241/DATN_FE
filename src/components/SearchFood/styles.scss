@@ -1,0 +1,20 @@
+.SearchFood {
+  .search {
+    .results {
+      max-height: 300px;
+      overflow: auto;
+      .result {
+        .description {
+          /* autoprefixer: off */
+          -webkit-box-orient: vertical;
+          /* autoprefixer: on */
+          display: block;
+          display: -webkit-box !important;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+  }
+}

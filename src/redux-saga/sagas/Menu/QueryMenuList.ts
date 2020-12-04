@@ -5,7 +5,11 @@ import { MENU_QUERY_FOOD_IN_MENU, MENU_QUERY_MENU_SHOP } from 'redux-saga/action
 import { BASE_URI, configHeaderAxios } from 'utils/common';
 
 const queryMenuList = async (param: Obj) => {
-  return await Axios.get(`${BASE_URI}api/v1/menu`, configHeaderAxios);
+  console.log(param);
+  return await Axios.get(`${BASE_URI}api/menu/${param.id}`, {
+    params: param,
+    headers: configHeaderAxios,
+  });
 };
 
 const queryFoodInMenu = async (param: Obj) => {
@@ -23,6 +27,7 @@ function* doQueryMenuList(request: Request<Obj>) {
     } else if (request.type === MENU_QUERY_FOOD_IN_MENU) {
       payload = yield queryFoodInMenu(request.data);
     }
+    console.log(payload);
     yield put({
       type: (request.response as any).success,
       payload: payload,

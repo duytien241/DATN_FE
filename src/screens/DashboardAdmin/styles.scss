@@ -3,6 +3,9 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  .Topbar {
+    position: unset;
+  }
   .DashboardAdminContainer {
     display: flex;
     height: 100%;

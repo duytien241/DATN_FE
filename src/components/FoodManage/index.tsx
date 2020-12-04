@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ErrorBoundary } from 'react-error-boundary';
 import Cookie from 'js-cookie';
-import { Breadcrumb, Button, Header, Icon, Input, Modal } from 'semantic-ui-react';
+import { Breadcrumb, Button, Dropdown, DropdownProps, Header, Icon, Input, Modal } from 'semantic-ui-react';
 import { Column } from 'react-table';
 import { Obj } from 'interfaces/common';
 import Fallback from 'components/Fallback';
@@ -10,18 +10,30 @@ import TextArea from 'elements/TextArea';
 import TextBox, { TEXTBOX_TYPE } from 'elements/TextBox';
 import DataTable from 'elements/Datatable';
 import { createFood, queryFoodList, updateFood, deleteFoodManage } from 'components/actions';
-import { BASE_IMAGE_URL, FORM_TYPE, handleError } from 'utils/common';
+import { BASE_IMAGE_URL, FORM_TYPE, handleError, COMP_TYPE, isBlank, FIELD_VALID } from 'utils/common';
 import { State } from 'redux-saga/reducers';
 import styles from './styles.scss';
+import { changeStatusFood } from './actions';
+import { notificationErrorValidate } from 'utils/common';
 
-export default () => {
+export const foodStatus = [
+  { key: 0, text: 'Hết hàng', value: 0 },
+  { key: 1, text: 'Còn hàng', value: 1 },
+];
+
+interface FoodManageProps {
+  compType?: COMP_TYPE;
+  id_user?: any;
+}
+
+export const FoodManage: React.FC<FoodManageProps> = (props: FoodManageProps) => {
+  const { compType } = props;
   const dispatch = useDispatch();
   const [, setRedraw] = useState();
   const [openModal, setOpenModal] = useState(false);
   const [type, setType] = useState(FORM_TYPE.CREATE);
 
   const userLogin = Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string) : null;
-
   const foodList = useSelector((state: State) => state.foodList);
   const createFoodResult = useSelector((state: State) => state.createFoodResult);
   const updateFoodResult = useSelector((state: State) => state.updateFoodResult);
@@ -33,10 +45,13 @@ export default () => {
     info: string;
     image?: FileList;
     id?: number;
+    foodStatus: string;
+    foodStatusId?: number;
   }>({
     name: '',
     price: 0,
     info: '',
+    foodStatus: '',
   });
 
   useEffect(() => {
@@ -98,7 +113,7 @@ export default () => {
         Header: 'Mô tả',
         accessor: 'info',
         className: 'Center',
-        width: 70,
+        width: 270,
       },
       {
         Header: 'Giá',
@@ -107,7 +122,7 @@ export default () => {
         width: 70,
       },
       {
-        Header: 'Giá',
+        Header: 'Hình ảnh',
         accessor: 'image',
         className: 'Center',
         width: 70,
@@ -148,7 +163,7 @@ export default () => {
 
   const requestData = () => {
     const params = {
-      id_user: userLogin.data.id,
+      id_user: compType === COMP_TYPE.MODAL ? props.id_user : userLogin.data.id,
     };
 
     dispatch(queryFoodList(params));
@@ -159,6 +174,7 @@ export default () => {
     foodFormRef.current.price = data.price as number;
     foodFormRef.current.info = data.info as string;
     foodFormRef.current.id = data.id as number;
+    foodFormRef.current.foodStatus = data.status as string;
     setOpenModal(true);
     setType(FORM_TYPE.UPDATE);
     setRedraw({});
@@ -191,21 +207,33 @@ export default () => {
   };
 
   const submitCreate = () => {
-    const params = {
-      name: foodFormRef.current.name,
-      info: foodFormRef.current.info,
-      price: foodFormRef.current.price,
-      image: foodFormRef.current.image,
-      id_user: userLogin.data.id,
-      id_food: foodFormRef.current.id,
-      ...(type === FORM_TYPE.UPDATE && {
+    const isValidName = notificationErrorValidate(foodFormRef.current.name, undefined, 'tên món ăn', 50);
+    const isValidPrice = notificationErrorValidate(foodFormRef.current.price, FIELD_VALID.NUMBER, 'giá món ăn');
+    const isValidInfo = notificationErrorValidate(
+      foodFormRef.current.info,
+      FIELD_VALID.TEXT,
+      'thông tin chi tiết món ăn',
+      500,
+      false
+    );
+
+    if (isValidName === true && isValidPrice === true && isValidInfo === true) {
+      const params = {
+        name: foodFormRef.current.name,
+        info: foodFormRef.current.info,
+        price: foodFormRef.current.price,
+        image: foodFormRef.current.image,
+        id_user: userLogin.data.id,
         id_food: foodFormRef.current.id,
-      }),
-    };
-    if (type === FORM_TYPE.CREATE) {
-      dispatch(createFood(params));
-    } else {
-      dispatch(updateFood(params));
+        ...(type === FORM_TYPE.UPDATE && {
+          id_food: foodFormRef.current.id,
+        }),
+      };
+      if (type === FORM_TYPE.CREATE) {
+        dispatch(createFood(params));
+      } else {
+        dispatch(updateFood(params));
+      }
     }
   };
 
@@ -214,6 +242,18 @@ export default () => {
       id: foodFormRef.current.id,
     };
     dispatch(deleteFoodManage(params));
+  };
+
+  const changeFoodStatus = (event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) => {
+    foodFormRef.current.foodStatusId = data.value as number;
+    foodFormRef.current.foodStatus = foodStatus.find((foodStatusData: any) => foodStatusData.value === data.value)
+      ?.text as string;
+    const params = {
+      status: foodFormRef.current.foodStatusId,
+      id: foodFormRef.current.id,
+    };
+    dispatch(changeStatusFood(params));
+    setRedraw({});
   };
 
   const onClose = () => {
@@ -226,19 +266,25 @@ export default () => {
 
   return (
     <ErrorBoundary FallbackComponent={Fallback} onError={handleError}>
-      <Breadcrumb>
-        <Breadcrumb.Section link>Manage</Breadcrumb.Section>
-        <Breadcrumb.Divider />
-        <Breadcrumb.Section link active>
-          Food
-        </Breadcrumb.Section>
-      </Breadcrumb>
-      <Header>
-        <Icon name="food" />
-        Quản lý món ăn
-      </Header>
+      {compType !== COMP_TYPE.MODAL && (
+        <>
+          <Breadcrumb>
+            <Breadcrumb.Section link>Manage</Breadcrumb.Section>
+            <Breadcrumb.Divider />
+            <Breadcrumb.Section link active>
+              Food
+            </Breadcrumb.Section>
+          </Breadcrumb>
+          <Header>
+            <Icon name="food" />
+            Quản lý món ăn
+          </Header>
+        </>
+      )}
       <div className={styles.FoodManage}>
-        <Button onClick={showCreateFoodModal} content="Thêm món ăn" icon="add" color="blue" />
+        {compType !== COMP_TYPE.MODAL && (
+          <Button onClick={showCreateFoodModal} content="Thêm món ăn" icon="add" color="blue" />
+        )}
         <DataTable columns={(ref.current.columnDefs as unknown) as Column<object>[]} data={ref.current.data as Obj[]} />
       </div>
       <Modal
@@ -279,7 +325,20 @@ export default () => {
                   label="Chi tiết món ăn"
                   onChangeText={onChangeInfoFood}
                 />
-                <Button onClick={submitCreate} content="Thêm" />
+                {type === FORM_TYPE.UPDATE && (
+                  <Dropdown
+                    button
+                    className="icon"
+                    floating
+                    labeled
+                    options={foodStatus}
+                    text={
+                      !isBlank(foodFormRef.current.foodStatus) ? foodFormRef.current.foodStatus : 'Thay đổi trạng thái'
+                    }
+                    onChange={changeFoodStatus}
+                  />
+                )}
+                <Button onClick={submitCreate} content={type === FORM_TYPE.UPDATE ? 'Cập nhật' : 'Thêm'} />
               </div>
             </div>
           </Modal.Content>

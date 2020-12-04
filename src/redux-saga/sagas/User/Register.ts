@@ -6,7 +6,8 @@ import { AUTHENTICATION_REGISTER, USER_UPDATE_INFO_USER, AUTHENTICATION_CHANGE_P
 import { BASE_URI, configHeaderAxios, notificationError, notificationSuccess } from 'utils/common';
 
 const register = async (param: any) => {
-  return await Axios.post(`${BASE_URI}api/v1/regist`, qs.stringify(param), configHeaderAxios);
+  console.log(param);
+  return await Axios.post(`${BASE_URI}api/user/register`, qs.stringify(param), configHeaderAxios);
 };
 
 const updateInfoUser = async (param: any) => {

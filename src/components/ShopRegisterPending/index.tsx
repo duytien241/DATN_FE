@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ErrorBoundary } from 'react-error-boundary';
-import Cookie from 'js-cookie';
 import { Breadcrumb, Button, Header, Icon, Modal } from 'semantic-ui-react';
 import { Column } from 'react-table';
 import { Obj } from 'interfaces/common';
@@ -17,7 +16,6 @@ export default () => {
   const [, setRedraw] = useState();
   const [openModal, setOpenModal] = useState(false);
   const [type, setType] = useState(FORM_TYPE.CREATE);
-  const userLogin = Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string).data : null;
   const shopPendingList = useSelector((state: State) => state.shopPendingList);
   const decisionShopResult = useSelector((state: State) => state.decisionShopResult);
 
@@ -63,49 +61,49 @@ export default () => {
         Header: 'Tên cửa hàng',
         accessor: 'NameR',
         className: 'Center',
-        width: 70,
+        width: 170,
       },
       {
         Header: 'Địa chỉ',
         accessor: 'Address_R',
         className: 'Center',
-        width: 70,
+        width: 170,
       },
       {
         Header: 'Email',
         accessor: 'Email_R',
         className: 'Center',
-        width: 70,
+        width: 170,
       },
       {
         Header: 'Mô tả',
         accessor: 'desc',
         className: 'Center',
-        width: 70,
+        width: 170,
       },
       {
         Header: 'Ngân hàng thụ hưởng',
         accessor: 'BankCore',
         className: 'Center',
-        width: 70,
+        width: 170,
       },
       {
         Header: 'Số tài khoản',
         accessor: 'BankNum',
         className: 'Center',
-        width: 70,
+        width: 170,
       },
       {
         Header: 'Ngày đăng ký',
         accessor: 'create_at',
         className: 'Center',
-        width: 70,
+        width: 170,
       },
       {
         Header: 'SĐT',
         accessor: 'SDT',
         className: 'Center',
-        width: 70,
+        width: 170,
       },
       {
         Header: 'Đánh giá',
@@ -125,7 +123,7 @@ export default () => {
         },
         className: 'Right NoBorder',
         headerClassName: 'Right NoBorder',
-        width: 55,
+        width: 70,
       },
       {
         Header: '',
@@ -138,7 +136,7 @@ export default () => {
           );
         },
         className: 'Right',
-        width: 55,
+        width: 70,
       },
     ],
     data: [],
@@ -163,7 +161,7 @@ export default () => {
 
   const submit = () => {
     const params = {
-      id_user: userLogin.id,
+      id_user: foodFormRef.current.id,
       result: type === FORM_TYPE.UPDATE ? 'APPLY' : FORM_TYPE.DELETE ? 'IGNORE' : null,
     };
     dispatch(decisionShopRegister(params));
@@ -176,17 +174,17 @@ export default () => {
   return (
     <ErrorBoundary FallbackComponent={Fallback} onError={handleError}>
       <Breadcrumb>
-        <Breadcrumb.Section link>Manage</Breadcrumb.Section>
+        <Breadcrumb.Section link>Quản lý</Breadcrumb.Section>
         <Breadcrumb.Divider />
         <Breadcrumb.Section link active>
-          Pending shop list
+          Danh sách cửa hàng chờ duyệt
         </Breadcrumb.Section>
       </Breadcrumb>
       <Header>
         <Icon name="food" />
         Quản lý đăng ký cửa hàng
       </Header>
-      <div className={styles.ShopRegisterPending}>
+      <div className={`${styles.ShopRegisterPending} DataTableData`}>
         <DataTable columns={(ref.current.columnDefs as unknown) as Column<object>[]} data={ref.current.data as Obj[]} />
       </div>
       <Modal
@@ -201,7 +199,7 @@ export default () => {
         <Modal.Content>
           <div className={'FoodForm'}>
             <div className={'HeaderFoodForm'}>
-              {type === FORM_TYPE.CREATE ? 'Xác nhận duyệt đăng ký cửa hàng' : 'Từ chối đăng ký của cửa hàng'}
+              {type === FORM_TYPE.UPDATE ? 'Xác nhận duyệt đăng ký cửa hàng' : 'Từ chối đăng ký của cửa hàng'}
             </div>
             <div className={'InputFoodForm'}>
               <Button onClick={submit} content="Xác nhận" />

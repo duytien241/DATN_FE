@@ -17,8 +17,10 @@ export default (props: DropdownLocationProps) => {
   const [, setRedraw] = useState();
   const ref = useRef<{
     lsFoodType: Obj[];
+    textFoodType: string;
   }>({
     lsFoodType: [],
+    textFoodType: '',
   });
 
   useEffect(() => {
@@ -29,12 +31,12 @@ export default (props: DropdownLocationProps) => {
   }, [foodType]);
 
   const onChangeValue = (event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) => {
+    ref.current.textFoodType = (data.options as any).find((item: any) => item.id === data.value).text;
     if (props.changeText) {
       props.changeText(data);
     }
+    setRedraw({});
   };
-
-  console.log(props.text);
 
   return (
     <Dropdown
@@ -42,10 +44,10 @@ export default (props: DropdownLocationProps) => {
       className="icon"
       floating
       labeled
-      icon="world"
+      icon="food"
       options={ref.current.lsFoodType}
       search
-      text={isBlank(props.text) ? props.defaultText : props.text}
+      text={isBlank(ref.current.textFoodType) ? props.defaultText : ref.current.textFoodType}
       onChange={onChangeValue}
     />
   );

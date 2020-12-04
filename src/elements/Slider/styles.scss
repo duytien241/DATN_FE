@@ -1,0 +1,63 @@
+.SliderBanner {
+  height: 415px;
+  .slick-prev {
+    font-size: 0;
+    left: 242px;
+    line-height: 0;
+    position: absolute;
+    top: unset;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    -webkit-transform: translate(0, -50%);
+    -ms-transform: translate(0, -50%);
+    transform: translate(0, -50%);
+    cursor: pointer;
+    color: transparent;
+    border: none;
+    outline: 0;
+    background: 0 0;
+    z-index: 1;
+    bottom: -16px;
+  }
+  .slick-next {
+    display: block;
+    right: 242px;
+    font-size: 0;
+    line-height: 0;
+    position: absolute;
+    top: 50%;
+    display: block;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    -webkit-transform: translate(0, -50%);
+    -ms-transform: translate(0, -50%);
+    transform: translate(0, -50%);
+    cursor: pointer;
+    color: transparent;
+    border: none;
+    outline: 0;
+    background: 0 0;
+    z-index: 1;
+    bottom: -16px;
+    top: unset;
+    width: 40px;
+    height: 40px;
+  }
+  .slick-list {
+    .slick-track {
+      .slick-slide {
+        width: 100%;
+        padding: 0 5px;
+        div {
+          img {
+            // width: 675px !important;
+            border-radius: 0;
+            height: 355px;
+          }
+        }
+      }
+    }
+  }
+}

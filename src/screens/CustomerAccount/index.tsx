@@ -51,7 +51,12 @@ class CustomerAccount extends React.Component<CustomerAccountProps, CustomerAcco
       <div className={styles.CustomerAccount}>
         <TopBar />
         <div className={styles.CustomerAccountContainer}>
-          <Sidebar menus={menus} onClickItem={this.onClickItem} activeTab={this.activeTarget} />
+          <Sidebar
+            title="Quản lý tài khoản"
+            menus={menus}
+            onClickItem={this.onClickItem}
+            activeTab={this.activeTarget}
+          />
           <Segment attached className={styles.CustomerAccountBody}>
             {Comp && (
               //@ts-ignore
