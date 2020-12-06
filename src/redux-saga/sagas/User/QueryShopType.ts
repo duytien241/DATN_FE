@@ -2,19 +2,26 @@ import Axios from 'axios';
 import { put, takeLatest } from 'redux-saga/effects';
 import { Obj, Request } from 'interfaces/common';
 import { GLOBAL_QUERY_SHOP_LIST, USER_QUERY_SHOP_INFO, USER_QUERY_SHOP_TYPE } from 'redux-saga/actions';
-import { BASE_URI, configHeaderAxios } from 'utils/common';
+import { BASE_URI } from 'utils/common';
 
 const queryShopType = async (param: Obj) => {
-  return await Axios.get(`${BASE_URI}api/v1/user/type`, configHeaderAxios);
+  return await Axios.get(`${BASE_URI}api/v1/user/type`);
 };
 
 const queryShopInfo = async (param: Obj) => {
-  return await Axios.get(`${BASE_URI}api/restaurant/${param.id}`, { params: param, headers: configHeaderAxios });
+  return Axios.get(`${BASE_URI}api/restaurant/${param.id}`)
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => console.log(error));
 };
 
 const queryShopList = async (param: Obj) => {
-  console.log(param);
-  return await Axios.get(`${BASE_URI}api/restaurant`, { params: param, headers: configHeaderAxios });
+  return Axios.get(`${BASE_URI}api/restaurant/`)
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => console.log(error));
 };
 
 function* doQueryShop(request: Request<Obj>) {

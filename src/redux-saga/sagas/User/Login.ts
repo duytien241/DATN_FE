@@ -1,19 +1,22 @@
 import Axios from 'axios';
-import qs from 'qs';
 import Cookie from 'js-cookie';
 import { put, takeLatest } from 'redux-saga/effects';
 import { Obj, Request } from 'interfaces/common';
 import { AUTHENTICATION_LOGIN, AUTHENTICATION_LOGIN_ADMIN } from 'redux-saga/actions';
-import { configHeaderAxios, notificationError, notificationSuccess } from 'utils/common';
+import { notificationError, notificationSuccess } from 'utils/common';
 import { BASE_URI } from 'utils/common';
 import { ROUTER_REFRESH } from 'components/Router/reducers';
 
-const login = async (param: any) => {
-  return Axios.post(`${BASE_URI}api/v1/login`, qs.stringify(param), configHeaderAxios);
+const login = (param: any) => {
+  return Axios.get(`${BASE_URI}api/v1/login`)
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => console.log(error));
 };
 
 const loginAdmin = async (param: any) => {
-  return Axios.post(`${BASE_URI}api/v1/admin/login`, qs.stringify(param), configHeaderAxios);
+  return Axios.post(`${BASE_URI}api/v1/admin/login`);
 };
 
 function* doLogin(request: Request<Obj>) {

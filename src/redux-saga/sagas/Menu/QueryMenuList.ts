@@ -4,12 +4,12 @@ import { Obj, Request } from 'interfaces/common';
 import { MENU_QUERY_FOOD_IN_MENU, MENU_QUERY_MENU_SHOP } from 'redux-saga/actions';
 import { BASE_URI, configHeaderAxios } from 'utils/common';
 
-const queryMenuList = async (param: Obj) => {
-  console.log(param);
-  return await Axios.get(`${BASE_URI}api/menu/${param.id}`, {
-    params: param,
-    headers: configHeaderAxios,
-  });
+const queryMenuList = (param: Obj) => {
+  return Axios.get(`${BASE_URI}api/menu/${param.id}`)
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => console.log(error));
 };
 
 const queryFoodInMenu = async (param: Obj) => {

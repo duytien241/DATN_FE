@@ -1,19 +1,23 @@
 import { QUERY_COMMENT, REQUEST_COMMENT } from 'redux-saga/actions';
-import qs from 'querystring';
 import Axios from 'axios';
 import { Obj, Request } from 'interfaces/common';
 import { put, takeLatest } from 'redux-saga/effects';
-import { BASE_URI, configHeaderAxios } from 'utils/common';
+import { BASE_URI } from 'utils/common';
 
-const requestComment = async (param: any) => {
-  return await Axios.post(`${BASE_URI}api/v1/food/comment`, qs.stringify(param), configHeaderAxios);
+const requestComment = (param: any) => {
+  return Axios.get(`${BASE_URI}api/v1/food/comment/`)
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => console.log(error));
 };
 
-const queryComment = async (param: any) => {
-  console.log(param);
-  return await Axios.get(`${BASE_URI}api/comment/${param.id}`, {
-    params: param,
-  });
+const queryComment = (param: any) => {
+  return Axios.get(`${BASE_URI}api/comment/${param.id}`)
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => console.log(error));
 };
 
 function* doComment(request: Request<Obj>) {
