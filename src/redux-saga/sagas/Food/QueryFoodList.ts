@@ -11,7 +11,7 @@ import {
 import { BASE_URI, configHeaderAxios } from 'utils/common';
 
 const queryFoodList = async (param?: Obj) => {
-  return await Axios.get(`${BASE_URI}api/menu/${param?.id}`, {
+  return await Axios.get(`${BASE_URI}api/v1/food`, {
     params: param,
     headers: configHeaderAxios,
   });

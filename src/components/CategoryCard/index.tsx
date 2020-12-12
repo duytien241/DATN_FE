@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Obj } from 'interfaces/common';
 import './styles.scss';
+import { BASE_IMAGE_URL } from 'utils/common';
 
 interface CategoryCardProps {
   categoryItem: Obj;
@@ -9,7 +10,6 @@ interface CategoryCardProps {
 
 export default (props: CategoryCardProps) => {
   const { categoryItem } = props;
-  console.log(categoryItem);
 
   return (
     <div className="CategoryCard" style={{ width: '237.5px' }}>
@@ -18,8 +18,8 @@ export default (props: CategoryCardProps) => {
           <figure>
             <span>{categoryItem.id}</span>
             <img
-              src={categoryItem.image as string}
-              data-src={categoryItem.image as string}
+              src={`${BASE_IMAGE_URL}${categoryItem.image as string}`}
+              data-src={`${BASE_IMAGE_URL}${categoryItem.image as string}`}
               alt=""
               className="owl-lazy"
               width={350}
@@ -27,8 +27,8 @@ export default (props: CategoryCardProps) => {
               style={{ opacity: 1 }}
             />
             <div className="info">
-              <h3>{categoryItem.name}</h3>
-              <small>Nhấn vào đây để xem</small>
+              <h3>{categoryItem.type}</h3>
+              <small>Avg price $40</small>
             </div>
           </figure>
         </Link>

@@ -16,7 +16,7 @@ export default (props: FoodCardProps) => {
   return (
     <Link to={`/food/${id_food}`}>
       <Card className={styles.FoodCard}>
-        <Image src={image == null ? foodLogo : `${BASE_IMAGE_URL}${image}`} wrapped ui={false} />
+        <Image src={image == null ? foodLogo : `${BASE_IMAGE_URL}${image}`} wrapped ui={false} className="owl-lazy" />
         <Card.Content>
           <Card.Header>{name}</Card.Header>
           <Card.Meta>

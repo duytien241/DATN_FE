@@ -16,5 +16,8 @@ declare const styles: {
   readonly Name: string;
   readonly Value: string;
   readonly Apply: string;
+  readonly PopupSaleCode: string;
+  readonly content: string;
+  readonly ShopDiscount: string;
 };
 export = styles;

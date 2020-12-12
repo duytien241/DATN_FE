@@ -22,8 +22,8 @@ export default () => {
                       data-was-processed="true"
                     />
                   </figure>
-                  <h3>Easly Order</h3>
-                  <p>Faucibus ante, in porttitor tellus blandit et. Phasellus tincidunt metus lectus sollicitudin.</p>
+                  <h3>Đặt hàng dễ dàng</h3>
+                  <p>Đặt các món ăn mà bạn yêu thích chỉ trong giây lắt</p>
                 </div>
                 <div className="box_how">
                   <figure>
@@ -37,8 +37,8 @@ export default () => {
                       data-was-processed="true"
                     />
                   </figure>
-                  <h3>Quick Delivery</h3>
-                  <p>Maecenas pulvinar, risus in facilisis dignissim, quam nisi hendrerit nulla, id vestibulum.</p>
+                  <h3>Giao hàng nhanh chóng</h3>
+                  <p>Nhận hàng chỉ trong vài phút</p>
                 </div>
               </div>
               <div className="col-lg-6 align-self-center">
@@ -54,8 +54,8 @@ export default () => {
                       data-was-processed="true"
                     />
                   </figure>
-                  <h3>Enjoy Food</h3>
-                  <p>Morbi convallis bibendum urna ut viverra. Maecenas quis consequat libero, a feugiat eros.</p>
+                  <h3>Món ăn ưa thích</h3>
+                  <p>Trải nghiệm những món ăn bạn yêu thích</p>
                 </div>
               </div>
             </div>
@@ -66,7 +66,7 @@ export default () => {
                 <span>
                   <em />
                 </span>
-                <h2>Start Ordering Now</h2>
+                <h2>Đặt hàng ngay bây giờ</h2>
               </div>
               <p className="lead">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed imperdiet libero id nisi euismod, sed porta
@@ -76,9 +76,7 @@ export default () => {
                 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
               </p>
               <p>
-                <a href="#0" className="btn_1 medium gradient pulse_bt mt-2">
-                  Register
-                </a>
+                <button className="btn_1 medium gradient pulse_bt mt-2">Đặt hàng ngay</button>
               </p>
             </div>
           </div>

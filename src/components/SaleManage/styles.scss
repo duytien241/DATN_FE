@@ -1,12 +1,12 @@
 .SaleManage {
-  display: flex;
-  flex: 1;
-  flex-grow: 1;
-  position: relative;
+  display: block;
   width: 100% !important;
-  flex-direction: column;
   overflow: hidden;
-  align-items: flex-end;
+  max-height: calc(100% - 100px);
+  overflow-x: auto;
+  height: 100%;
+  position: relative;
+  text-align: right;
   > .button {
     width: 200px;
   }

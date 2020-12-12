@@ -10,7 +10,7 @@ import { handleError } from 'utils/common';
 import { State } from 'redux-saga/reducers';
 import { queryRatingList } from './actions';
 import styles from './styles.scss';
-import { Header, Icon } from 'semantic-ui-react';
+import { Breadcrumb, Header, Icon } from 'semantic-ui-react';
 
 export default () => {
   const dispatch = useDispatch();
@@ -80,6 +80,13 @@ export default () => {
   };
   return (
     <ErrorBoundary FallbackComponent={Fallback} onError={handleError}>
+      <Breadcrumb>
+        <Breadcrumb.Section link>Quản lý</Breadcrumb.Section>
+        <Breadcrumb.Divider />
+        <Breadcrumb.Section link active>
+          Quản lý đánh giá
+        </Breadcrumb.Section>
+      </Breadcrumb>
       <Header>
         <Icon name="food" />
         Quản lý đánh giá

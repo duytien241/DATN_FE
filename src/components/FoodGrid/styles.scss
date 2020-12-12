@@ -1,6 +1,35 @@
 .FoodGrid {
-  display: flex;
-  flex-wrap: wrap;
+  max-width: 1320px;
+  width: 100%;
+  .main_title {
+    margin-bottom: 25px;
+    position: relative;
+    h2 {
+      font-size: 26px;
+      font-size: 1.625rem;
+      max-width: 600px;
+      margin: 20px 0 0 0;
+      color: #222;
+      font-weight: 500;
+      transition: all 0.3s ease-in-out;
+    }
+    p {
+      max-width: 600px;
+      font-size: 18px;
+      font-size: 1.125rem;
+      font-weight: 300;
+    }
+    a {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      font-weight: 500;
+      color: #e54750;
+      text-decoration: none;
+      transition: all 0.3s ease-in-out;
+      outline: none;
+    }
+  }
   .cards {
     justify-content: center;
     margin: 0 !important;

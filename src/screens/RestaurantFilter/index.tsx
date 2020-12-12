@@ -48,7 +48,7 @@ export default (props: RestaurantListProps) => {
     ref.current.loading = false;
     if (shopListCategory && shopListCategory.data) {
       if (typeof shopListCategory?.data === 'object') {
-        ref.current.shopListCategory = shopListCategory.data as Obj[];
+        ref.current.shopListCategory = (shopListCategory.data as Obj)?.results as Obj[];
       }
     }
     redraw({});

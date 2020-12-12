@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Cookie from 'js-cookie';
 import { useDispatch, useSelector } from 'react-redux';
 import { Icon } from 'semantic-ui-react';
 import { comment } from 'components/actions';
@@ -41,20 +40,18 @@ const CommentComp = (props: Comment) => {
 export default (props: CommentSectionProps) => {
   const dispatch = useDispatch();
   const [value, setValue] = useState('');
-  const ref = useRef<{ userLogin?: Obj }>({
-    userLogin: Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string).data : null,
-  });
-  const userLogin1 = useSelector((state: State) => state.userLogin);
+  const infoAccount = useSelector((state: State) => state.infoAccount);
+  const ref = useRef<{ userLogin?: Obj }>({});
 
   useEffect(() => {
-    if (userLogin1 && userLogin1.data) {
-      ref.current.userLogin = Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string).data : null;
+    if (infoAccount) {
+      ref.current.userLogin = infoAccount;
     }
-  }, [userLogin1]);
+  }, [infoAccount]);
 
   const onSend = () => {
     const params = {
-      id_user: ref.current.userLogin?.id,
+      id_user: ref.current?.userLogin?.id,
       date: new Date(),
       comment: value,
       id_food: props.id_food,
@@ -74,7 +71,7 @@ export default (props: CommentSectionProps) => {
   return (
     <div className={styles.CommentSection}>
       <SectionHeader title="BÌNH LUẬN" />
-      {ref.current.userLogin && (
+      {ref.current?.userLogin && (
         <div className={styles.Input}>
           <Icon name="user outline" />
           <input type="text" onChange={onChange} value={value} onKeyDown={onPressEnter} />

@@ -3,9 +3,20 @@ import Axios from 'axios';
 import { Obj, Request } from 'interfaces/common';
 import { put, takeLatest } from 'redux-saga/effects';
 import { BASE_URI } from 'utils/common';
+import Cookies from 'js-cookie';
 
 const requestComment = (param: any) => {
-  return Axios.get(`${BASE_URI}api/v1/food/comment/`)
+  console.log(param);
+  return Axios.post(
+    `${BASE_URI}api/comment/`,
+    {
+      content: param.comment,
+      title: param.comment,
+      rating: 10,
+      restaurant: param.id_food,
+    },
+    { headers: { Authorization: `Token  ${Cookies.get('userInfo')}` } }
+  )
     .then((res) => {
       return res;
     })

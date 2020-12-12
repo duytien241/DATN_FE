@@ -63,32 +63,9 @@ const FoodItem = (props: FoodItemProps) => {
 export default (props: RelativeFoodProps) => {
   const dispatch = useDispatch();
   const [, redraw] = useState();
-  // useEffect(() => {
-  //   if (props.type === 'SHOP') {
-  //     if (props.id_user) {
-  //       const params = {
-  //         id_user: props.id_user,
-  //       };
-  //       console.log(params);
-
-  //       dispatch(queryFoodList(params));
-  //     }
-  //   } else {
-  //     dispatch(queryFoodList());
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   console.log(foodList);
-  //   if (foodList) {
-  //     ref.current.foodList = foodList;
-  //     redraw({});
-  //   }
-  // }, [foodList]);
-
-  const onOrder = (name: string, price: number, image: string, id_food: number | string) => {
-    console.log({ name, price, image, id_food });
-    dispatch(orderFood({ name, price, image, id_food }));
+  const onOrder = (name: string, price: number | string, image: string, id_food: number | string) => {
+    var price_format = parseInt((price as String).replace('đ', '').replace(',', ''));
+    dispatch(orderFood({ name, price: price_format, image, id_food }));
     redraw({});
   };
 

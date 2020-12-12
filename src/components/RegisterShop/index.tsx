@@ -78,12 +78,13 @@ export default (props: RegisterAccountProps) => {
   const registerShop = () => {
     const isValidName = notificationErrorValidate(registerShopRef.current.name, undefined, 'họ tên', 50);
     const isValidNameR = notificationErrorValidate(registerShopRef.current.NameR, undefined, 'tên cửa hàng', 50);
-    const isValiDesc = notificationErrorValidate(registerShopRef.current.desc, undefined, 'mô tả chi tiết', 500);
+    const isValiDesc = notificationErrorValidate(registerShopRef.current.desc, undefined, 'mô tả chi tiết', 500, false);
     const isValidAddress = notificationErrorValidate(
       registerShopRef.current.Address_R,
       undefined,
       'địa chỉ cửa hàng',
-      255
+      255,
+      false
     );
     const isValidEmail = notificationErrorValidate(registerShopRef.current.Email_R, FIELD_VALID.MAIL, 'Email');
     const isValidUsername = notificationErrorValidate(
@@ -93,7 +94,13 @@ export default (props: RegisterAccountProps) => {
       50
     );
     const isValidPass = notificationErrorValidate(registerShopRef.current.password, FIELD_VALID.TEXT, 'mật khẩu', 8);
-    const isValidID = notificationErrorValidate(registerShopRef.current.idNo, FIELD_VALID.ID, 'CMND/CCCD');
+    const isValidID = notificationErrorValidate(
+      registerShopRef.current.idNo,
+      FIELD_VALID.ID,
+      'CMND/CCCD',
+      undefined,
+      false
+    );
 
     if (
       isValidName === true &&
@@ -107,17 +114,17 @@ export default (props: RegisterAccountProps) => {
     ) {
       const params = {
         name: registerShopRef.current.name,
-        SDT: registerShopRef.current.SDT,
-        Address_R: registerShopRef.current.Address_R,
-        F_type: registerShopRef.current.F_type,
+        phone: registerShopRef.current.SDT,
+        address: registerShopRef.current.Address_R,
+        type: registerShopRef.current.F_type,
         idNo: registerShopRef.current.idNo,
-        Email_R: registerShopRef.current.Email_R,
-        BankNum: registerShopRef.current.BankNum,
-        BankCore: registerShopRef.current.BankCore,
-        Role: registerShopRef.current.Role,
-        Username: registerShopRef.current.username,
-        Password: registerShopRef.current.password,
-        NameR: registerShopRef.current.NameR,
+        email: registerShopRef.current.Email_R,
+        bankNum: registerShopRef.current.BankNum,
+        bankCore: registerShopRef.current.BankCore,
+        role: registerShopRef.current.Role,
+        username: registerShopRef.current.username,
+        password: registerShopRef.current.password,
+        nameR: registerShopRef.current.NameR,
         desc: registerShopRef.current.desc,
       };
       dispatch(register(params));

@@ -4,7 +4,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import DatePickerLib from 'react-datepicker';
 import { Column } from 'react-table';
 import Cookie from 'js-cookie';
-import { Form } from 'semantic-ui-react';
+import { Dropdown, DropdownProps, Form } from 'semantic-ui-react';
 import { queryStatisticalOrder } from './actions';
 import { Obj } from 'interfaces/common';
 import Fallback from 'components/Fallback';
@@ -14,6 +14,13 @@ import { State } from 'redux-saga/reducers';
 import { STATISTICAL_TYPE } from '..';
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from './styles.scss';
+
+export const orderStatus = [
+  { key: 0, text: 'Tất cả(Trạng thái đơn hàng)', value: undefined },
+  { key: 1, text: 'Đang chờ', value: 1 },
+  { key: 2, text: 'Đã xác nhận', value: 2 },
+  { key: 4, text: 'Bị huỷ', value: 4 },
+];
 
 interface StatisticalContainerProps {
   type?: STATISTICAL_TYPE;
@@ -36,6 +43,8 @@ export default (props: StatisticalContainerProps) => {
     columnDefs: Obj[];
     pageIndex: number;
     data: Obj[];
+    status: string;
+    statusId: number;
   }>({
     pageIndex: 0,
     columnDefs: [
@@ -93,6 +102,8 @@ export default (props: StatisticalContainerProps) => {
       },
     ],
     data: [],
+    status: orderStatus[0].text,
+    statusId: orderStatus[0].value as number,
   });
 
   useEffect(() => {
@@ -105,8 +116,9 @@ export default (props: StatisticalContainerProps) => {
     setQuarter(quarterOfTheYear(new Date()));
     setYear(new Date().getFullYear());
     setDate(new Date());
+    setRedraw({});
     requestData();
-  }, [type]);
+  }, [type, compType, id_user]);
 
   useEffect(() => {
     requestData();
@@ -114,6 +126,8 @@ export default (props: StatisticalContainerProps) => {
 
   useEffect(() => {
     if (statisticalOrderList && statisticalOrderList.data) {
+      console.log(statisticalOrderList.data);
+
       if (typeof statisticalOrderList?.data === 'object') {
         ref.current.data = statisticalOrderList?.data as Obj[];
       }
@@ -129,7 +143,9 @@ export default (props: StatisticalContainerProps) => {
         : type === STATISTICAL_TYPE.QUATER
         ? { quarter: quarter, year: year }
         : { year: year }),
+      status: ref.current.statusId,
     };
+    console.log(params);
 
     dispatch(queryStatisticalOrder(params));
   };
@@ -142,29 +158,47 @@ export default (props: StatisticalContainerProps) => {
     setDate(date);
   };
 
+  const changeOrderStatus = (event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) => {
+    ref.current.statusId = data.value as number;
+    ref.current.status = orderStatus.find((statusData: any) => statusData.value === data.value)?.text as string;
+    requestData();
+    setRedraw({});
+  };
+
   return (
     <ErrorBoundary FallbackComponent={Fallback} onError={handleError}>
       <div className={styles.StatisticalContainer}>
-        <Form.Field
-          control={DatePickerLib}
-          className={styles.DateTime}
-          selected={date}
-          onChange={onChangeDate}
-          {...(type === STATISTICAL_TYPE.MONTH
-            ? {
-                dateFormat: 'MM/yyyy',
-                showMonthYearPicker: true,
-              }
-            : type === STATISTICAL_TYPE.QUATER
-            ? {
-                dateFormat: 'yyyy, QQQ',
-                showQuarterYearPicker: true,
-              }
-            : {
-                showYearPicker: true,
-                dateFormat: 'yyyy',
-              })}
-        />
+        <div className={styles.FilterContainer}>
+          <Form.Field
+            control={DatePickerLib}
+            className={styles.DateTime}
+            selected={date}
+            onChange={onChangeDate}
+            {...(type === STATISTICAL_TYPE.MONTH
+              ? {
+                  dateFormat: 'MM/yyyy',
+                  showMonthYearPicker: true,
+                }
+              : type === STATISTICAL_TYPE.QUATER
+              ? {
+                  dateFormat: 'yyyy, QQQ',
+                  showQuarterYearPicker: true,
+                }
+              : {
+                  showYearPicker: true,
+                  dateFormat: 'yyyy',
+                })}
+          />
+          <Dropdown
+            button
+            className="icon"
+            floating
+            labeled
+            options={orderStatus}
+            text={(ref.current.status as string) ? ref.current.status : 'Choose Status'}
+            onChange={changeOrderStatus}
+          />
+        </div>
         <DataTable columns={(ref.current.columnDefs as unknown) as Column<object>[]} data={ref.current.data as Obj[]} />
       </div>
     </ErrorBoundary>

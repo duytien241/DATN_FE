@@ -76,7 +76,7 @@ export default () => {
         Header: 'Email',
         accessor: 'Email_R',
         className: 'Center',
-        width: 70,
+        width: 200,
       },
       {
         Header: 'Mô tả',
@@ -177,15 +177,15 @@ export default () => {
   return (
     <ErrorBoundary FallbackComponent={Fallback} onError={handleError}>
       <Breadcrumb>
-        <Breadcrumb.Section link>Manage</Breadcrumb.Section>
+        <Breadcrumb.Section link>Quản lý</Breadcrumb.Section>
         <Breadcrumb.Divider />
         <Breadcrumb.Section link active>
-          Shop list
+          Danh sách cửa hàng
         </Breadcrumb.Section>
       </Breadcrumb>
       <Header>
         <Icon name="food" />
-        Quản lý đăng ký cửa hàng
+        Danh sách cửa hàng
       </Header>
       <div className={styles.AdminManageShopList}>
         <DataTable columns={(ref.current.columnDefs as unknown) as Column<object>[]} data={ref.current.data as Obj[]} />

@@ -1,27 +1,37 @@
 .StatisticalContainer {
   display: block;
-  .DateTime {
-    width: 200px;
+  .FilterContainer {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
+    margin-bottom: 20px;
+    .DateTime {
+      width: 200px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
 
-    .Label {
-      flex: 1;
-      display: inline-block;
+      .Label {
+        flex: 1;
+        display: inline-block;
+      }
+
+      .react-datepicker-wrapper {
+        display: block !important;
+        flex: 2;
+        float: right;
+        width: 100%;
+
+        input {
+          height: 32px;
+          border-radius: 4px;
+          width: 100%;
+        }
+      }
     }
 
-    .react-datepicker-wrapper {
-      display: block !important;
-      flex: 2;
-      float: right;
-      width: 100%;
-
-      input {
-        height: 32px;
-        border-radius: 4px;
-        width: 100%;
-      }
+    .dropdown {
+      min-width: 250px;
+      height: 32px;
+      margin-left: 10px;
     }
   }
 }

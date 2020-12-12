@@ -16,20 +16,29 @@ interface MessageProps {
 }
 
 export default React.memo((props: MessageProps) => {
-  const renderTextMessage = () => (
-    <div className={`${styles.Message} ${isUser === true ? styles.UserMessage : styles.BotMessage}`}>
-      {message.showAvatar === true && avatarBot != null && (
-        <img src={avatarBot as string} className={styles.ChatbotAvatarMessage} />
-      )}
-      {isUser !== true && <LoaderDots typing={false} />}
-      <div className={`${styles.ChatMessage} `}>
-        <div className={`${styles.Text} ${message.style ? message.style : ''}`}>
-          <span>{message.text}</span>
+  const renderTextMessage = () => {
+    let arr_meesage: string[] = [];
+    if (message.text) {
+      arr_meesage = message.text.split('\n');
+    }
+    console.log(arr_meesage);
+    return (
+      <div className={`${styles.Message} ${isUser === true ? styles.UserMessage : styles.BotMessage}`}>
+        {message.showAvatar === true && avatarBot != null && (
+          <img src={avatarBot as string} className={styles.ChatbotAvatarMessage} />
+        )}
+        {isUser !== true && <LoaderDots typing={false} />}
+        <div className={`${styles.ChatMessage} `}>
+          <div className={`${styles.Text} ${message.style ? message.style : ''}`}>
+            {arr_meesage.map((mess) => (
+              <p>{mess}</p>
+            ))}
+          </div>
+          <span className={styles.Time}>{/* <span>{message.timestamp}</span> */}</span>
         </div>
-        <span className={styles.Time}>{/* <span>{message.timestamp}</span> */}</span>
       </div>
-    </div>
-  );
+    );
+  };
 
   const renderTyping = () => {
     return (

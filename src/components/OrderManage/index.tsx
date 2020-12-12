@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Dropdown, DropdownProps, Header, Icon, Modal } from 'semantic-ui-react';
+import { Breadcrumb, Button, Dropdown, DropdownProps, Header, Icon, Modal } from 'semantic-ui-react';
 import { Column } from 'react-table';
 import { ErrorBoundary } from 'react-error-boundary';
 import Cookie from 'js-cookie';
@@ -42,10 +42,35 @@ export default () => {
         Header: () => null, // No header
         id: 'expander', // It needs an ID
         maxWidth: 50,
-        Cell: ({ row }: any) => {
+        Cell: ({ row, rows, toggleRowExpanded }: any) => {
           return (
             <span {...row.getToggleRowExpandedProps()}>
-              <span onClick={() => showOrderInfoDetail(row)}>{row.isExpanded ? '👇' : '👉'}</span>
+              <span
+                onClick={() => {
+                  showOrderInfoDetail(row);
+                  const expandedRow = rows.find((row2: any) => {
+                    return row2.isExpanded;
+                  });
+                  if (expandedRow) {
+                    const isSubItemOfRow = Boolean(expandedRow && row.id.split('.')[0] === expandedRow.id);
+
+                    if (isSubItemOfRow) {
+                      const expandedSubItem = expandedRow.subRows.find((subRow: any) => subRow.isExpanded);
+
+                      if (expandedSubItem) {
+                        const isClickedOnExpandedSubItem = expandedSubItem.id === row.id;
+                        if (!isClickedOnExpandedSubItem) {
+                          toggleRowExpanded(expandedSubItem.id, false);
+                        }
+                      }
+                    } else {
+                      toggleRowExpanded(expandedRow.id, false);
+                    }
+                  }
+                }}
+              >
+                {row.isExpanded ? '👇' : '👉'}
+              </span>
             </span>
           );
         },
@@ -63,6 +88,12 @@ export default () => {
       {
         Header: 'HTTT',
         accessor: 'payType',
+        className: 'Center',
+        width: 70,
+      },
+      {
+        Header: 'Người đặt',
+        accessor: 'Name',
         className: 'Center',
         width: 70,
       },
@@ -101,9 +132,11 @@ export default () => {
         accessor: 'update',
         Cell: (data: any) => {
           return (
-            <Button positive onClick={() => showUpdateForm(data.row.original)}>
-              {'Cập nhật'}
-            </Button>
+            data.row.original.status === 'Đang chờ' && (
+              <Button positive onClick={() => showUpdateForm(data.row.original)}>
+                {'Cập nhật'}
+              </Button>
+            )
           );
         },
         className: 'Right NoBorder',
@@ -262,6 +295,13 @@ export default () => {
 
   return (
     <ErrorBoundary FallbackComponent={Fallback} onError={handleError}>
+      <Breadcrumb>
+        <Breadcrumb.Section link>Quản lý</Breadcrumb.Section>
+        <Breadcrumb.Divider />
+        <Breadcrumb.Section link active>
+          Quản lý đơn hàng
+        </Breadcrumb.Section>
+      </Breadcrumb>
       <Header>
         <Icon name="food" />
         Quản lý đơn hàng

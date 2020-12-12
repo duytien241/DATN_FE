@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { getOrderList } from 'components/reducers';
 import OrderQuantity from 'elements/OrderQuantity';
-import Cookie from 'js-cookie';
 import { Obj } from 'interfaces/common';
 import { useSelector } from 'react-redux';
 import { Button, Modal, Tab } from 'semantic-ui-react';
@@ -58,23 +57,33 @@ export const OrderFoodItem = (props: OrderFoodItemProps) => {
 export default (props: OrderInfoProps) => {
   const orderInfo = useSelector(getOrderList);
   const orderResult = useSelector((state: State) => state.orderResult);
-  const userLogin1 = useSelector((state: State) => state.userLogin);
+  const infoAccount = useSelector((state: State) => state.infoAccount);
   const ref = useRef<{
     userLogin?: Obj;
     orderDetail: {
       orderInfo?: Obj;
       note?: string;
     };
+    step: number;
   }>({
-    userLogin: Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string).data : null,
     orderDetail: {},
+    step: 1,
   });
   const [openOrderDetail, setOpenOrderDetail] = useState(false);
+  // const [, setRedraw] = useState();
   const [open, setOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
 
+  useEffect(() => {
+    if (infoAccount) {
+      ref.current.userLogin = infoAccount;
+    }
+  }, [infoAccount]);
+
   const onConfirmOrder = () => {
-    ref.current.userLogin = Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string).data : null;
+    if (infoAccount) {
+      ref.current.userLogin = infoAccount;
+    }
     if ((orderInfo.orderInfo as Obj[]).length === 0) {
     } else if (ref.current.userLogin == null) {
       setOpen(true);
@@ -98,12 +107,17 @@ export default (props: OrderInfoProps) => {
     ref.current.orderDetail.note = event.target.value;
   };
 
+  // const onChangeStep = (event: React.SyntheticEvent, data: Obj) => {
+  //   ref.current.step = data.index as number;
+  //   setRedraw({});
+  // };
+
   useEffect(() => {
-    if (userLogin1 && userLogin1.data && open === true) {
-      ref.current.userLogin = Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string).data : null;
+    if (infoAccount && open === true) {
+      ref.current.userLogin = infoAccount;
       setOpen(false);
     }
-  }, [userLogin1]);
+  }, [infoAccount]);
 
   const panes = [
     {
@@ -175,7 +189,28 @@ export default (props: OrderInfoProps) => {
           <span>Chi tiết đơn</span>
         </Modal.Header>
         <Modal.Content>
-          <OrderDetail orderDetail={ref.current.orderDetail as Obj} id_user={props.id_user} />
+          {/* <Step.Group ordered>
+            <Step completed index={1} onClick={onChangeStep}>
+              <Step.Content>
+                <Step.Title>Shipping</Step.Title>
+                <Step.Description>Choose your shipping options</Step.Description>
+              </Step.Content>
+            </Step>
+
+            <Step completed index={2} onClick={onChangeStep}>
+              <Step.Content>
+                <Step.Title>Billing</Step.Title>
+                <Step.Description>Enter billing information</Step.Description>
+              </Step.Content>
+            </Step>
+
+            <Step active index={3} onClick={onChangeStep}>
+              <Step.Content>
+                <Step.Title>Confirm Order</Step.Title>
+              </Step.Content>
+            </Step>
+          </Step.Group> */}
+          <OrderDetail step={ref.current.step} orderDetail={ref.current.orderDetail as Obj} id_user={props.id_user} />
         </Modal.Content>
       </Modal>
     </>

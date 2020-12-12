@@ -6,6 +6,7 @@ import { Obj } from 'interfaces/common';
 import styles from './styles.scss';
 import { Card } from 'semantic-ui-react';
 import { queryFoodList } from 'components/actions';
+import { Link } from 'react-router-dom';
 
 interface FoodGridProps {
   limit?: number;
@@ -33,9 +34,17 @@ export default (props: FoodGridProps) => {
     }
     setRedraw({});
   }, [foodList]);
-  console.log(foodList);
+
   return (
     <div className={styles.FoodGrid}>
+      <div className="main_title">
+        <span>
+          <em></em>
+        </span>
+        <h2>Món ăn</h2>
+        <p>Những món ăn được nhiều người đặt.</p>
+        <Link to="/food_list">Xem tất cả →</Link>
+      </div>
       <Card.Group>
         {((foodList as Obj)?.data as Obj[])?.slice(0, limit).map((foodItem: Obj, index: number) => (
           <FoodCard foodItem={foodItem} key={index} />

@@ -96,7 +96,7 @@ export default () => {
       },
       {
         Header: 'Địa chỉ',
-        accessor: 'price',
+        accessor: 'Address',
         className: 'Center',
         width: 70,
       },
@@ -181,10 +181,10 @@ export default () => {
   return (
     <ErrorBoundary FallbackComponent={Fallback} onError={handleError}>
       <Breadcrumb>
-        <Breadcrumb.Section link>Manage</Breadcrumb.Section>
+        <Breadcrumb.Section link>Quản lý</Breadcrumb.Section>
         <Breadcrumb.Divider />
         <Breadcrumb.Section link active>
-          customer
+          Danh sách khách đăng ký
         </Breadcrumb.Section>
       </Breadcrumb>
       <Header>

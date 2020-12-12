@@ -1,12 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Cookie from 'js-cookie';
 import restaurantImage from 'assets/defaultFood.png';
 import { Icon, Rating, RatingProps } from 'semantic-ui-react';
 import styles from './styles.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from 'redux-saga/reducers';
 import { Obj } from 'interfaces/common';
-import { rating, queryRating } from 'components/actions';
+import { rating } from 'components/actions';
 
 interface FoodInfoProps {
   image: string;
@@ -21,7 +20,7 @@ interface FoodInfoProps {
 
 export default (props: FoodInfoProps) => {
   const dispatch = useDispatch();
-  const userLogin = Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string).data : null;
+  const infoAccount = useSelector((state: State) => state.infoAccount);
   const ratingValue = useSelector((state: State) => state.rating);
   const ratingResult = useSelector((state: State) => state.ratingResult);
   const [, setRedraw] = useState();
@@ -50,18 +49,12 @@ export default (props: FoodInfoProps) => {
     setRedraw({});
   }, [ratingValue]);
 
-  const requestDataRating = () => {
-    const params = {
-      id_user: props.id_res,
-    };
-
-    dispatch(queryRating(params));
-  };
+  const requestDataRating = () => {};
   const onChangeRate = (event: React.MouseEvent<HTMLDivElement>, data: RatingProps) => {
     const params = {
       ratingLevel: data.rating,
       id_user: props.id_res,
-      id_cus: userLogin.id,
+      id_cus: infoAccount?.id,
     };
     dispatch(rating(params));
   };
@@ -82,7 +75,7 @@ export default (props: FoodInfoProps) => {
           <div className={'Rate'}>
             <Rating
               icon="star"
-              disabled={userLogin == null}
+              disabled={infoAccount == null}
               defaultRating={Math.ceil(props.rate / 2)}
               maxRating={5}
               onRate={onChangeRate}

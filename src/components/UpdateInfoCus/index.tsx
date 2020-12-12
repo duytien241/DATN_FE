@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Button, Grid, Header, Image, Input } from 'semantic-ui-react';
-import Cookie from 'js-cookie';
 import Fallback from 'components/Fallback';
 import TextBox, { TEXTBOX_TYPE } from 'elements/TextBox';
 import DatePicker from 'elements/DatePicker';
@@ -20,9 +19,8 @@ export const UpdateInfoCus: React.FC<UpdateInfoCusProps> = (props: UpdateInfoCus
   const { compType, id_cus } = props;
   const dispatch = useDispatch();
   const [, setRedraw] = useState();
-  const cusInfo = useSelector((state: State) => state.cusInfo);
   const updateCusInfoResult = useSelector((state: State) => state.updateCusInfoResult);
-  const userLogin = Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string).data : null;
+  const infoAccount = useSelector((state: State) => state.infoAccount);
 
   const userInfoRef = useRef<{
     id?: number;
@@ -45,19 +43,19 @@ export const UpdateInfoCus: React.FC<UpdateInfoCusProps> = (props: UpdateInfoCus
   }, []);
 
   useEffect(() => {
-    if (cusInfo && cusInfo.data) {
-      if (typeof cusInfo?.data === 'object') {
-        userInfoRef.current.id = cusInfo.data[0].id;
-        userInfoRef.current.name = cusInfo.data[0].Name;
-        userInfoRef.current.SDT = cusInfo.data[0].SDT;
-        userInfoRef.current.Address_P = cusInfo.data[0].Address;
-        userInfoRef.current.Birth = formatStringToDate(cusInfo.data[0].Birth, 'dd/MM/yyyy');
-        userInfoRef.current.Email_P = cusInfo.data[0].Email;
-        userInfoRef.current.image = cusInfo.data[0].image;
+    if (infoAccount) {
+      if (typeof infoAccount?.data === 'object') {
+        userInfoRef.current.id = infoAccount.data[0].id;
+        userInfoRef.current.name = infoAccount.data[0].Name;
+        userInfoRef.current.SDT = infoAccount.data[0].phone;
+        userInfoRef.current.Address_P = infoAccount.data[0].address;
+        userInfoRef.current.Birth = formatStringToDate(infoAccount.data[0].birthday, 'dd/MM/yyyy');
+        userInfoRef.current.Email_P = infoAccount.data[0].email;
+        userInfoRef.current.image = infoAccount.data[0].avatar;
         setRedraw({});
       }
     }
-  }, [cusInfo]);
+  }, [infoAccount]);
 
   useEffect(() => {
     if (updateCusInfoResult && updateCusInfoResult.data) {
@@ -68,7 +66,7 @@ export const UpdateInfoCus: React.FC<UpdateInfoCusProps> = (props: UpdateInfoCus
 
   const requestData = () => {
     const params = {
-      id: compType === COMP_TYPE.MODAL ? id_cus : userLogin.id,
+      id: compType === COMP_TYPE.MODAL ? id_cus : infoAccount?.id,
     };
     dispatch(queryCusInfo(params));
   };

@@ -3,7 +3,6 @@ import TextBox, { TEXTBOX_TYPE } from 'elements/TextBox';
 import { Button, Grid, Header } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changePassword } from './actions';
-import Cookie from 'js-cookie';
 import { State } from 'redux-saga/reducers';
 import { isBlank } from 'utils/common';
 
@@ -15,7 +14,7 @@ interface ChangePasswordState {
 
 export default () => {
   const dispatch = useDispatch();
-  const userLogin = Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string).data : null;
+  const infoAccount = useSelector((state: State) => state.infoAccount);
   const loginPassword = useSelector((state: State) => state.loginPassword);
   const [state, setState] = useState<ChangePasswordState>({});
 
@@ -98,7 +97,7 @@ export default () => {
     const { errorOldPassword, errorNewPassword, errorRetypePassword } = validateChangePassword();
     if (errorOldPassword !== true && errorNewPassword !== true && errorRetypePassword !== null) {
       const params = {
-        id: userLogin.id,
+        id: infoAccount?.id,
         oldPass: ref.current.oldPassword,
         newPass: ref.current.newPassword,
       };

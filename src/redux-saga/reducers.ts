@@ -19,6 +19,7 @@ import {
   ShopListCategory,
   ListCategory,
   ListDistrict,
+  InfoAccount,
 } from 'components/reducers';
 import { Router } from 'components/Router/reducers';
 import {
@@ -122,6 +123,7 @@ export const state = combineReducers({
   shopListCategory: ShopListCategory,
   listCategory: ListCategory,
   listDistrict: ListDistrict,
+  infoAccount: InfoAccount,
 });
 
 export type State = ReturnType<typeof state>;

@@ -9,12 +9,13 @@ import Fallback from 'components/Fallback';
 import TextArea from 'elements/TextArea';
 import TextBox, { TEXTBOX_TYPE } from 'elements/TextBox';
 import DataTable from 'elements/Datatable';
-import { createFood, queryFoodList, updateFood, deleteFoodManage } from 'components/actions';
+import { createFood, queryFoodList, updateFood, deleteFoodManage, queryFoodType } from 'components/actions';
 import { BASE_IMAGE_URL, FORM_TYPE, handleError, COMP_TYPE, isBlank, FIELD_VALID } from 'utils/common';
 import { State } from 'redux-saga/reducers';
 import styles from './styles.scss';
 import { changeStatusFood } from './actions';
 import { notificationErrorValidate } from 'utils/common';
+import { getFoodTypeOrigin } from 'components/reducers';
 
 export const foodStatus = [
   { key: 0, text: 'Hết hàng', value: 0 },
@@ -32,6 +33,7 @@ export const FoodManage: React.FC<FoodManageProps> = (props: FoodManageProps) =>
   const [, setRedraw] = useState();
   const [openModal, setOpenModal] = useState(false);
   const [type, setType] = useState(FORM_TYPE.CREATE);
+  const foodType = useSelector(getFoodTypeOrigin);
 
   const userLogin = Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string) : null;
   const foodList = useSelector((state: State) => state.foodList);
@@ -47,12 +49,149 @@ export const FoodManage: React.FC<FoodManageProps> = (props: FoodManageProps) =>
     id?: number;
     foodStatus: string;
     foodStatusId?: number;
+    lsFoodType: Obj[];
+    foodType?: string;
+    foodTypeId?: number;
   }>({
     name: '',
     price: 0,
     info: '',
     foodStatus: '',
+    lsFoodType: [],
   });
+
+  const ref = useRef<{
+    columnDefs: Obj[];
+    pageIndex: number;
+    data: Obj[];
+  }>({
+    pageIndex: 0,
+    columnDefs:
+      props.compType !== COMP_TYPE.MODAL
+        ? [
+            {
+              Header: 'STT',
+              maxWidth: 50,
+              accessor: 'index',
+              filterable: false,
+              className: 'Center',
+              Cell: (data: any) => {
+                return <span>{data.row.index + 1}</span>;
+              },
+            },
+            {
+              Header: 'Tên món ăn',
+              accessor: 'name',
+              className: 'Center',
+              width: 70,
+            },
+            {
+              Header: 'Mô tả',
+              accessor: 'info',
+              className: 'Center',
+              width: 270,
+            },
+            {
+              Header: 'Giá',
+              accessor: 'price',
+              className: 'Center',
+              width: 70,
+            },
+            {
+              Header: 'Loại món ăn',
+              accessor: 'type',
+              className: 'Center',
+              width: 70,
+            },
+            {
+              Header: 'Hình ảnh',
+              accessor: 'image',
+              className: 'Center',
+              width: 70,
+              Cell: (data: any) => {
+                return <img src={`${BASE_IMAGE_URL}${data.row.original.image}`} className={styles.FoodImage} />;
+              },
+            },
+            {
+              Header: '',
+              accessor: 'update',
+              Cell: (data: any) => {
+                return (
+                  <Button className={styles.Update} onClick={() => showUpdateForm(data.row.original)} positive>
+                    {'Cập nhật'}
+                  </Button>
+                );
+              },
+              className: 'Right NoBorder',
+              headerClassName: 'Right NoBorder',
+              width: 55,
+            },
+            {
+              Header: '',
+              accessor: 'sell',
+              Cell: (data: any) => {
+                return (
+                  <Button className={styles.Hidden} negative onClick={() => showDeleteForm(data.row.original)}>
+                    {'Xóa'}
+                  </Button>
+                );
+              },
+              className: 'Right',
+              width: 55,
+            },
+          ]
+        : [
+            {
+              Header: 'STT',
+              maxWidth: 50,
+              accessor: 'index',
+              filterable: false,
+              className: 'Center',
+              Cell: (data: any) => {
+                return <span>{data.row.index + 1}</span>;
+              },
+            },
+            {
+              Header: 'Tên món ăn',
+              accessor: 'name',
+              className: 'Center',
+              width: 70,
+            },
+            {
+              Header: 'Mô tả',
+              accessor: 'info',
+              className: 'Center',
+              width: 270,
+            },
+            {
+              Header: 'Loại món ăn',
+              accessor: 'type',
+              className: 'Center',
+              width: 70,
+            },
+            {
+              Header: 'Giá',
+              accessor: 'price',
+              className: 'Center',
+              width: 70,
+            },
+            {
+              Header: 'Hình ảnh',
+              accessor: 'image',
+              className: 'Center',
+              width: 70,
+              Cell: (data: any) => {
+                return <img src={`${BASE_IMAGE_URL}${data.row.original.image}`} className={styles.FoodImage} />;
+              },
+            },
+          ],
+    data: [],
+  });
+
+  useEffect(() => {
+    requestData();
+    dispatch(queryFoodType());
+  }, []);
 
   useEffect(() => {
     if (createFoodResult && createFoodResult.data) {
@@ -69,6 +208,17 @@ export const FoodManage: React.FC<FoodManageProps> = (props: FoodManageProps) =>
   }, [updateFoodResult]);
 
   useEffect(() => {
+    if (foodType && foodType.length > 0) {
+      console.log(foodType);
+
+      foodFormRef.current.lsFoodType = foodType as Obj[];
+      foodFormRef.current.foodType = foodType[0]?.text as string;
+      foodFormRef.current.foodTypeId = foodType[0]?.value as number;
+    }
+    setRedraw({});
+  }, [foodType]);
+
+  useEffect(() => {
     if (deleteFoodManageResult && deleteFoodManageResult.data) {
       requestData();
       onClose();
@@ -76,90 +226,11 @@ export const FoodManage: React.FC<FoodManageProps> = (props: FoodManageProps) =>
   }, [deleteFoodManageResult]);
 
   useEffect(() => {
-    requestData();
-  }, []);
-
-  useEffect(() => {
     if (foodList && foodList.data) {
       ref.current.data = foodList?.data as Obj[];
     }
     setRedraw({});
   }, [foodList]);
-
-  const ref = useRef<{
-    columnDefs: Obj[];
-    pageIndex: number;
-    data: Obj[];
-  }>({
-    pageIndex: 0,
-    columnDefs: [
-      {
-        Header: 'STT',
-        maxWidth: 50,
-        accessor: 'index',
-        filterable: false,
-        className: 'Center',
-        Cell: (data: any) => {
-          return <span>{data.row.index + 1}</span>;
-        },
-      },
-      {
-        Header: 'Tên món ăn',
-        accessor: 'name',
-        className: 'Center',
-        width: 70,
-      },
-      {
-        Header: 'Mô tả',
-        accessor: 'info',
-        className: 'Center',
-        width: 270,
-      },
-      {
-        Header: 'Giá',
-        accessor: 'price',
-        className: 'Center',
-        width: 70,
-      },
-      {
-        Header: 'Hình ảnh',
-        accessor: 'image',
-        className: 'Center',
-        width: 70,
-        Cell: (data: any) => {
-          return <img src={`${BASE_IMAGE_URL}${data.row.original.image}`} className={styles.FoodImage} />;
-        },
-      },
-      {
-        Header: '',
-        accessor: 'update',
-        Cell: (data: any) => {
-          return (
-            <Button className={styles.Update} onClick={() => showUpdateForm(data.row.original)} positive>
-              {'Cập nhật'}
-            </Button>
-          );
-        },
-        className: 'Right NoBorder',
-        headerClassName: 'Right NoBorder',
-        width: 55,
-      },
-      {
-        Header: '',
-        accessor: 'sell',
-        Cell: (data: any) => {
-          return (
-            <Button className={styles.Hidden} negative onClick={() => showDeleteForm(data.row.original)}>
-              {'Xóa'}
-            </Button>
-          );
-        },
-        className: 'Right',
-        width: 55,
-      },
-    ],
-    data: [],
-  });
 
   const requestData = () => {
     const params = {
@@ -170,11 +241,18 @@ export const FoodManage: React.FC<FoodManageProps> = (props: FoodManageProps) =>
   };
 
   const showUpdateForm = (data: Obj) => {
+    console.log(data);
+
+    foodFormRef.current.foodType = data.type as string;
+    foodFormRef.current.foodTypeId = data.id_type as number;
     foodFormRef.current.name = data.name as string;
     foodFormRef.current.price = data.price as number;
     foodFormRef.current.info = data.info as string;
     foodFormRef.current.id = data.id as number;
-    foodFormRef.current.foodStatus = data.status as string;
+    foodFormRef.current.foodStatus = foodStatus.find((foodStatusData: any) => foodStatusData.value === data.status)
+      ?.text as string;
+    foodFormRef.current.foodStatusId = data.status as number;
+
     setOpenModal(true);
     setType(FORM_TYPE.UPDATE);
     setRedraw({});
@@ -187,6 +265,7 @@ export const FoodManage: React.FC<FoodManageProps> = (props: FoodManageProps) =>
   };
 
   const showCreateFoodModal = () => {
+    setType(FORM_TYPE.CREATE);
     setOpenModal((openModal) => !openModal);
   };
 
@@ -228,6 +307,9 @@ export const FoodManage: React.FC<FoodManageProps> = (props: FoodManageProps) =>
         ...(type === FORM_TYPE.UPDATE && {
           id_food: foodFormRef.current.id,
         }),
+        ...(type === FORM_TYPE.CREATE && {
+          type: foodFormRef.current.foodTypeId,
+        }),
       };
       if (type === FORM_TYPE.CREATE) {
         dispatch(createFood(params));
@@ -264,15 +346,24 @@ export const FoodManage: React.FC<FoodManageProps> = (props: FoodManageProps) =>
     setOpenModal(false);
   };
 
+  const changeFoodType = (event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) => {
+    const text = foodFormRef.current.lsFoodType.find((item) => {
+      return item.value === data.value;
+    })?.text;
+    foodFormRef.current.foodTypeId = data.value as number;
+    foodFormRef.current.foodType = text as string;
+    setRedraw({});
+  };
+
   return (
     <ErrorBoundary FallbackComponent={Fallback} onError={handleError}>
       {compType !== COMP_TYPE.MODAL && (
         <>
           <Breadcrumb>
-            <Breadcrumb.Section link>Manage</Breadcrumb.Section>
+            <Breadcrumb.Section link>Quản lý</Breadcrumb.Section>
             <Breadcrumb.Divider />
             <Breadcrumb.Section link active>
-              Food
+              Danh sách món ăn
             </Breadcrumb.Section>
           </Breadcrumb>
           <Header>
@@ -325,6 +416,16 @@ export const FoodManage: React.FC<FoodManageProps> = (props: FoodManageProps) =>
                   label="Chi tiết món ăn"
                   onChangeText={onChangeInfoFood}
                 />
+                <Dropdown
+                  button
+                  className="icon"
+                  floating
+                  labeled
+                  options={foodFormRef.current.lsFoodType}
+                  text={!isBlank(foodFormRef.current.foodType) ? foodFormRef.current.foodType : 'Thay đổi loại'}
+                  disabled={type === FORM_TYPE.UPDATE}
+                  onChange={changeFoodType}
+                />
                 {type === FORM_TYPE.UPDATE && (
                   <Dropdown
                     button
@@ -338,7 +439,7 @@ export const FoodManage: React.FC<FoodManageProps> = (props: FoodManageProps) =>
                     onChange={changeFoodStatus}
                   />
                 )}
-                <Button onClick={submitCreate} content={type === FORM_TYPE.UPDATE ? 'Cập nhật' : 'Thêm'} />
+                <Button positive onClick={submitCreate} content={type === FORM_TYPE.UPDATE ? 'Cập nhật' : 'Thêm'} />
               </div>
             </div>
           </Modal.Content>
@@ -347,7 +448,7 @@ export const FoodManage: React.FC<FoodManageProps> = (props: FoodManageProps) =>
             <div className={'FoodForm'}>
               <div className={'HeaderFoodForm'}>Bạn có chắc muốn xóa món ăn này khỏi danh sách</div>
               <div className={'InputFoodForm'}>
-                <Button onClick={submitDelete} content="Xác nhận" />
+                <Button negative onClick={submitDelete} content="Xác nhận" />
               </div>
             </div>
           </Modal.Content>

@@ -63,10 +63,36 @@ export default () => {
         Header: () => null, // No header
         id: 'expander', // It needs an ID
         maxWidth: 50,
-        Cell: ({ row }: any) => {
+        Cell: ({ row, rows, toggleRowExpanded }: any) => {
           return (
             <span {...row.getToggleRowExpandedProps()}>
-              <span onClick={() => showFoodInMenu(row)}>{row.isExpanded ? '👇' : '👉'}</span>
+              <span
+                onClick={() => {
+                  showFoodInMenu(row);
+                  const expandedRow = rows.find((row2: any) => {
+                    return row2.isExpanded;
+                  });
+
+                  if (expandedRow) {
+                    const isSubItemOfRow = Boolean(expandedRow && row.id.split('.')[0] === expandedRow.id);
+
+                    if (isSubItemOfRow) {
+                      const expandedSubItem = expandedRow.subRows.find((subRow: any) => subRow.isExpanded);
+
+                      if (expandedSubItem) {
+                        const isClickedOnExpandedSubItem = expandedSubItem.id === row.id;
+                        if (!isClickedOnExpandedSubItem) {
+                          toggleRowExpanded(expandedSubItem.id, false);
+                        }
+                      }
+                    } else {
+                      toggleRowExpanded(expandedRow.id, false);
+                    }
+                  }
+                }}
+              >
+                {row.isExpanded ? '👇' : '👉'}
+              </span>
             </span>
           );
         },
@@ -142,7 +168,7 @@ export default () => {
         Header: 'Mô tả',
         accessor: 'info',
         className: 'Center',
-        width: 1,
+        width: 170,
       },
       {
         Header: 'Giá',
@@ -253,6 +279,7 @@ export default () => {
   };
 
   const showCreateMenuModal = () => {
+    setType(FORM_TYPE.CREATE);
     setOpenModal((openModal) => !openModal);
   };
 
@@ -355,10 +382,10 @@ export default () => {
         <TextArea
           value={menuFormRef.current.desc}
           placeholder="Nhập chi tiết"
-          label="Chi tiết món ăn"
+          label="Chi tiết menu"
           onChangeText={onChangeDescMenu}
         />
-        <Button onClick={submitCreate} content="Thêm menu" color="blue" />
+        <Button onClick={submitCreate} content={type === FORM_TYPE.UPDATE ? 'Cập nhật' : 'Thêm menu'} color="blue" />
       </Modal.Content>
     );
   };
@@ -434,7 +461,7 @@ export default () => {
             <div className={'FoodForm'}>
               <div className={'HeaderFoodForm'}>Bạn có chắc muốn xóa menu khỏi danh sách</div>
               <div className={'InputFoodForm'}>
-                <Button onClick={submitDelete} content="Xác nhận" />
+                <Button negative onClick={submitDelete} content="Xác nhận" />
               </div>
             </div>
           </Modal.Content>

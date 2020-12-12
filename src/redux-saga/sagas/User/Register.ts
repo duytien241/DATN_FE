@@ -1,13 +1,31 @@
 import Axios from 'axios';
 import qs from 'querystring';
+import Cookie from 'js-cookie';
 import { put, takeLatest } from 'redux-saga/effects';
 import { Obj, Request } from 'interfaces/common';
 import { AUTHENTICATION_REGISTER, USER_UPDATE_INFO_USER, AUTHENTICATION_CHANGE_PASSWORD } from 'redux-saga/actions';
 import { BASE_URI, configHeaderAxios, notificationError, notificationSuccess } from 'utils/common';
+import { login } from './Login';
 
-const register = async (param: any) => {
+const register = (param: any) => {
   console.log(param);
-  return await Axios.post(`${BASE_URI}api/user/register`, qs.stringify(param), configHeaderAxios);
+  return Axios.post(`${BASE_URI}users`, {
+    id: param.email,
+    email: param.email,
+    password: param.password,
+    username: param.username,
+    role: param.role,
+    address: param.address,
+    phone: param.hone,
+  })
+    .then((res) => {
+      login({
+        username: param.email,
+        password: param.password,
+      });
+      return res;
+    })
+    .catch((error) => console.log(error));
 };
 
 const updateInfoUser = async (param: any) => {
@@ -15,7 +33,22 @@ const updateInfoUser = async (param: any) => {
 };
 
 const changePassord = async (param: any) => {
-  return await Axios.put(`${BASE_URI}api/v1/changePass`, qs.stringify(param), configHeaderAxios);
+  return Axios.post(
+    `${BASE_URI}rest-auth/password/change/`,
+    {
+      old_password: param.oldPass,
+      new_password1: param.newPass,
+      new_password2: param.newPass,
+    },
+    { headers: { Authorization: `Token  ${Cookie.get('userInfo')}` } }
+  )
+    .then((res) => {
+      notificationSuccess({ content: 'Đổi mật khẩu thành công' });
+      return res;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 
 const uploadFile = (input: FileList, id: number) => {

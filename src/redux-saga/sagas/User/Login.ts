@@ -1,22 +1,34 @@
 import Axios from 'axios';
-import Cookie from 'js-cookie';
+import qs from 'qs';
 import { put, takeLatest } from 'redux-saga/effects';
 import { Obj, Request } from 'interfaces/common';
-import { AUTHENTICATION_LOGIN, AUTHENTICATION_LOGIN_ADMIN } from 'redux-saga/actions';
-import { notificationError, notificationSuccess } from 'utils/common';
+import { AUTHENTICATION_LOGIN, AUTHENTICATION_LOGIN_ADMIN, QUERY_INFO_ACCOUNT } from 'redux-saga/actions';
+import { configHeaderAxios, notificationError, notificationSuccess } from 'utils/common';
 import { BASE_URI } from 'utils/common';
-import { ROUTER_REFRESH } from 'components/Router/reducers';
+import Cookies from 'js-cookie';
 
-const login = (param: any) => {
-  return Axios.get(`${BASE_URI}api/v1/login`)
+export const login = (param: any) => {
+  return Axios.post(`${BASE_URI}rest-auth/login/`, {
+    username: param.username,
+    password: param.password,
+  })
     .then((res) => {
-      return res;
+      Cookies.set('userInfo', res.data.key, { expires: 7 });
+      return res.data;
     })
     .catch((error) => console.log(error));
 };
 
-const loginAdmin = async (param: any) => {
-  return Axios.post(`${BASE_URI}api/v1/admin/login`);
+const loginAdmin = (param: any) => {
+  return Axios.post(`${BASE_URI}api/v1/admin/login`, qs.stringify(param), configHeaderAxios);
+};
+
+const getInfoAccount = (param: any) => {
+  return Axios.get(`${BASE_URI}me`, { headers: { Authorization: `Token  ${Cookies.get('userInfo')}` } })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => console.log(error));
 };
 
 function* doLogin(request: Request<Obj>) {
@@ -27,10 +39,7 @@ function* doLogin(request: Request<Obj>) {
     } else if (request.type === AUTHENTICATION_LOGIN_ADMIN) {
       payload = yield loginAdmin(request.data);
     }
-    Cookie.set('userInfo', JSON.stringify(payload), { expires: 7 });
-    yield put({
-      type: ROUTER_REFRESH,
-    });
+    window.location = '/' as any;
     yield put({
       type: (request.response as any).success,
       payload,
@@ -40,6 +49,22 @@ function* doLogin(request: Request<Obj>) {
     notificationError({ content: 'Đăng nhập Thất bại' });
     console.log(error.message);
   }
+}
+
+function* dogetInfo(request: Request<Obj>) {
+  try {
+    let payload = yield getInfoAccount(request.data);
+    yield put({
+      type: (request.response as any).success,
+      payload: payload,
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+export function* watchGetInfo() {
+  yield takeLatest(QUERY_INFO_ACCOUNT, dogetInfo);
 }
 
 export function* watchLogin() {

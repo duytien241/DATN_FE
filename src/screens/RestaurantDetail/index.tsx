@@ -79,8 +79,6 @@ export default () => {
     dispatch(queryComment(params));
   };
 
-  console.log(ref.current.shopInfo);
-
   return (
     <div className={styles.RestaurantDetail}>
       <TopBar />

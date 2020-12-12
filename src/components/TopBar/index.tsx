@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { withErrorBoundary } from 'react-error-boundary';
 import { Dropdown, Image, Menu, Modal, Tab } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import Cookie from 'js-cookie';
 import Fallback from 'components/Fallback';
 // import DropdownLocation from 'elements/DropdownLocation';
 import RegisterCus from 'components/RegisterCus';
@@ -25,9 +24,7 @@ interface TopbarProps {
 
 const TopBar = (props: TopbarProps) => {
   const dispatch = useDispatch();
-  const ref = useRef<{ userLogin?: Obj }>({
-    userLogin: Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string).data : null,
-  });
+  const ref = useRef<{ userLogin?: Obj }>({});
 
   const [, setRedraw] = useState();
   // const [location, setLocation] = useState('');
@@ -37,33 +34,26 @@ const TopBar = (props: TopbarProps) => {
 
   const [open, setOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
-  const userLogin1 = useSelector((state: State) => state.userLogin);
   const [scrolled, setScrolled] = useState(false);
   const shopRegisterResult = useSelector((state: State) => state.shopRegisterResult);
-  const router = useSelector((state: State) => state.router);
+  const infoAccount = useSelector((state: State) => state.infoAccount);
 
   useEffect(() => {
     dispatch(queryShopType());
   }, []);
 
   useEffect(() => {
-    if (userLogin1 && userLogin1.data && open === true) {
-      ref.current.userLogin = Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string).data : null;
-      setOpen(false);
+    if (infoAccount) {
+      ref.current.userLogin = infoAccount;
+      setRedraw({});
     }
-  }, [userLogin1]);
+  }, [infoAccount]);
 
   useEffect(() => {
     if (shopRegisterResult && shopRegisterResult.data && open === true) {
       setOpen(false);
     }
   }, [shopRegisterResult]);
-
-  useEffect(() => {
-    ref.current.userLogin = Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string).data : null;
-    setRedraw({});
-    console.log(ref.current.userLogin);
-  }, [router]);
 
   const handleScroll = () => {
     const offset = window.scrollY;
@@ -190,17 +180,21 @@ const TopBar = (props: TopbarProps) => {
           <div className={styles.MenuLeft}>
             <div className={styles.CompanyLogo}>
               <Link to="/home">
-                <img src={'../../../public/logo2.png'} />
+                <img
+                  src={
+                    'https://scontent.fhan2-6.fna.fbcdn.net/v/t1.0-9/127194294_1630913430427913_3697172868772040508_n.jpg?_nc_cat=103&ccb=2&_nc_sid=730e14&_nc_ohc=9Qm-eTs2O88AX_Qn12R&_nc_ht=scontent.fhan2-6.fna&oh=bc594a38049a61bf70f1fa1b73ff9d99&oe=5FE59F96'
+                  }
+                />
               </Link>
             </div>
             {/* {(ref.current.userLogin == null ||
-              (ref.current.userLogin && ref.current.userLogin.Role === USER_ROLE.CLIENT)) && (
+              (ref.current.userLogin && ref.current.userLogin.role === USER_ROLE.CLIENT)) && (
               <DropdownLocation defaultText={'Chọn khu vực'} changeText={changeLocation} text={location} />
             )} */}
             {props.showSearch === true && <SearchFood />}
           </div>
           <Menu.Menu position="right">
-            {ref.current.userLogin && ref.current.userLogin.Role === USER_ROLE.OWNER_SHOP && (
+            {ref.current.userLogin && ref.current.userLogin.role === USER_ROLE.OWNER_SHOP && (
               <Menu.Item as={Link} to="/manage_shop">
                 Quản lý cửa hàng
               </Menu.Item>
@@ -220,11 +214,11 @@ const TopBar = (props: TopbarProps) => {
                 pointing="top right"
                 icon={null}
                 options={
-                  ref.current.userLogin?.Role === USER_ROLE.OWNER_SHOP
+                  ref.current.userLogin?.role === USER_ROLE.OWNER_SHOP
                     ? menuShop
-                    : ref.current.userLogin?.Role === USER_ROLE.CLIENT
+                    : ref.current.userLogin?.role === USER_ROLE.CLIENT
                     ? menuCus
-                    : ref.current.userLogin?.Role === USER_ROLE.ADMIN
+                    : ref.current.userLogin?.role === USER_ROLE.ADMIN
                     ? menuAdmin
                     : menuDefault
                 }

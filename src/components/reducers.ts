@@ -229,6 +229,20 @@ export const getFoodType: Selector<State, Obj[]> = createSelector([foodType], (f
   return [];
 });
 
+export const getFoodTypeOrigin: Selector<State, Obj[]> = createSelector([foodType], (foodType: any) => {
+  if (foodType && foodType.data) {
+    return foodType.data.map((data: any) => {
+      return {
+        id: data.id,
+        key: data.id,
+        value: data.id,
+        text: data.type,
+      };
+    });
+  }
+  return [];
+});
+
 export const ORDER_SUCCESS = 'ORDER_SUCCESS';
 export const ORDER_FAILURE = 'ORDER_FAILURE';
 export const DELETE_SUCCESS = 'DELETE_SUCCESS';
@@ -258,9 +272,9 @@ export const getOrderList: Selector<State, Obj> = createSelector([orderFoodList]
   let id: number[] = [];
   let orderInfo: Obj[] = [];
   let totalPrice: number = 0;
-  console.log(orderFoodList);
   if (orderList && orderList.length > 0) {
     orderList.map((food) => {
+      console.log(food);
       if (id.includes(food.id_food as number) !== true) {
         id.push(food.id_food as number);
         orderInfo.push({
@@ -332,6 +346,18 @@ export const QUERY_LIST_DISTRICT_FAILED = 'QUERY_LIST_DISTRICT_FAILED';
 export function ListDistrict(state: Obj | null = null, action: Action<Obj>) {
   switch (action.type) {
     case QUERY_LIST_DISTRICT_SUCCESS:
+      return action.payload ? { ...action.payload } : null;
+    default:
+      return state;
+  }
+}
+
+export const QUERY_INFO_ACCOUNT_SUCCESS = 'QUERY_INFO_ACCOUNT_SUCCESS';
+export const QUERY_INFO_ACCOUNT_FAILED = 'QUERY_INFO_ACCOUNT_FAILED';
+
+export function InfoAccount(state: Obj | null = null, action: Action<Obj>) {
+  switch (action.type) {
+    case QUERY_INFO_ACCOUNT_SUCCESS:
       return action.payload ? { ...action.payload } : null;
     default:
       return state;

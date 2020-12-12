@@ -73,7 +73,7 @@ export default () => {
         Header: 'Email',
         accessor: 'Email_R',
         className: 'Center',
-        width: 170,
+        width: 200,
       },
       {
         Header: 'Mô tả',
@@ -202,7 +202,7 @@ export default () => {
               {type === FORM_TYPE.UPDATE ? 'Xác nhận duyệt đăng ký cửa hàng' : 'Từ chối đăng ký của cửa hàng'}
             </div>
             <div className={'InputFoodForm'}>
-              <Button onClick={submit} content="Xác nhận" />
+              <Button onClick={submit} content="Xác nhận" positive />
             </div>
           </div>
         </Modal.Content>

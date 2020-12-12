@@ -11,17 +11,16 @@
       .AdminManageShopList,
       .AdminManageCusList,
       .OrderManageCus {
-        display: block;
-        width: 100% !important;
-        overflow: hidden;
-        // max-height: calc(100% - 100px);
-        overflow-x: auto;
-        height: 100%;
-        position: relative;
-        .DataTable {
-          height: calc(100% - 50px) !important;
-          position: absolute !important;
-        }
+        // display: block;
+        // width: 100% !important;
+        // overflow: hidden;
+        max-height: calc(100% - 100px);
+        // height: 100%;
+        // position: relative;
+        // .DataTable {
+        //     height: calc(100% - 50px) !important;
+        //     position: absolute !important;
+        // }
       }
     }
   }

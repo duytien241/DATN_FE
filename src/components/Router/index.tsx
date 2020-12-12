@@ -14,7 +14,7 @@ import DashboardShop from 'screens/DashboardShop';
 import { handleError, USER_ROLE } from 'utils/common';
 import { State } from 'redux-saga/reducers';
 import FoodDetail from 'screens/FoodDetail';
-import { queryFoodType, queryLocation, queryShopType } from 'components/actions';
+import { queryFoodType, queryLocation, queryShopType, queryInfoAccount } from 'components/actions';
 import ShopDetail from 'screens/RestaurantDetail';
 import RestaurantList from 'screens/RestaurantList';
 // import FoodPage from 'screens/FoodPage';
@@ -24,9 +24,9 @@ import RestaurantFilter from 'screens/RestaurantFilter';
 
 const Router = React.memo(() => {
   const dispatch = useDispatch();
-  const userLogin = Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string).data : null;
-  const userLogin1 = useSelector((state: State) => state.userLogin);
+  console.log(Cookie.get('userInfo'));
   const router = useSelector((state: State) => state.router);
+  const infoAccount = useSelector((state: State) => state.infoAccount);
   const [, setRedraw] = useState();
 
   useEffect(() => {
@@ -34,11 +34,14 @@ const Router = React.memo(() => {
     dispatch(queryShopType());
     dispatch(queryFoodType());
     dispatch(initSocket());
+    if (Cookie.get('userInfo')) {
+      dispatch(queryInfoAccount());
+    }
   }, []);
 
   useEffect(() => {
     setRedraw({});
-  }, [userLogin1]);
+  }, [infoAccount]);
 
   useEffect(() => {}, [router]);
 
@@ -50,33 +53,33 @@ const Router = React.memo(() => {
             exact
             path="/"
             render={() =>
-              userLogin && userLogin.Role === USER_ROLE.ADMIN ? <Redirect to="/admin_dashboard" /> : <Home />
+              infoAccount && infoAccount.role === USER_ROLE.ADMIN ? <Redirect to="/admin_dashboard" /> : <Home />
             }
           />
           <Route
             path="/home"
             render={() =>
-              userLogin && userLogin.Role === USER_ROLE.ADMIN ? <Redirect to="/admin_dashboard" /> : <Home />
+              infoAccount && infoAccount.role === USER_ROLE.ADMIN ? <Redirect to="/admin_dashboard" /> : <Home />
             }
           />
           <Route
             path="/manage_shop"
             render={() =>
-              userLogin && userLogin.Role === USER_ROLE.OWNER_SHOP ? <DashboardShop /> : <Redirect to="/" />
+              infoAccount && infoAccount.role === USER_ROLE.OWNER_SHOP ? <DashboardShop /> : <Redirect to="/" />
             }
           />
           <Route
             path="/manage_shop"
             render={() =>
-              userLogin && userLogin.Role === USER_ROLE.OWNER_SHOP ? <DashboardShop /> : <Redirect to="/" />
+              infoAccount && infoAccount.role === USER_ROLE.OWNER_SHOP ? <DashboardShop /> : <Redirect to="/" />
             }
           />
           <Route
             path="/update_account"
             render={() =>
-              userLogin && userLogin.Role === USER_ROLE.OWNER_SHOP ? (
+              infoAccount && infoAccount.role === USER_ROLE.OWNER_SHOP ? (
                 <UpdateUser />
-              ) : userLogin && userLogin.Role === USER_ROLE.CLIENT ? (
+              ) : infoAccount && infoAccount.role === USER_ROLE.CLIENT ? (
                 <DashboardCus />
               ) : (
                 <Redirect to="/" />
@@ -90,12 +93,14 @@ const Router = React.memo(() => {
           <Route
             path="/login_admin"
             render={() =>
-              userLogin && userLogin.Role === USER_ROLE.ADMIN ? <Redirect to="/admin_dashboard" /> : <LoginAdmin />
+              infoAccount && infoAccount.role === USER_ROLE.ADMIN ? <Redirect to="/admin_dashboard" /> : <LoginAdmin />
             }
           />
           <Route
             path="/admin_dashboard"
-            render={() => (userLogin && userLogin.Role === USER_ROLE.ADMIN ? <DashboardAdmin /> : <Redirect to="/" />)}
+            render={() =>
+              infoAccount && infoAccount.role === USER_ROLE.ADMIN ? <DashboardAdmin /> : <Redirect to="/" />
+            }
           />
         </Switch>
       </HashRouter>

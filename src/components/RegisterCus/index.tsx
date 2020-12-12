@@ -33,7 +33,7 @@ export default (props: RegisterCusProps) => {
   const registerCus = () => {
     const isValidUsername = notificationErrorValidate(registerShopRef.current.Username, undefined, 'tên đăng nhập');
     const isValidPass = notificationErrorValidate(registerShopRef.current.Password, undefined, 'mật khẩu', 8);
-    const isValidAddress = notificationErrorValidate(registerShopRef.current.Address, undefined, 'địa chỉ');
+    const isValidAddress = notificationErrorValidate(registerShopRef.current.Address, undefined, 'địa chỉ', 255, false);
     const isValidEmail = notificationErrorValidate(registerShopRef.current.Email, FIELD_VALID.MAIL, 'địa chỉ mail');
     const isValidPhone = notificationErrorValidate(registerShopRef.current.SDT, FIELD_VALID.PHONE, 'số điện thoại');
     if (
@@ -44,14 +44,13 @@ export default (props: RegisterCusProps) => {
       isValidPhone === true
     ) {
       const params = {
-        SDT: registerShopRef.current.SDT,
-        Address_P: registerShopRef.current.Address,
-        Email: registerShopRef.current.Email,
-        Role: registerShopRef.current.Role,
-        Username: registerShopRef.current.Username,
-        Password: registerShopRef.current.Password,
+        phone: registerShopRef.current.SDT,
+        address: registerShopRef.current.Address,
+        email: registerShopRef.current.Email,
+        role: registerShopRef.current.Role,
+        username: registerShopRef.current.Username,
+        password: registerShopRef.current.Password,
       };
-      console.log(params);
       dispatch(register(params));
     }
   };

@@ -1,18 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Obj } from 'interfaces/common';
-import Cookie from 'js-cookie';
 import styles from './styles.scss';
 import { formatNumber } from 'utils/common';
-import { Button, CheckboxProps, Form, Icon, InputOnChangeData, Modal, Popup, Radio } from 'semantic-ui-react';
+import { Button, Form, Icon, Input, InputOnChangeData, Modal, Popup } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { placeOrder } from './actions';
 import { querySaleCodeList } from 'components/SaleManage/actions';
+// import { State } from 'redux-saga/reducers';
+import { getSaleCodeList } from 'components/SaleManage/reducers';
 import { State } from 'redux-saga/reducers';
-import { userInfo } from 'os';
 
 interface Discount {
-  text: string;
-  value: number;
+  text?: string;
+  value?: number;
+  code?: string;
+  type: string;
 }
 
 interface DiscountDetailProps {
@@ -34,9 +36,17 @@ interface ShipmentInfo {
 }
 
 const DISCOUNTS = {
-  FREE_SHIP: {
+  FreeShip: {
     text: 'FREE_SHIP',
     value: 15000,
+  },
+  'Sale 50%': {
+    text: 'Sale 50%',
+    value: 0.5,
+  },
+  'Sale 5%': {
+    text: 'Sale 5%',
+    value: 0.05,
   },
 };
 
@@ -55,7 +65,7 @@ const DiscountDetail = (props: DiscountDetailProps) => {
             <div className={styles.DiscountDetail}>
               <div className={styles.Name}>
                 <Icon name="clipboard list" />
-                <span>{discount.text}</span>
+                <span>{discount.code}</span>
               </div>
               <div className={styles.Value}>
                 <label>Giảm giá:</label>
@@ -80,13 +90,14 @@ const DiscountDetail = (props: DiscountDetailProps) => {
             <div className={styles.DiscountItem}>
               <div className={styles.Name}>
                 <Icon name="clipboard list" />
-                <span>{discount.text}</span>
+                <span>{discount.code}</span>
               </div>
               <div className={styles.Value}>
                 <label>Giảm giá:</label>
                 <span>
-                  {formatNumber(discount.value)}
-                  <sup>đ</sup>
+                  {/* {formatNumber(discount.value)}
+                  <sup>đ</sup> */}
+                  {discount.text}
                 </span>
               </div>
               <div className={styles.Apply} onClick={() => onApply(discount)}>
@@ -100,24 +111,27 @@ const DiscountDetail = (props: DiscountDetailProps) => {
   );
 };
 
-export default ({ orderDetail, id_user }: { orderDetail: Obj; id_user: any }) => {
+export default ({ orderDetail, id_user, step }: { orderDetail: Obj; id_user: any; step: number }) => {
   const dispatch = useDispatch();
   const [, setRedraw] = useState();
-  const saleCodeList = useSelector((state: State) => state.saleCodeList);
-
+  const saleCodeList = useSelector(getSaleCodeList);
+  const infoAccount = useSelector((state: State) => state.infoAccount);
+  console.log(step);
   const ref = useRef<{
     totalQuantity: number;
-    discountCode: { text: string; value: number };
+    discountCode: { text?: string; value?: number; code?: string; type?: string };
     payMethod: PayMethod;
     shipmentInfo: ShipmentInfo;
     userLogin?: Obj;
     saleList: Obj[];
+    note: string;
   }>({
     totalQuantity: handleOrderDetail(),
     discountCode: {
       text: 'Nhập mã khuyến mãi',
       value: 0,
     },
+    note: '',
     payMethod: {
       text: 'Tiền mặt',
       value: 'COD',
@@ -127,7 +141,6 @@ export default ({ orderDetail, id_user }: { orderDetail: Obj; id_user: any }) =>
       phone: '',
       address: '',
     },
-    userLogin: Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string).data : null,
     saleList: [],
   });
 
@@ -136,9 +149,17 @@ export default ({ orderDetail, id_user }: { orderDetail: Obj; id_user: any }) =>
   }, []);
 
   useEffect(() => {
-    if (saleCodeList && saleCodeList.data) {
-      if (typeof saleCodeList?.data === 'object') {
-        ref.current.saleList = saleCodeList?.data as Obj[];
+    console.log(infoAccount);
+    if (infoAccount) {
+      ref.current.userLogin = infoAccount;
+      ref.current.shipmentInfo.name = infoAccount.first_name + ' ' + infoAccount.last_name;
+    }
+  }, [infoAccount]);
+
+  useEffect(() => {
+    if (saleCodeList) {
+      if (typeof saleCodeList === 'object') {
+        ref.current.saleList = saleCodeList;
       }
     }
     setRedraw({});
@@ -168,7 +189,7 @@ export default ({ orderDetail, id_user }: { orderDetail: Obj; id_user: any }) =>
   };
 
   const onBlur = () => {
-    if (DISCOUNTS[ref.current.discountCode.text] == null) {
+    if (DISCOUNTS[ref.current.discountCode.text as any] == null) {
       ref.current.discountCode.text = 'Không có mã này';
     }
     setShowTypeCode(false);
@@ -185,6 +206,9 @@ export default ({ orderDetail, id_user }: { orderDetail: Obj; id_user: any }) =>
     redraw({});
   };
 
+  const onChangeNote = (e: React.ChangeEvent, data: Obj) => {
+    ref.current.note = data.value as string;
+  };
   const requestDataSaleList = () => {
     const params = {
       id_user: id_user,
@@ -204,7 +228,7 @@ export default ({ orderDetail, id_user }: { orderDetail: Obj; id_user: any }) =>
       total: (orderDetail.orderInfo as Obj)?.totalPrice,
       payType: ref.current.payMethod.value,
       info: ((orderDetail.orderInfo as Obj)?.orderInfo as Obj[]).map((info: Obj) => {
-        return { qty: info.quantity, id_food: (info.food as Obj).id_food };
+        return { qty: info.quantity, id_food: (info.food as Obj).id_food, total: 0 };
       }),
     };
     console.log(params);
@@ -212,58 +236,80 @@ export default ({ orderDetail, id_user }: { orderDetail: Obj; id_user: any }) =>
     dispatch(placeOrder(params));
   };
 
-  const onSelectPayMethod = (event: React.MouseEvent<HTMLInputElement, MouseEvent>, data: CheckboxProps) => {
-    if (data.value === 'COD') {
-      ref.current.payMethod = { text: 'Tiền mặt', value: 'CASH' };
-    } else if (data.value === 'ONLINE') {
-      ref.current.payMethod = { text: 'Online', value: 'ONLINE' };
-    }
-    redraw({});
-  };
+  console.log(orderDetail);
 
-  console.log(userInfo);
-
-  return (
-    <div className={styles.OrderDetail}>
-      <div className={styles.Quantity}>
-        {((orderDetail.orderInfo as Obj).orderInfo as Obj[]).map((order, index) => {
-          return (
-            <div className={styles.Food} key={index}>
-              <div>
-                <span>{order.quantity}</span>
-                <span>{(order.food as Obj).name}</span>
+  const detailFood = () => {
+    return (
+      <div>
+        <div className={styles.Quantity}>
+          {((orderDetail.orderInfo as Obj).orderInfo as Obj[]).map((order, index) => {
+            return (
+              <div className={styles.Food} key={index}>
+                <div>
+                  <span>{order.quantity}</span>
+                  <span>{(order.food as Obj).name}</span>
+                </div>
+                <div>
+                  {formatNumber((order.quantity as number) * ((order.food as Obj).price as number))}
+                  <sup>đ</sup>
+                </div>
               </div>
-              <div>
-                {formatNumber((order.quantity as number) * ((order.food as Obj).price as number))}
-                <sup>đ</sup>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-      <div className={styles.Discount}>
-        <label>Khuyến mãi</label>
-        <div>
-          {ref.current.discountCode.value > 0 && (
+            );
+          })}
+        </div>
+        <div className={styles.Discount}>
+          <label>Khuyến mãi</label>
+          <div>
+            {/* {ref.current.discountCode.value > 0 && ( */}
             <span>
-              {` - ${formatNumber(ref.current.discountCode.value)}`} <sup>đ</sup>
+              {` - ${
+                ref.current.discountCode.type === 'FreeShip'
+                  ? formatNumber(ref.current.discountCode.value as number)
+                  : ref.current.discountCode.type === 'Sale 50%'
+                  ? formatNumber(
+                      ((orderDetail.orderInfo as Obj).totalPrice as number) * (ref.current.discountCode.value as number)
+                    )
+                  : ref.current.discountCode.type === 'Sale 5%'
+                  ? formatNumber(
+                      ((orderDetail.orderInfo as Obj).totalPrice as number) * (ref.current.discountCode.value as number)
+                    )
+                  : ''
+              }`}{' '}
+              <sup>đ</sup>
             </span>
-          )}
+            {/* )} */}
+          </div>
+        </div>
+        <div className={styles.Total}>
+          <label>{`Tổng cộng ${ref.current.totalQuantity} phần`}</label>
+          <span>
+            {ref.current.discountCode.type === 'FreeShip'
+              ? formatNumber(
+                  ((orderDetail.orderInfo as Obj).totalPrice as number) - (ref.current.discountCode.value as number)
+                )
+              : ref.current.discountCode.type === 'Sale 50%'
+              ? formatNumber(
+                  ((orderDetail.orderInfo as Obj).totalPrice as number) -
+                    ((orderDetail.orderInfo as Obj).totalPrice as number) * (ref.current.discountCode.value as number)
+                )
+              : ref.current.discountCode.type === 'Sale 5%'
+              ? formatNumber(
+                  ((orderDetail.orderInfo as Obj).totalPrice as number) -
+                    ((orderDetail.orderInfo as Obj).totalPrice as number) * (ref.current.discountCode.value as number)
+                )
+              : ''}
+          </span>
+        </div>
+        <div className={styles.Note}>
+          <label>Ghi chú</label>
+          <Input onChange={onChangeNote} placeholder="Ghi chú" />
         </div>
       </div>
-      <div className={styles.Total}>
-        <label>{`Tổng cộng ${ref.current.totalQuantity} phần`}</label>
-        <span>
-          {formatNumber(
-            ((orderDetail.orderInfo as Obj).totalPrice as number) - (ref.current.discountCode.value as number)
-          )}
-          <sup>đ</sup>
-        </span>
-      </div>
-      <div className={styles.Note}>
-        <label>Ghi chú</label>
-        <span>{orderDetail.note}</span>
-      </div>
+    );
+  };
+  return (
+    <div className={styles.OrderDetail}>
+      {step === 2 ? <div></div> : step === 3 ? <div></div> : detailFood()}
       <div className={styles.DiscountCode}>
         <label>Mã khuyến mãi</label>
         {showTypeCode ? (
@@ -276,6 +322,7 @@ export default ({ orderDetail, id_user }: { orderDetail: Obj; id_user: any }) =>
         <Popup
           wide="very"
           size="large"
+          className={'PopupSaleCode'}
           trigger={<span className={styles.DiscountButton}>Xem mã khuyến mãi</span>}
           on="click"
           position="top center"
@@ -285,34 +332,10 @@ export default ({ orderDetail, id_user }: { orderDetail: Obj; id_user: any }) =>
             <DiscountDetail
               id_user={id_user}
               userDiscounts={[]}
-              shopDiscounts={Object.values(DISCOUNTS)}
+              // shopDiscounts={Object.values(DISCOUNTS)}
+              shopDiscounts={ref.current.saleList as any[]}
               onApply={onApply}
             />
-          </Popup.Content>
-        </Popup>
-      </div>
-      <div className={styles.PayMethod}>
-        <label>Hình thức thanh toán</label>
-        <span>{ref.current.payMethod.text}</span>
-        <Popup
-          wide="very"
-          size="large"
-          trigger={<span className={styles.DiscountButton}>Thay đổi</span>}
-          on="click"
-          position="top center"
-        >
-          <Popup.Header>Hình thức thanh toán</Popup.Header>
-          <Popup.Content>
-            <Form>
-              <Form.Field>
-                <Radio
-                  label="Tiền mặt"
-                  name="radioGroup"
-                  checked={ref.current.payMethod.value === 'COD'}
-                  onClick={onSelectPayMethod}
-                />
-              </Form.Field>
-            </Form>
           </Popup.Content>
         </Popup>
       </div>
@@ -323,42 +346,35 @@ export default ({ orderDetail, id_user }: { orderDetail: Obj; id_user: any }) =>
             ref.current.shipmentInfo.phone && ','
           } ${ref.current.shipmentInfo.address}`}
         </span>
-        <Popup
-          wide="very"
-          size="large"
-          trigger={<span className={styles.DiscountButton}>Thay đổi</span>}
-          on="click"
-          position="top center"
-        >
-          <Popup.Header>Hình thức thanh toán</Popup.Header>
-          <Popup.Content>
-            <Form>
-              <Form.Group widths="equal">
-                <Form.Input
-                  placeholder="Họ và tên"
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>, data: InputOnChangeData) => {
-                    ref.current.shipmentInfo.name = data.value;
-                    redraw({});
-                  }}
-                />
-                <Form.Input
-                  placeholder="Số điện thoại"
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>, data: InputOnChangeData) => {
-                    ref.current.shipmentInfo.phone = data.value;
-                    redraw({});
-                  }}
-                />
-              </Form.Group>
-              <Form.Input
-                placeholder="Địa chỉ"
-                onChange={(event: React.ChangeEvent<HTMLInputElement>, data: InputOnChangeData) => {
-                  ref.current.shipmentInfo.address = data.value;
-                  redraw({});
-                }}
-              />
-            </Form>
-          </Popup.Content>
-        </Popup>
+        <Form>
+          <Form.Group widths="equal">
+            <Form.Input
+              placeholder={ref.current.shipmentInfo.name}
+              label="Tên"
+              va
+              onChange={(event: React.ChangeEvent<HTMLInputElement>, data: InputOnChangeData) => {
+                ref.current.shipmentInfo.name = data.value;
+                redraw({});
+              }}
+            />
+            <Form.Input
+              placeholder="Số điện thoại"
+              label="Số điện thoại"
+              onChange={(event: React.ChangeEvent<HTMLInputElement>, data: InputOnChangeData) => {
+                ref.current.shipmentInfo.phone = data.value;
+                redraw({});
+              }}
+            />
+          </Form.Group>
+          <Form.Input
+            placeholder="Địa chỉ"
+            label="Địa chỉ"
+            onChange={(event: React.ChangeEvent<HTMLInputElement>, data: InputOnChangeData) => {
+              ref.current.shipmentInfo.address = data.value;
+              redraw({});
+            }}
+          />
+        </Form>
       </div>
       <div className={styles.Order}>
         <Button

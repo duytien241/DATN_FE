@@ -1,5 +1,6 @@
 declare const styles: {
   readonly RestauranyList: string;
+  readonly Topbar: string;
   readonly HeaderPage: string;
   readonly HeaderContainer: string;
   readonly Row: string;
@@ -12,5 +13,6 @@ declare const styles: {
   readonly RestaurantListContainer: string;
   readonly LeftSide: string;
   readonly ContentSide: string;
+  readonly cards: string;
 };
 export = styles;

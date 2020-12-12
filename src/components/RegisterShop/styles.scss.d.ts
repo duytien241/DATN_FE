@@ -9,6 +9,7 @@ declare const styles: {
   readonly FormInput: string;
   readonly UsernameInput: string;
   readonly PasswordInput: string;
+  readonly dropdown: string;
   readonly LoginButton: string;
   readonly Line: string;
   readonly LineLeft: string;

@@ -20,7 +20,6 @@
   transition: all 0.3s ease-in-out;
   outline: none;
   position: relative;
-
   > figure {
     -webkit-border-radius: 5px 0 0 5px;
     -moz-border-radius: 5px 0 0 5px;
@@ -33,7 +32,6 @@
     left: 0;
     top: 0;
     margin: 0 0 1rem;
-
     > img {
       width: 200px;
       height: auto;
@@ -57,12 +55,10 @@
       backface-visibility: hidden;
     }
   }
-
   .score {
     position: absolute;
     top: 10px;
     right: 20px;
-
     strong {
       padding: 10px 0 0 0;
       display: inline-block;
@@ -71,11 +67,9 @@
       font-weight: 500;
     }
   }
-
   em {
     font-size: 0.75rem;
   }
-
   h3 {
     font-size: 1.125rem;
     color: #222;
@@ -86,33 +80,27 @@
     -ms-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
     margin: 0;
-    max-width: 80%;
   }
-
   small {
     font-size: 14px;
     font-size: 0.875rem;
     color: #777;
   }
-
   ul {
     margin: 0;
     margin-top: 10px;
     list-style: none;
     padding: 0;
-
     li {
       display: inline-block;
       width: auto;
       margin: 0 5px 0 0;
       position: relative;
-
       &:last-child {
         margin: 0;
         font-size: 12px;
         font-size: 0.75rem;
       }
-
       .ribbon {
         position: static;
         background-color: #f3723b;
@@ -133,12 +121,34 @@
       }
     }
   }
-
   &:hover img {
     -webkit-transform: translate(-50%, -50%) scale(1);
     -moz-transform: translate(-50%, -50%) scale(1);
     -ms-transform: translate(-50%, -50%) scale(1);
     -o-transform: translate(-50%, -50%) scale(1);
     transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.ShopPageCard {
+  width: 100% !important;
+  height: 100%;
+  img {
+    height: 142px !important;
+  }
+  .header {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .description {
+    /* autoprefixer: off */
+    -webkit-box-orient: vertical;
+    /* autoprefixer: on */
+    display: block;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }

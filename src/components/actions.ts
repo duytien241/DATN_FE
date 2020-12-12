@@ -19,6 +19,7 @@ import {
   SHOP_QUERY_SHOP_LIST_CATEGORY,
   QUERY_LIST_CATEGORY,
   QUERY_LIST_DISTRICT,
+  QUERY_INFO_ACCOUNT,
 } from 'redux-saga/actions';
 import {
   FOOD_CREATE_FOOD_FAILED,
@@ -61,6 +62,8 @@ import {
   QUERY_LIST_CATEGORY_FAILED,
   QUERY_LIST_DISTRICT_SUCCESS,
   QUERY_LIST_DISTRICT_FAILED,
+  QUERY_INFO_ACCOUNT_SUCCESS,
+  QUERY_INFO_ACCOUNT_FAILED,
 } from './reducers';
 
 export const queryFoodList = (data?: any) => ({
@@ -126,14 +129,16 @@ export const queryShopType = (data?: any) => ({
   },
 });
 
-export const queryShopInfo = (data?: any) => ({
-  type: USER_QUERY_SHOP_INFO,
-  data,
-  response: {
-    success: USER_QUERY_SHOP_INFO_SUCCESS,
-    failed: USER_QUERY_SHOP_INFO_FAILED,
-  },
-});
+export const queryShopInfo = (data?: any) => {
+  return {
+    type: USER_QUERY_SHOP_INFO,
+    data,
+    response: {
+      success: USER_QUERY_SHOP_INFO_SUCCESS,
+      failed: USER_QUERY_SHOP_INFO_FAILED,
+    },
+  };
+};
 
 export const queryLocation = (data?: any) => ({
   type: GLOBAL_QUERY_LOCATION,
@@ -240,5 +245,14 @@ export const queryListDistrict = (data?: any) => ({
   response: {
     success: QUERY_LIST_DISTRICT_SUCCESS,
     failed: QUERY_LIST_DISTRICT_FAILED,
+  },
+});
+
+export const queryInfoAccount = (data?: any) => ({
+  type: QUERY_INFO_ACCOUNT,
+  data,
+  response: {
+    success: QUERY_INFO_ACCOUNT_SUCCESS,
+    failed: QUERY_INFO_ACCOUNT_FAILED,
   },
 });

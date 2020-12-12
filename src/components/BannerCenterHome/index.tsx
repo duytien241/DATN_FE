@@ -16,10 +16,10 @@ export default () => {
       >
         <div>
           <small>TM Food Delivery</small>
-          <h3>We Deliver to your Office</h3>
-          <p>Enjoy a tasty food in minutes!</p>
+          <h3>Nền tảng tìm kiếm và đặt món ăn</h3>
+          <p>Thưởng thức một món ăn ngon trong vài phút!</p>
           <a href="grid-listing-filterscol.html" className="btn_1 gradient">
-            Start Now!
+            Trải nghiệm ngay!
           </a>
         </div>
       </div>

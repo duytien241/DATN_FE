@@ -27,7 +27,6 @@ function* doQueryMenuList(request: Request<Obj>) {
     } else if (request.type === MENU_QUERY_FOOD_IN_MENU) {
       payload = yield queryFoodInMenu(request.data);
     }
-    console.log(payload);
     yield put({
       type: (request.response as any).success,
       payload: payload,

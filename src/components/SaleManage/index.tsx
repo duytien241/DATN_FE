@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Dropdown, DropdownProps, Modal } from 'semantic-ui-react';
+import { Breadcrumb, Button, Dropdown, DropdownProps, Header, Icon, Modal } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Column } from 'react-table';
@@ -155,6 +155,17 @@ export default () => {
 
   return (
     <ErrorBoundary FallbackComponent={Fallback} onError={handleError}>
+      <Breadcrumb>
+        <Breadcrumb.Section link>Quản lý</Breadcrumb.Section>
+        <Breadcrumb.Divider />
+        <Breadcrumb.Section link active>
+          Quản lý mã giảm giá
+        </Breadcrumb.Section>
+      </Breadcrumb>
+      <Header>
+        <Icon name="food" />
+        Quản lý mã giảm giá
+      </Header>
       <div className={styles.SaleManage}>
         <Button onClick={showCreateMenuModal} color="blue" content="Thêm Mã giảm giá" />
         <DataTable columns={(ref.current.columnDefs as unknown) as Column<object>[]} data={ref.current.data as Obj[]} />

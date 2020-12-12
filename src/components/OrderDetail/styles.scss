@@ -97,7 +97,7 @@
   }
 
   .Address {
-    display: flex;
+    display: block;
     justify-content: space-between;
 
     > span {
@@ -148,6 +148,20 @@
       border: 1px solid #206b9b;
       cursor: pointer;
       border-radius: 5px;
+    }
+  }
+}
+
+.PopupSaleCode {
+  .content {
+    .DiscountDetail {
+      display: flex;
+      flex-direction: column;
+      max-height: 180px;
+      overflow: hidden;
+      .ShopDiscount {
+        overflow: auto;
+      }
     }
   }
 }

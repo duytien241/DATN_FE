@@ -11,10 +11,10 @@ import {
   queryShopList,
   queryComment,
   requestComment,
-  addOrder,
-  delOrder,
+  order,
   queryRating,
   requestRating,
+  getInfoAccount,
 } from './sagas/User';
 import {
   changeStatusFood,
@@ -68,9 +68,9 @@ export default function* () {
     requestComment(),
     queryRating(),
     requestRating(),
-    delOrder(),
-    addOrder(),
+    order(),
     queryRatingList(),
+    getInfoAccount(),
 
     //food
     createFood(),

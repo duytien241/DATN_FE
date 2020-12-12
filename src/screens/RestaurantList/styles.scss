@@ -1,4 +1,7 @@
 .RestauranyList {
+  .Topbar {
+    position: unset;
+  }
   .HeaderPage {
     padding: 20px 0 20px 0;
     background-color: #f4f4f4;
@@ -16,6 +19,7 @@
         flex-wrap: wrap;
         margin-right: -15px;
         margin-left: -15px;
+        justify-content: space-between;
         .Left {
           display: block !important;
           flex: 0 0 66.666667%;
@@ -68,7 +72,20 @@
       display: block;
     }
     .ContentSide {
-      display: block;
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
+      .cards {
+        justify-content: center;
+        margin: 0 !important;
+        padding: 10px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+
+        a {
+          margin: 5px;
+        }
+      }
     }
   }
 }
