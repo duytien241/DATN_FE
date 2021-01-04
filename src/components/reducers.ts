@@ -363,3 +363,15 @@ export function InfoAccount(state: Obj | null = null, action: Action<Obj>) {
       return state;
   }
 }
+
+export const QUERY_RESULT_FILTER_SUCCESS = 'QUERY_RESULT_FILTER_SUCCESS';
+export const QUERY_RESULT_FILTER_FAILED = 'QUERY_RESULT_FILTER_FAILED';
+
+export function ResultFilter(state: Obj | null = null, action: Action<Obj>) {
+  switch (action.type) {
+    case QUERY_RESULT_FILTER_SUCCESS:
+      return action.payload ? { ...action.payload } : null;
+    default:
+      return state;
+  }
+}

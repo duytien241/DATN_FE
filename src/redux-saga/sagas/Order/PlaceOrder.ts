@@ -15,6 +15,7 @@ const placeOrder = async (param: any) => {
       phone: param.phone,
       total_cost: param.total,
       status: 'Chưa giao hàng',
+      order_detail: '',
       restaurant: param.id_user,
       note: param.note,
       time_order: Date().toLocaleString(),

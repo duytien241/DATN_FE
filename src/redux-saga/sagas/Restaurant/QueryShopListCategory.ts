@@ -5,7 +5,7 @@ import { SHOP_QUERY_SHOP_LIST_CATEGORY } from 'redux-saga/actions';
 import { BASE_URI } from 'utils/common';
 
 const queryShopListCategory = async (param?: Obj) => {
-  return Axios.get(`${BASE_URI}api/foodtype/${param?.id}/?page=${param?.page}`)
+  return Axios.get(`${BASE_URI}api/foodtype/${param?.id}?page=${param?.page ? param?.page : 1}`)
     .then((res) => {
       return res;
     })

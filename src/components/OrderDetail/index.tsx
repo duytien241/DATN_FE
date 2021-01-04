@@ -225,6 +225,8 @@ export default ({ orderDetail, id_user, step }: { orderDetail: Obj; id_user: any
       note: `${ref.current.shipmentInfo.name}${ref.current.shipmentInfo.name && ','} ${ref.current.shipmentInfo.phone}${
         ref.current.shipmentInfo.phone && ','
       } ${ref.current.shipmentInfo.address}`,
+      phone: ref.current.shipmentInfo.phone,
+      status: 'Chưa giao hàng',
       total: (orderDetail.orderInfo as Obj)?.totalPrice,
       payType: ref.current.payMethod.value,
       info: ((orderDetail.orderInfo as Obj)?.orderInfo as Obj[]).map((info: Obj) => {

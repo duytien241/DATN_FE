@@ -4,25 +4,6 @@ import './styles.scss';
 
 export default () => {
   return (
-    // <footer className={styles.Footer}>
-    //   <div className={styles.FooterTop}></div>
-    //   <div className={styles.FooterBottom}>
-    //     <span style={{ color: '#999', clear: 'both', display: 'block' }}>
-    //       ©2020 TMFood Corporation. Số 96 Định Công - Thanh Xuân - Hà Nội
-    //     </span>
-    //     <span id="foody-hot-line" style={{ color: '#999', clear: 'both', display: 'block' }}>
-    //       Điện thoại: 0337981919 Email: varanenguyen@gmail.vn
-    //     </span>
-    //     <span style={{ color: '#999', clear: 'both', display: 'block' }}>
-    //       Giấy CN ĐKDN số xxxxxxxxxx do Sở Kế hoạch và Đầu tư TP.HCM cấp ngày 11/6/2012, sửa đổi lần thứ 21, ngày
-    //       04/10/2019
-    //     </span>
-    //     <span style={{ color: '#999', clear: 'both', display: 'block' }}>
-    //       Giấy phép thiết lập MXH trên mạng số 363/GP-BTTTT do Bộ Thông tin và Truyền thông cấp ngày 30/6/2016 Người
-    //       chịu trách nhiệm: Nguyễn Đức Minh.
-    //     </span>
-    //   </div>
-    // </footer>
     <>
       <footer id="colophon" className="site-footer footer-v1" role="contentinfo">
         <div className="wave footer"></div>

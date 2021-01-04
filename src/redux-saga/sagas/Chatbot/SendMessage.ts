@@ -6,7 +6,7 @@ import { Obj, Request } from 'interfaces/common';
 import { Global } from 'global/common';
 import { getKey } from 'utils/common';
 
-const sendMessage = (payload?: Obj) => {
+export const sendMessage = (payload?: Obj) => {
   if (Global.socketChatbot != null) {
     store.dispatch({
       type: CHATBOT_ADD_USER_MESSAGE,
@@ -14,7 +14,11 @@ const sendMessage = (payload?: Obj) => {
     });
 
     const event = Global.config?.connectionInfo?.chatbotInfo?.user_event as string;
-    Global.socketChatbot.emit(`${event}${getKey('chatbotId')}`, payload?.text as string);
+    console.log(`${event}${getKey('chatbotId')}`);
+    Global.socketChatbot.publish(`${event}${getKey('chatbotId')}`, {
+      text: payload?.text as string,
+      id: getKey('chatbotId'),
+    });
   }
 };
 function* doSendMessage(request: Request<Obj>) {

@@ -9,7 +9,6 @@ import { COMP_TYPE, handleError } from 'utils/common';
 import { State } from 'redux-saga/reducers';
 import { Obj } from 'interfaces/common';
 import { queryHistory } from 'components/AdminHistory/actions';
-import { queryOrderDetail } from 'components/OrderManage/actions';
 import styles from './styles.scss';
 import { updateOrderShop } from 'components/OrderManage/actions';
 
@@ -98,7 +97,7 @@ export const OrderManageCus: React.FC<OrderManageCusProps> = (props: OrderManage
       },
       {
         Header: 'Địa chỉ',
-        accessor: 'address',
+        accessor: 'address_ship',
         className: 'Center',
         width: 70,
       },
@@ -116,13 +115,13 @@ export const OrderManageCus: React.FC<OrderManageCusProps> = (props: OrderManage
       },
       {
         Header: 'Tổng tiền',
-        accessor: 'total',
+        accessor: 'total_cost',
         className: 'Center',
         width: 70,
       },
       {
         Header: 'Ngày tạo',
-        accessor: 'create_at',
+        accessor: 'time_order',
         className: 'Center',
         width: 70,
       },
@@ -162,13 +161,13 @@ export const OrderManageCus: React.FC<OrderManageCusProps> = (props: OrderManage
       },
       {
         Header: 'Tên món ăn',
-        accessor: 'name',
+        accessor: 'item',
         className: 'Center',
         width: 70,
       },
       {
         Header: 'Số lượng',
-        accessor: 'qty',
+        accessor: 'quantity',
         className: 'Center',
         width: 70,
       },
@@ -222,10 +221,9 @@ export const OrderManageCus: React.FC<OrderManageCusProps> = (props: OrderManage
   };
 
   const showOrderDetail = (data: any) => {
-    const params = {
-      id: data.original.id,
-    };
-    dispatch(queryOrderDetail(params));
+    console.log(ref.current.data);
+    ref.current.orderDetailList = ref.current.data[data.original.id]?.order_detail as Obj[];
+    setRedraw({});
   };
 
   const showIgnoreForm = (data: Obj) => {
@@ -263,17 +261,6 @@ export const OrderManageCus: React.FC<OrderManageCusProps> = (props: OrderManage
       </div>
     );
   }, []);
-
-  // const showUpdateForm = (data: Obj) => {
-  //   ref.current.name = data.name as string;
-  //   ref.current.desc = data.desc as string;
-  //   ref.current.id = data.id as number;
-  //   ref.current.status = data.status as string;
-  //   setOpenModal(true);
-  //   setType(FORM_TYPE.UPDATE);
-  //   setRedraw({});
-  // };
-
   return (
     <ErrorBoundary FallbackComponent={Fallback} onError={handleError}>
       {compType !== COMP_TYPE.MODAL && (

@@ -1,8 +1,11 @@
 import React, { useEffect } from 'react';
 import LoaderDots from '../LoaderDots';
 import { Mes, MESSAGE_SENDER, MESSAGE_TYPE } from 'components/Chatbot/reducers';
+// import ButtonsSlider from '../SliderButtons';
 import styles from './styles.scss';
 import { Obj } from 'interfaces/common';
+import GridButtons from '../GridButtons';
+import { sendMessage } from 'redux-saga/sagas/Chatbot/SendMessage';
 
 interface MessageProps {
   message: Mes;
@@ -14,8 +17,27 @@ interface MessageProps {
   typing?: boolean;
   detectSymbolPickerPosition?: (symbolPickerRef: React.RefObject<HTMLDivElement>) => void;
 }
-
+const onClickOptions = (data: any) => {
+  console.log(data);
+  const payload = {
+    sender: MESSAGE_SENDER.CLIENT,
+    showAvatar: false,
+    text: data,
+    timestamp: new Date(),
+    type: 'text',
+  };
+  sendMessage(payload);
+};
 export default React.memo((props: MessageProps) => {
+  const componentProps = props.component?.props;
+  console.log(componentProps);
+  const COMPONENTS = {
+    SHOW_LIST_OPTIONS: componentProps && (
+      <GridButtons onClickButton={onClickOptions} slidesToShow={2} buttons={componentProps.options as Obj[]} />
+    ),
+  };
+
+  const renderComponentMessage = () => <>{COMPONENTS[props.component?.value!]}</>;
   const renderTextMessage = () => {
     let arr_meesage: string[] = [];
     if (message.text) {
@@ -63,7 +85,7 @@ export default React.memo((props: MessageProps) => {
         ? renderTextMessage()
         : message.type === MESSAGE_TYPE.TYPING
         ? renderTyping()
-        : null}
+        : renderComponentMessage()}
     </>
   );
 });

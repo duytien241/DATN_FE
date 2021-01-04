@@ -20,6 +20,7 @@ import {
   QUERY_LIST_CATEGORY,
   QUERY_LIST_DISTRICT,
   QUERY_INFO_ACCOUNT,
+  QUERY_RESULT_FILTER,
 } from 'redux-saga/actions';
 import {
   FOOD_CREATE_FOOD_FAILED,
@@ -64,6 +65,8 @@ import {
   QUERY_LIST_DISTRICT_FAILED,
   QUERY_INFO_ACCOUNT_SUCCESS,
   QUERY_INFO_ACCOUNT_FAILED,
+  QUERY_RESULT_FILTER_FAILED,
+  QUERY_RESULT_FILTER_SUCCESS,
 } from './reducers';
 
 export const queryFoodList = (data?: any) => ({
@@ -254,5 +257,14 @@ export const queryInfoAccount = (data?: any) => ({
   response: {
     success: QUERY_INFO_ACCOUNT_SUCCESS,
     failed: QUERY_INFO_ACCOUNT_FAILED,
+  },
+});
+
+export const queryResultFilter = (data?: any) => ({
+  type: QUERY_RESULT_FILTER,
+  data,
+  response: {
+    success: QUERY_RESULT_FILTER_SUCCESS,
+    failed: QUERY_RESULT_FILTER_FAILED,
   },
 });

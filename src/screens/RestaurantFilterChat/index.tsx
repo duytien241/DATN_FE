@@ -3,10 +3,9 @@ import styles from './styles.scss';
 import TopBar from 'components/TopBar';
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from 'redux-saga/reducers';
-import { queryListCategory, queryListDistrict, queryShopListCategory } from 'components/actions';
+import { queryListCategory, queryListDistrict, queryResultFilter } from 'components/actions';
 import { Accordion, Form, Menu, Dimmer, Loader } from 'semantic-ui-react';
 import Footer from 'components/Footer';
-import { useParams } from 'react-router';
 import { Obj } from 'interfaces/common';
 import ShopCard from 'components/ShopCard';
 import ReactPaginate from 'react-paginate';
@@ -17,8 +16,6 @@ interface RestaurantListProps {
 }
 
 export default (props: RestaurantListProps) => {
-  const { id } = useParams<{ id: string }>();
-
   const dispatch = useDispatch();
   const [activeSort, setActiveSort] = useState(false);
   const [activeCategory, setActiveCategory] = useState(false);
@@ -76,10 +73,9 @@ export default (props: RestaurantListProps) => {
   const requestData = (id_choose?: string, page?: number) => {
     ref.current.loading = true;
     redraw({});
-    const id_query = id_choose ? id_choose : id;
     dispatch(
-      queryShopListCategory({
-        id: id_query,
+      queryResultFilter({
+        list_id: [1, 2, 3, 4, 5, 6, 7, 8, 9],
         page: page ? page : 1,
       })
     );

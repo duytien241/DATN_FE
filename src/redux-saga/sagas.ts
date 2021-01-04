@@ -45,7 +45,7 @@ import { queryCusInfo, queryCustList, updateCusInfo } from './sagas/Customer';
 import { decisionShopRegister, queryAdminInfo, queryShopPendingList } from './sagas/Admin';
 import { queryHistory } from './sagas/History';
 import { sendMessage } from './sagas/Chatbot';
-import { queryListDistrict, queryShopListCategory } from './sagas/Restaurant';
+import { queryListDistrict, queryShopListCategory, queryResultFilter } from './sagas/Restaurant';
 import { queryListCategory } from './sagas/CateGory';
 
 export default function* () {
@@ -123,5 +123,6 @@ export default function* () {
 
     queryListCategory(),
     queryListDistrict(),
+    queryResultFilter(),
   ]);
 }
