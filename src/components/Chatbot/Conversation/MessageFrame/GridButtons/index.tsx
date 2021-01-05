@@ -17,9 +17,14 @@ export default (props: QuickButtonsProps) => {
   return (
     <div className={styles.BannerChatbot}>
       <div className="Buttons">
-        {buttons?.map((button, index) => (
-          <Button basic color="blue" key={index} content={button} onClick={() => props.onClickButton!(button)} />
-        ))}
+        {buttons?.map((button, index) => {
+          if (((button as unknown) as string).length != 0) {
+            return (
+              <Button basic color="blue" key={index} content={button} onClick={() => props.onClickButton!(button)} />
+            );
+          }
+          return <></>;
+        })}
       </div>
     </div>
   );
