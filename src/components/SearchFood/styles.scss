@@ -1,8 +1,17 @@
 .SearchFood {
+  width: 600px;
+
   .search {
+    width: 600px;
+
+    .input {
+      width: 100%;
+    }
     .results {
       max-height: 300px;
+      width: 100%;
       overflow: auto;
+
       .result {
         .description {
           /* autoprefixer: off */

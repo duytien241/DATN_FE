@@ -29,9 +29,10 @@ export default (props: FoodGridProps) => {
   useEffect(() => {
     if (foodList && foodList.data) {
       if (typeof foodList?.data === 'object') {
-        ref.current.foodList = foodList.data as Obj[];
+        ref.current.foodList = (foodList.data as Obj).results as Obj[];
       }
     }
+    console.log(ref.current.foodList);
     setRedraw({});
   }, [foodList]);
 
@@ -46,7 +47,7 @@ export default (props: FoodGridProps) => {
         <Link to="/food_list">Xem tất cả →</Link>
       </div>
       <Card.Group>
-        {((foodList as Obj)?.data as Obj[])?.slice(0, limit).map((foodItem: Obj, index: number) => (
+        {ref.current.foodList?.slice(0, limit).map((foodItem: Obj, index: number) => (
           <FoodCard foodItem={foodItem} key={index} />
         ))}
       </Card.Group>

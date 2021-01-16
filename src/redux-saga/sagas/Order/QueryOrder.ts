@@ -2,22 +2,17 @@ import Axios from 'axios';
 import { put, takeLatest } from 'redux-saga/effects';
 import { Obj, Request } from 'interfaces/common';
 import { ORDER_QUERY_ORDER, ORDER_QUERY_ORDER_DETAIL, ORDER_QUERY_ORDER_STATUS } from 'redux-saga/actions';
-import { BASE_URI, configHeaderAxios } from 'utils/common';
+import { BASE_URI } from 'utils/common';
+import Cookies from 'js-cookie';
 
 const queryOrder = async (param: Obj) => {
-  return await Axios.get(`${BASE_URI}api/v1/order`, {
-    params: param,
-  });
-};
-
-const queryOrderDetailShop = async (param: Obj) => {
-  return await Axios.get(`${BASE_URI}api/v1/order/info`, {
-    params: param,
-  });
-};
-
-const queryOrderStatus = async () => {
-  return await Axios.get(`${BASE_URI}api/v1/order/status`, configHeaderAxios);
+  return await Axios.get(`${BASE_URI}api/shop/orders`, {
+    headers: { Authorization: `Token  ${Cookies.get('userInfo')}` },
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => console.log(error));
 };
 
 function* doQueryOrder(request: Request<Obj>) {
@@ -26,10 +21,6 @@ function* doQueryOrder(request: Request<Obj>) {
     if (request.type === ORDER_QUERY_ORDER) {
       payload = yield queryOrder(request.data);
       console.log(payload);
-    } else if (request.type === ORDER_QUERY_ORDER_STATUS) {
-      payload = yield queryOrderStatus();
-    } else if (request.type === ORDER_QUERY_ORDER_DETAIL) {
-      payload = yield queryOrderDetailShop(request.data);
     }
     yield put({
       type: (request.response as any).success,

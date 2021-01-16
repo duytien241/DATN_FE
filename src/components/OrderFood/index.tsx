@@ -176,41 +176,25 @@ export default (props: OrderInfoProps) => {
           </Button>
         </div>
       </div>
+      <Modal
+        size="small"
+        onClose={() => setOpenOrderDetail(false)}
+        onOpen={() => setOpenOrderDetail(true)}
+        open={openOrderDetail}
+      >
+        <Modal.Header>
+          <span>Chi tiết đơn</span>
+        </Modal.Header>
+        <Modal.Content>
+          <OrderDetail step={ref.current.step} orderDetail={ref.current.orderDetail as Obj} id_user={props.id_user} />
+        </Modal.Content>
+      </Modal>
       <Modal onClose={() => setOpen(false)} onOpen={() => setOpen(true)} open={open} closeIcon={true}>
         <Modal.Header>
           {activeIndex === 1 ? 'Đăng nhập' : activeIndex === 2 ? 'Đăng ký tài khoản' : 'Đăng ký tài khoản cửa hàng'}
         </Modal.Header>
         <Modal.Content>
           <Tab panes={panes} activeIndex={activeIndex} onTabChange={onTabChange} />
-        </Modal.Content>
-      </Modal>
-      <Modal onClose={() => setOpenOrderDetail(false)} onOpen={() => setOpenOrderDetail(true)} open={openOrderDetail}>
-        <Modal.Header>
-          <span>Chi tiết đơn</span>
-        </Modal.Header>
-        <Modal.Content>
-          {/* <Step.Group ordered>
-            <Step completed index={1} onClick={onChangeStep}>
-              <Step.Content>
-                <Step.Title>Shipping</Step.Title>
-                <Step.Description>Choose your shipping options</Step.Description>
-              </Step.Content>
-            </Step>
-
-            <Step completed index={2} onClick={onChangeStep}>
-              <Step.Content>
-                <Step.Title>Billing</Step.Title>
-                <Step.Description>Enter billing information</Step.Description>
-              </Step.Content>
-            </Step>
-
-            <Step active index={3} onClick={onChangeStep}>
-              <Step.Content>
-                <Step.Title>Confirm Order</Step.Title>
-              </Step.Content>
-            </Step>
-          </Step.Group> */}
-          <OrderDetail step={ref.current.step} orderDetail={ref.current.orderDetail as Obj} id_user={props.id_user} />
         </Modal.Content>
       </Modal>
     </>

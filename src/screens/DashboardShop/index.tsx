@@ -8,7 +8,7 @@ import { Segment } from 'semantic-ui-react';
 const menus = [
   { title: 'Quản lý đơn hàng', target: 'manage_order', isLeaf: true },
   { title: 'Quản lý món ăn', target: 'manage_food', isLeaf: true },
-  { title: 'Quản lý menu', target: 'manage_menu', isLeaf: true },
+  // { title: 'Quản lý menu', target: 'manage_menu', isLeaf: true },
   { title: 'Quản lý Sale', target: 'manage_sale', isLeaf: true },
   { title: 'Đánh giá cửa hàng', target: 'manage_rating', isLeaf: true },
   {
@@ -31,7 +31,7 @@ class DashboardShop extends React.Component<DashboardShopProps, DashboardShopSta
 
   constructor(props: DashboardShopProps) {
     super(props);
-    this.activeTarget = this.props.activeTarget ? this.props.activeTarget : 'manage_menu';
+    this.activeTarget = this.props.activeTarget ? this.props.activeTarget : 'manage_food';
 
     this.state = {
       redraw: false,

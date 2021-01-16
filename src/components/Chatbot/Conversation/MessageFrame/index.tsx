@@ -62,6 +62,14 @@ export default React.memo(
             messages.map((message: Mes, index: number) => {
               return <Message key={index} message={message} avatarBot={avatarBot} component={message.component} />;
             })}
+
+          {props.loadingMessage && (
+            <Message
+              message={{ type: MESSAGE_TYPE.TYPING, sender: MESSAGE_SENDER.RESPONSE, showAvatar: true }}
+              typing={true}
+              avatarBot={avatarBot}
+            />
+          )}
         </div>
       </Scrollbars>
     );

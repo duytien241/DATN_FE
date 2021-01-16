@@ -9,12 +9,25 @@ import {
   QUERY_FOOD_NAME_SEARCH,
 } from 'redux-saga/actions';
 import { BASE_URI, configHeaderAxios } from 'utils/common';
+import Cookies from 'js-cookie';
 
 const queryFoodList = async (param?: Obj) => {
-  return await Axios.get(`${BASE_URI}api/v1/food`, {
-    params: param,
-    headers: configHeaderAxios,
-  });
+  return await Axios.get(`${BASE_URI}api/shop/menu`, {
+    headers: { Authorization: `Token  ${Cookies.get('userInfo')}` },
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => console.log(error));
+};
+
+const searchFoodList = async (param?: Obj) => {
+  return Axios.get(`${BASE_URI}api/search?text=${param?.name}`)
+    .then((res) => {
+      console.log(res);
+      return res;
+    })
+    .catch((error) => console.log(error));
 };
 
 const queryFoodType = async (param: Obj) => {
@@ -36,7 +49,7 @@ function* doQueryFoodList(request: Request<Obj>) {
     } else if (request.type === FOOD_QUERY_FOOD_LIST_CATEGORY) {
       payload = yield queryFoodList(request.data);
     } else if (request.type === QUERY_FOOD_NAME_SEARCH) {
-      payload = yield queryFoodList(request.data);
+      payload = yield searchFoodList(request.data);
     }
     yield put({
       type: (request.response as any).success,

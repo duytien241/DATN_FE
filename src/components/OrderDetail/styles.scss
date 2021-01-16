@@ -38,6 +38,10 @@
     }
   }
 
+  .Note {
+    flex-direction: column;
+  }
+
   .Discount {
     display: flex;
     justify-content: space-between;

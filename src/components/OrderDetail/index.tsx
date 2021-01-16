@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Obj } from 'interfaces/common';
 import styles from './styles.scss';
 import { formatNumber } from 'utils/common';
-import { Button, Form, Icon, Input, InputOnChangeData, Modal, Popup } from 'semantic-ui-react';
+import { Button, Form, Icon, InputOnChangeData, Modal, Popup, TextArea } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { placeOrder } from './actions';
 import { querySaleCodeList } from 'components/SaleManage/actions';
@@ -206,7 +206,7 @@ export default ({ orderDetail, id_user, step }: { orderDetail: Obj; id_user: any
     redraw({});
   };
 
-  const onChangeNote = (e: React.ChangeEvent, data: Obj) => {
+  const onChangeNote = (event: React.FormEvent<HTMLTextAreaElement>, data: Obj) => {
     ref.current.note = data.value as string;
   };
   const requestDataSaleList = () => {
@@ -304,7 +304,7 @@ export default ({ orderDetail, id_user, step }: { orderDetail: Obj; id_user: any
         </div>
         <div className={styles.Note}>
           <label>Ghi chú</label>
-          <Input onChange={onChangeNote} placeholder="Ghi chú" />
+          <TextArea placeholder="Ghi chú" rows={4} onChange={onChangeNote} />
         </div>
       </div>
     );

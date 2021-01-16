@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ErrorBoundary } from 'react-error-boundary';
-import Cookie from 'js-cookie';
 import { Breadcrumb, Button, Dropdown, DropdownProps, Header, Icon, Input, Modal } from 'semantic-ui-react';
 import { Column } from 'react-table';
 import { Obj } from 'interfaces/common';
@@ -35,7 +34,7 @@ export const FoodManage: React.FC<FoodManageProps> = (props: FoodManageProps) =>
   const [type, setType] = useState(FORM_TYPE.CREATE);
   const foodType = useSelector(getFoodTypeOrigin);
 
-  const userLogin = Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string) : null;
+  const infoAccount = useSelector((state: State) => state.infoAccount);
   const foodList = useSelector((state: State) => state.foodList);
   const createFoodResult = useSelector((state: State) => state.createFoodResult);
   const updateFoodResult = useSelector((state: State) => state.updateFoodResult);
@@ -109,7 +108,7 @@ export const FoodManage: React.FC<FoodManageProps> = (props: FoodManageProps) =>
               className: 'Center',
               width: 70,
               Cell: (data: any) => {
-                return <img src={`${BASE_IMAGE_URL}${data.row.original.image}`} className={styles.FoodImage} />;
+                return <img src={data.row.original.image_url} className={styles.FoodImage} />;
               },
             },
             {
@@ -226,15 +225,16 @@ export const FoodManage: React.FC<FoodManageProps> = (props: FoodManageProps) =>
   }, [deleteFoodManageResult]);
 
   useEffect(() => {
+    console.log(foodList);
     if (foodList && foodList.data) {
-      ref.current.data = foodList?.data as Obj[];
+      ref.current.data = (foodList?.data as Obj).results as Obj[];
     }
     setRedraw({});
   }, [foodList]);
 
   const requestData = () => {
     const params = {
-      id_user: compType === COMP_TYPE.MODAL ? props.id_user : userLogin.data.id,
+      id_user: compType === COMP_TYPE.MODAL ? props.id_user : infoAccount?.id,
     };
 
     dispatch(queryFoodList(params));
@@ -295,6 +295,7 @@ export const FoodManage: React.FC<FoodManageProps> = (props: FoodManageProps) =>
       500,
       false
     );
+    console.log(infoAccount);
 
     if (isValidName === true && isValidPrice === true && isValidInfo === true) {
       const params = {
@@ -302,7 +303,8 @@ export const FoodManage: React.FC<FoodManageProps> = (props: FoodManageProps) =>
         info: foodFormRef.current.info,
         price: foodFormRef.current.price,
         image: foodFormRef.current.image,
-        id_user: userLogin.data.id,
+        id_user: infoAccount?.id,
+        restaurant: infoAccount?.restaurant,
         id_food: foodFormRef.current.id,
         ...(type === FORM_TYPE.UPDATE && {
           id_food: foodFormRef.current.id,
@@ -320,6 +322,7 @@ export const FoodManage: React.FC<FoodManageProps> = (props: FoodManageProps) =>
   };
 
   const submitDelete = () => {
+    console.log(foodFormRef.current);
     const params = {
       id: foodFormRef.current.id,
     };

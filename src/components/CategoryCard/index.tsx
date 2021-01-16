@@ -28,7 +28,7 @@ export default (props: CategoryCardProps) => {
             />
             <div className="info">
               <h3>{categoryItem.type}</h3>
-              <small>Avg price $40</small>
+              <small>{categoryItem.name}</small>
             </div>
           </figure>
         </Link>

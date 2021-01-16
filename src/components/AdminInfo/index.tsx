@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Grid, Header, Image, Input } from 'semantic-ui-react';
-import Cookie from 'js-cookie';
 import Fallback from 'components/Fallback';
 import TextBox, { TEXTBOX_TYPE } from 'elements/TextBox';
 import DatePicker from 'elements/DatePicker';
@@ -15,7 +14,7 @@ export default () => {
   const dispatch = useDispatch();
   const [, setRedraw] = useState();
   const adminInfo = useSelector((state: State) => state.adminInfo);
-  const userLogin = Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string).data : null;
+  const infoAccount = useSelector((state: State) => state.infoAccount);
 
   const userInfoRef = useRef<{
     id?: number;
@@ -54,7 +53,7 @@ export default () => {
 
   const requestData = () => {
     const params = {
-      id_user: userLogin.id,
+      id_user: infoAccount?.id,
     };
     dispatch(queryAdminInfo(params));
   };

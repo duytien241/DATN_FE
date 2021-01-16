@@ -12,6 +12,7 @@
     padding: 6pt 12pt;
     border-radius: 10px;
     border-top-left-radius: unset;
+    background-color: #e7e5eb;
     .LoaderDot {
       display: inline-block;
       height: 4px;
@@ -19,6 +20,7 @@
       border-radius: 50%;
       margin-right: 2px;
       animation: bounce 0.5s ease infinite alternate;
+      background: #9a9a9a;
 
       &:nth-child(1) {
         animation-delay: 0.2s;

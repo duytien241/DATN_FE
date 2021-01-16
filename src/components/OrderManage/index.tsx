@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Breadcrumb, Button, Dropdown, DropdownProps, Header, Icon, Modal } from 'semantic-ui-react';
 import { Column } from 'react-table';
 import { ErrorBoundary } from 'react-error-boundary';
-import Cookie from 'js-cookie';
 import Fallback from 'components/Fallback';
 import DataTable from 'elements/Datatable';
 import { FORM_TYPE, handleError } from 'utils/common';
@@ -18,12 +17,25 @@ export default () => {
   const [type, setType] = useState(FORM_TYPE.CREATE);
 
   const orderList = useSelector((state: State) => state.orderList);
-  const orderStatusList = useSelector((state: State) => state.orderStatusList);
   const updateOrderResult = useSelector((state: State) => state.updateOrderResult);
   const orderDetailShop = useSelector((state: State) => state.orderDetailShop);
   const [openModal, setOpenModal] = useState(false);
-  const userLogin = Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string) : null;
+  const infoAccount = useSelector((state: State) => state.infoAccount);
 
+  const orderStatusList: Obj[] = [
+    {
+      text: 'Chưa giao hàng',
+      value: 'Chưa giao hàng',
+    },
+    {
+      text: 'Đã giao hàng',
+      value: 'Đã giao hàng',
+    },
+    {
+      text: 'Đã hủy',
+      value: 'Đã hủy',
+    },
+  ];
   const ref = useRef<{
     columnDefs: Obj[];
     pageIndex: number;
@@ -31,7 +43,6 @@ export default () => {
     name: string;
     desc: string;
     id?: number;
-    orderStatusList: Obj[];
     status: string;
     orderDetailList: Obj[];
     subColumnDefs: Obj[];
@@ -132,11 +143,9 @@ export default () => {
         accessor: 'update',
         Cell: (data: any) => {
           return (
-            data.row.original.status === 'Đang chờ' && (
-              <Button positive onClick={() => showUpdateForm(data.row.original)}>
-                {'Cập nhật'}
-              </Button>
-            )
+            <Button positive onClick={() => showUpdateForm(data.row.original)}>
+              {'Cập nhật'}
+            </Button>
           );
         },
         className: 'Right NoBorder',
@@ -157,26 +166,25 @@ export default () => {
       },
       {
         Header: 'Tên món ăn',
-        accessor: 'name',
+        accessor: 'item',
         className: 'Center',
         width: 70,
       },
       {
         Header: 'số lượng',
-        accessor: 'qty',
+        accessor: 'quantity',
         className: 'Center',
         width: 70,
       },
       {
         Header: 'Giá tiền',
-        accessor: 'total',
+        accessor: 'price',
         className: 'Center',
         width: 70,
       },
     ],
     data: [],
     orderDetailList: [],
-    orderStatusList: [],
     status: '',
     name: '',
     desc: '',
@@ -197,26 +205,8 @@ export default () => {
   }, [orderDetailShop]);
 
   useEffect(() => {
-    if (orderStatusList && orderStatusList.data) {
-      if (typeof orderStatusList?.data === 'object') {
-        ref.current.orderStatusList = (orderStatusList?.data as Obj[]).map((item: Obj) => {
-          return {
-            key: item.id,
-            text: item.status,
-            value: item.status,
-          };
-        });
-      }
-    }
-    setRedraw({});
-  }, [orderStatusList]);
-
-  useEffect(() => {
     if (orderList && orderList.data) {
-      console.log(orderList.data);
-
       ref.current.data = orderList?.data as Obj[];
-      console.log(ref.current.data);
     }
     setRedraw({});
   }, [orderList]);
@@ -230,7 +220,7 @@ export default () => {
 
   const requestData = () => {
     const params = {
-      id_user: userLogin.data.id,
+      id_user: infoAccount?.id,
     };
 
     dispatch(queryOrderShop(params));
@@ -242,10 +232,10 @@ export default () => {
 
   const submitCreate = () => {
     const params = {
-      id_user: userLogin.data.id,
+      id_user: infoAccount?.id,
       ...(type === FORM_TYPE.UPDATE && {
         id: ref.current.id,
-        status: ref.current.orderStatusList.find((obj) => obj.value === ref.current.status)!.key,
+        status: orderStatusList.find((obj) => obj.value === ref.current.status)!.key,
       }),
     };
 
@@ -276,11 +266,12 @@ export default () => {
   };
 
   const renderRowSubComponent = React.useCallback(({ row }) => {
+    console.log(row);
     return (
       <div className={styles.SubOrderManage}>
         <DataTable
           columns={(ref.current.subColumnDefs as unknown) as Column<object>[]}
-          data={ref.current.orderDetailList as Obj[]}
+          data={(row.original as Obj).order_detail as Obj[]}
         />
       </div>
     );
@@ -322,7 +313,7 @@ export default () => {
             className="icon"
             floating
             labeled
-            options={ref.current.orderStatusList}
+            options={orderStatusList}
             text={(ref.current.status as string) ? ref.current.status : 'Choose Status'}
             onChange={changeOrderStatus}
           />

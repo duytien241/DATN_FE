@@ -6,6 +6,7 @@ import styles from './styles.scss';
 import { Obj } from 'interfaces/common';
 import GridButtons from '../GridButtons';
 import { sendMessage } from 'redux-saga/sagas/Chatbot/SendMessage';
+import { BrowserRouter, Link } from 'react-router-dom';
 
 interface MessageProps {
   message: Mes;
@@ -34,6 +35,13 @@ export default React.memo((props: MessageProps) => {
   const COMPONENTS = {
     SHOW_LIST_OPTIONS: componentProps && (
       <GridButtons onClickButton={onClickOptions} slidesToShow={2} buttons={componentProps.options as Obj[]} />
+    ),
+    SAVE_SEARCH: componentProps && (
+      <BrowserRouter>
+        <Link to="/#/filter" target="_blank">
+          Xem thêm tại: đây
+        </Link>
+      </BrowserRouter>
     ),
   };
 

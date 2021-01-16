@@ -9,6 +9,7 @@ import {
   FOOD_CHANGE_FOOD_STATUS,
 } from 'redux-saga/actions';
 import { BASE_URI, configHeaderAxios, notificationError, notificationSuccess } from 'utils/common';
+import Cookies from 'js-cookie';
 
 const uploadFile = (input: FileList, id: number) => {
   if (input != null) {
@@ -31,15 +32,36 @@ const uploadFile = (input: FileList, id: number) => {
 };
 
 const createFood = async (param: any) => {
-  return await Axios.post(`${BASE_URI}api/v1/food/create`, qs.stringify(param), configHeaderAxios);
+  console.log(param);
+  return Axios.post(
+    `${BASE_URI}api/shop/menu/`,
+    {
+      name: param.name,
+      description: param.info,
+      price: param.price,
+      image_url: param.image ? param.image : 'http://localhost:3003/static/media/defaultFood.png',
+      restaurant: param.restaurant,
+    },
+    { headers: { Authorization: `Token  ${Cookies.get('userInfo')}` } }
+  )
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => console.log(error));
 };
 
 const updateFood = async (param: any) => {
-  return await Axios.put(`${BASE_URI}api/v1/food/update`, qs.stringify(param), configHeaderAxios);
+  return await Axios.put(`${BASE_URI}api/shop/menu`, qs.stringify(param), configHeaderAxios);
 };
 
 const deleteFoodManage = async (param: any) => {
-  return await Axios.put(`${BASE_URI}api/v1/food/delete`, qs.stringify(param), configHeaderAxios);
+  return Axios.delete(`${BASE_URI}api/shop/menu/${param.id}`, {
+    headers: { Authorization: `Token  ${Cookies.get('userInfo')}` },
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => console.log(error));
 };
 
 const changeFoodStatus = async (param: any) => {

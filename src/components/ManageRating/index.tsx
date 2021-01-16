@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Column } from 'react-table';
-import Cookie from 'js-cookie';
 import DataTable from 'elements/Datatable';
 import Fallback from 'components/Fallback';
 import { Obj } from 'interfaces/common';
@@ -16,7 +15,7 @@ export default () => {
   const dispatch = useDispatch();
   const [, setRedraw] = useState();
 
-  const userLogin = Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string) : null;
+  const infoAccount = useSelector((state: State) => state.infoAccount);
   const ratingList = useSelector((state: State) => state.ratingList);
 
   const ref = useRef<{
@@ -38,13 +37,13 @@ export default () => {
       },
       {
         Header: 'Người đánh giá',
-        accessor: 'Name',
+        accessor: 'results',
         className: 'Center',
         width: 70,
       },
       {
         Header: 'Mức rating',
-        accessor: 'ratingLevel',
+        accessor: 'rating',
         className: 'Center',
         width: 70,
       },
@@ -53,6 +52,12 @@ export default () => {
         accessor: 'time',
         className: 'Center',
         width: 70,
+      },
+      {
+        Header: 'Nội dung',
+        accessor: 'content',
+        className: 'Center',
+        width: 270,
       },
     ],
     data: [],
@@ -64,8 +69,9 @@ export default () => {
 
   useEffect(() => {
     if (ratingList && ratingList.data) {
+      console.log(ratingList);
       if (typeof ratingList?.data === 'object') {
-        ref.current.data = ratingList?.data as Obj[];
+        ref.current.data = (ratingList?.data as Obj)?.results as Obj[];
       }
     }
     setRedraw({});
@@ -73,7 +79,7 @@ export default () => {
 
   const requestDataRatingList = () => {
     const params = {
-      id: userLogin.data.id,
+      id: infoAccount?.restaurant,
     };
 
     dispatch(queryRatingList(params));

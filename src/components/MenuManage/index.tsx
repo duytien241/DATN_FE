@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Breadcrumb, Button, Checkbox, CheckboxProps, Header, Icon, Modal, Tab } from 'semantic-ui-react';
 import { Column } from 'react-table';
 import { ErrorBoundary } from 'react-error-boundary';
-import Cookie from 'js-cookie';
 import TextBox, { TEXTBOX_TYPE } from 'elements/TextBox';
 import Fallback from 'components/Fallback';
 import TextArea from 'elements/TextArea';
@@ -37,7 +36,7 @@ export default () => {
   const insertFoodMenuResult = useSelector((state: State) => state.insertFoodMenuResult);
   const deleteFoodMenuResult = useSelector((state: State) => state.deleteFoodMenuResult);
   const [openModal, setOpenModal] = useState(false);
-  const userLogin = Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string) : null;
+  const infoAccount = useSelector((state: State) => state.infoAccount);
 
   const menuFormRef = useRef<{
     name: string;
@@ -264,7 +263,7 @@ export default () => {
 
   const requestData = () => {
     const params = {
-      id_user: userLogin.data.id,
+      id_user: infoAccount?.id,
     };
 
     dispatch(queryMenuShop(params));
@@ -272,7 +271,7 @@ export default () => {
 
   const requestDataFood = () => {
     const params = {
-      id_user: userLogin.data.id,
+      id_user: infoAccount?.id,
     };
 
     dispatch(queryFoodList(params));
@@ -302,7 +301,7 @@ export default () => {
     );
     if (isValidName === true && isValidDesc === true) {
       const params = {
-        id_user: userLogin.data.id,
+        id_user: infoAccount?.id,
         name: menuFormRef.current.name,
         desc: menuFormRef.current.desc,
         ...(type === FORM_TYPE.UPDATE && {

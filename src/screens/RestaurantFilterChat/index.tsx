@@ -4,7 +4,7 @@ import TopBar from 'components/TopBar';
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from 'redux-saga/reducers';
 import { queryListCategory, queryListDistrict, queryResultFilter } from 'components/actions';
-import { Accordion, Form, Menu, Dimmer, Loader } from 'semantic-ui-react';
+import { Dimmer, Loader } from 'semantic-ui-react';
 import Footer from 'components/Footer';
 import { Obj } from 'interfaces/common';
 import ShopCard from 'components/ShopCard';
@@ -17,8 +17,6 @@ interface RestaurantListProps {
 
 export default (props: RestaurantListProps) => {
   const dispatch = useDispatch();
-  const [activeSort, setActiveSort] = useState(false);
-  const [activeCategory, setActiveCategory] = useState(false);
   const listCategory = useSelector((state: State) => state.listCategory);
   const listDistrict = useSelector((state: State) => state.listDistrict);
   const shopListCategory = useSelector((state: State) => state.shopListCategory);
@@ -81,56 +79,6 @@ export default (props: RestaurantListProps) => {
     );
   };
 
-  const handleClickSort = (e: any, titleProps: any) => {
-    // const { index } = titleProps
-    // const { activeIndex } = this.state
-    // const newIndex = activeIndex === index ? -1 : index
-
-    setActiveSort((activeSort) => !activeSort);
-  };
-
-  const handleClickCategory = (e: any, titleProps: any) => {
-    setActiveCategory((activeCategory) => !activeCategory);
-  };
-
-  const onClickCategoryForm = (e: any, data: Obj) => {
-    requestData(data.value as string);
-  };
-
-  const CategoryForm = (
-    <Form>
-      <Form.Group grouped>
-        {ref.current.listCategory &&
-          ref.current.listCategory.length > 0 &&
-          ref.current.listCategory.map((shopItem: Obj, index: number) => (
-            <Form.Checkbox
-              onClick={onClickCategoryForm}
-              label={shopItem.name}
-              name="color"
-              value={shopItem.id as string}
-            />
-          ))}
-      </Form.Group>
-    </Form>
-  );
-
-  const DistrictForm = (
-    <Form>
-      <Form.Group grouped>
-        {ref.current.listDistrict &&
-          ref.current.listDistrict.length > 0 &&
-          ref.current.listDistrict.map((shopItem: Obj, index: number) => (
-            <Form.Checkbox
-              onClick={onClickCategoryForm}
-              label={shopItem.district}
-              name="color"
-              value={shopItem.id as string}
-            />
-          ))}
-      </Form.Group>
-    </Form>
-  );
-
   const handlePageClick = (selectedItem: { selected: number }) => {
     requestData(undefined, selectedItem.selected + 1);
   };
@@ -149,18 +97,6 @@ export default (props: RestaurantListProps) => {
         </div>
       </div>
       <div className={styles.FoodPageContainer}>
-        <div className={styles.LeftSide}>
-          <Accordion as={Menu} vertical>
-            <Menu.Item>
-              <Accordion.Title active={activeSort} content="Quận huyện" index={0} onClick={handleClickSort} />
-              <Accordion.Content active={activeSort} content={DistrictForm} />
-            </Menu.Item>
-            <Menu.Item>
-              <Accordion.Title active={activeCategory} content="Loại quán" index={1} onClick={handleClickCategory} />
-              <Accordion.Content active={activeCategory} content={CategoryForm} />
-            </Menu.Item>
-          </Accordion>
-        </div>
         <div className={styles.ContentSide}>
           <div className={styles.ShopGrid}>
             <div className={'ShopGridSection'}>

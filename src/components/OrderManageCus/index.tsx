@@ -256,7 +256,7 @@ export const OrderManageCus: React.FC<OrderManageCusProps> = (props: OrderManage
       <div className={styles.SubOrderManage}>
         <DataTable
           columns={(ref.current.subColumnDefs as unknown) as Column<object>[]}
-          data={ref.current.orderDetailList as Obj[]}
+          data={ref.current.orderDetailList ? (ref.current.orderDetailList as Obj[]) : []}
         />
       </div>
     );

@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Breadcrumb, Button, Dropdown, DropdownProps, Header, Icon, Modal } from 'semantic-ui-react';
+import { Breadcrumb, Button, Header, Icon, Modal } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Column } from 'react-table';
-import Cookie from 'js-cookie';
 import TextBox, { TEXTBOX_TYPE } from 'elements/TextBox';
 import DataTable from 'elements/Datatable';
 import Fallback from 'components/Fallback';
@@ -18,7 +17,7 @@ export default () => {
   const [, setRedraw] = useState();
 
   const [openModal, setOpenModal] = useState(false);
-  const userLogin = Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string) : null;
+  const infoAccount = useSelector((state: State) => state.infoAccount);
   const saleCodeList = useSelector((state: State) => state.saleCodeList);
   const saleTypeList = useSelector((state: State) => state.saleTypeList);
   const createSaleResult = useSelector((state: State) => state.createSaleResult);
@@ -29,9 +28,13 @@ export default () => {
     data: Obj[];
     saleTypeList: Obj[];
     expired: number;
+    name: string;
+    discount: number;
     id_sale?: number;
     sale_type?: string;
   }>({
+    name: '',
+    discount: 0,
     pageIndex: 0,
     columnDefs: [
       {
@@ -113,7 +116,7 @@ export default () => {
 
   const requestDataSaleList = () => {
     const params = {
-      id_user: userLogin.data.id,
+      id_user: infoAccount?.id,
     };
 
     dispatch(querySaleCodeList(params));
@@ -131,26 +134,29 @@ export default () => {
     ref.current.expired = value;
   };
 
+  const onChangeName = (value: string) => {
+    ref.current.name = value;
+  };
+
+  const onDiscountNumber = (value: number) => {
+    ref.current.discount = value;
+  };
+
   const submitCreate = () => {
     const isValidNumberSale = notificationErrorValidate(ref.current.expired, FIELD_VALID.NUMBER, 'số ngày hiệu lực');
-    if (isValidNumberSale === true) {
+    const isValidSale = notificationErrorValidate(ref.current.discount, FIELD_VALID.NUMBER, 'phần trăm giảm giá');
+    const isValidNameSale = notificationErrorValidate(ref.current.discount, FIELD_VALID.TEXT, 'mã code');
+    if (isValidNumberSale === true && isValidSale == true && isValidNameSale) {
       const params = {
-        id_user: userLogin.data.id,
-        id_sale: ref.current.id_sale,
+        id_user: infoAccount?.id,
+        restaurant: infoAccount?.restaurant,
         expired: ref.current.expired,
+        name: ref.current.name,
+        discount: ref.current.discount,
       };
 
       dispatch(createSaleCode(params));
     }
-  };
-
-  const changeSaleType = (event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) => {
-    const text = ref.current.saleTypeList.find((item) => {
-      return item.value === data.value;
-    })?.text;
-    ref.current.id_sale = data.value as number;
-    ref.current.sale_type = text as string;
-    setRedraw({});
   };
 
   return (
@@ -173,15 +179,19 @@ export default () => {
       <Modal open={openModal} onClose={() => setOpenModal(false)} onOpen={() => setOpenModal(true)} closeIcon={true}>
         <Modal.Header>Tạo mã giảm giá</Modal.Header>
         <Modal.Content>
-          <Dropdown
-            button
-            className="icon"
-            floating
-            labeled
-            options={ref.current.saleTypeList}
-            value
-            text={(ref.current.sale_type as string) ? ref.current.sale_type : 'Choose Type'}
-            onChange={changeSaleType}
+          <TextBox
+            placeholder={'Mã Code'}
+            label="Số ngày hiệu lực"
+            type={TEXTBOX_TYPE.TEXT}
+            isEnglishInput
+            onChangeText={onChangeName}
+          />
+          <TextBox
+            placeholder={'Phần trăm giảm giá'}
+            label="Phần trăm giảm giá"
+            type={TEXTBOX_TYPE.TEXT}
+            isNumberInput
+            onChangeNumber={onDiscountNumber}
           />
           <TextBox
             placeholder={'Số ngày hiệu lực'}
