@@ -4,15 +4,18 @@ import { Obj, Request } from 'interfaces/common';
 import { SALE_CREATE_SALE_CODE } from 'redux-saga/actions';
 import { BASE_URI, notificationError, notificationSuccess } from 'utils/common';
 import Cookies from 'js-cookie';
+import * as dateFns from 'date-fns';
 
 const createSaleCode = async (param: any) => {
   console.log(param);
+  var result = new Date();
+  result.setDate(result.getDate() + param.expired);
   return Axios.post(
     `${BASE_URI}api/sale/`,
     {
       name: param.name,
       discount: param.discount,
-      date: param.expired,
+      date: dateFns.format(result, 'yyyy-MM-dd'),
       restaurant: param.restaurant,
     },
     { headers: { Authorization: `Token  ${Cookies.get('userInfo')}` } }

@@ -48,14 +48,8 @@ export default () => {
         },
       },
       {
-        Header: 'Loại Sale',
-        accessor: 'type',
-        className: 'Center',
-        width: 70,
-      },
-      {
         Header: 'Mã Sale',
-        accessor: 'code',
+        accessor: 'name',
         className: 'Center',
         width: 70,
       },
@@ -67,7 +61,13 @@ export default () => {
       },
       {
         Header: 'Số ngày hiệu lực',
-        accessor: 'exprired_days',
+        accessor: 'date',
+        className: 'Center',
+        width: 70,
+      },
+      {
+        Header: 'Giảm giá',
+        accessor: 'discount',
         className: 'Center',
         width: 70,
       },

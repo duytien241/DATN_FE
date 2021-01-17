@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Button, Dropdown, DropdownProps, Grid, Header, Image, Input } from 'semantic-ui-react';
-import Cookie from 'js-cookie';
 import Fallback from 'components/Fallback';
 import TextBox, { TEXTBOX_TYPE } from 'elements/TextBox';
 import TextArea from 'elements/TextArea';
@@ -25,7 +24,7 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = (props: UserInfoFormPro
   const shopType = useSelector((state: State) => state.shopType);
   const userShopInfo = useSelector((state: State) => state.userShopInfo);
   const shopUpdateInfoResult = useSelector((state: State) => state.shopUpdateInfoResult);
-  const userLogin = Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string).data : null;
+  const infoAccount = useSelector((state: State) => state.infoAccount);
 
   const userInfoRef = useRef<{
     id?: number;
@@ -111,7 +110,7 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = (props: UserInfoFormPro
 
   const requestData = () => {
     const params = {
-      id: compType === COMP_TYPE.MODAL ? id_user : userLogin.id,
+      id: compType === COMP_TYPE.MODAL ? id_user : infoAccount?.id,
     };
     dispatch(queryShopInfo(params));
   };
@@ -252,24 +251,6 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = (props: UserInfoFormPro
               iconPosition="left"
               type={TEXTBOX_TYPE.TEXT}
               value={userInfoRef.current.Email_R}
-            />
-            <TextBox
-              className={'UsernameInput'}
-              placeholder={'Ngân hàng'}
-              icon="money bill alternate"
-              iconPosition="left"
-              disabled={true}
-              type={TEXTBOX_TYPE.TEXT}
-              value={userInfoRef.current.BankCore}
-            />
-            <TextBox
-              className={'UsernameInput'}
-              placeholder={'STK Ngân hàng'}
-              icon="money bill alternate outline"
-              iconPosition="left"
-              disabled={true}
-              value={userInfoRef.current.BankNum}
-              type={TEXTBOX_TYPE.TEXT}
             />
             <TextArea placeholder="Nhập mô tả cửa hàng" value={userInfoRef.current.desc} onChangeText={onChangeDesc} />
             {compType !== COMP_TYPE.MODAL && <Button content="Lưu thông tin" onClick={updateInfo} color="blue" />}

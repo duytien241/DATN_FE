@@ -44,14 +44,15 @@ export const UpdateInfoCus: React.FC<UpdateInfoCusProps> = (props: UpdateInfoCus
 
   useEffect(() => {
     if (infoAccount) {
-      if (typeof infoAccount?.data === 'object') {
-        userInfoRef.current.id = infoAccount.data[0].id;
-        userInfoRef.current.name = infoAccount.data[0].Name;
-        userInfoRef.current.SDT = infoAccount.data[0].phone;
-        userInfoRef.current.Address_P = infoAccount.data[0].address;
-        userInfoRef.current.Birth = formatStringToDate(infoAccount.data[0].birthday, 'dd/MM/yyyy');
-        userInfoRef.current.Email_P = infoAccount.data[0].email;
-        userInfoRef.current.image = infoAccount.data[0].avatar;
+      console.log(infoAccount);
+      if (infoAccount) {
+        userInfoRef.current.id = infoAccount.id as number;
+        userInfoRef.current.name = infoAccount.first_name as string;
+        userInfoRef.current.SDT = infoAccount.phone as string;
+        userInfoRef.current.Address_P = infoAccount.address as string;
+        userInfoRef.current.Birth = formatStringToDate(infoAccount.birthday as string);
+        userInfoRef.current.Email_P = infoAccount.email as string;
+        userInfoRef.current.image = infoAccount.avatar as FileList;
         setRedraw({});
       }
     }
@@ -95,6 +96,7 @@ export const UpdateInfoCus: React.FC<UpdateInfoCusProps> = (props: UpdateInfoCus
       Birth: formatDateToString(userInfoRef.current.Birth),
       image: userInfoRef.current.image,
       email: userInfoRef.current.Email_P,
+      name: userInfoRef.current.name,
       accType: 'CUS',
     };
 

@@ -97,16 +97,10 @@ export default () => {
         },
       },
       {
-        Header: 'HTTT',
-        accessor: 'payType',
-        className: 'Center',
-        width: 70,
-      },
-      {
         Header: 'Người đặt',
-        accessor: 'Name',
+        accessor: 'username',
         className: 'Center',
-        width: 70,
+        width: 140,
       },
       {
         Header: 'Mô tả',
@@ -122,13 +116,13 @@ export default () => {
       },
       {
         Header: 'Tổng tiền',
-        accessor: 'total',
+        accessor: 'total_cost',
         className: 'Center',
         width: 70,
       },
       {
         Header: 'Tạo lúc',
-        accessor: 'create_at',
+        accessor: 'time_order',
         className: 'Center',
         width: 70,
       },
@@ -231,11 +225,12 @@ export default () => {
   };
 
   const submitCreate = () => {
+    console.log(ref.current.status);
     const params = {
       id_user: infoAccount?.id,
       ...(type === FORM_TYPE.UPDATE && {
         id: ref.current.id,
-        status: orderStatusList.find((obj) => obj.value === ref.current.status)!.key,
+        status: ref.current.status,
       }),
     };
 

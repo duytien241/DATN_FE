@@ -2,11 +2,12 @@ import React, { useEffect } from 'react';
 import LoaderDots from '../LoaderDots';
 import { Mes, MESSAGE_SENDER, MESSAGE_TYPE } from 'components/Chatbot/reducers';
 // import ButtonsSlider from '../SliderButtons';
+import LoginForm from '../LoginForm';
 import styles from './styles.scss';
 import { Obj } from 'interfaces/common';
 import GridButtons from '../GridButtons';
 import { sendMessage } from 'redux-saga/sagas/Chatbot/SendMessage';
-import { BrowserRouter, Link } from 'react-router-dom';
+import { HashRouter, Link } from 'react-router-dom';
 
 interface MessageProps {
   message: Mes;
@@ -31,17 +32,26 @@ const onClickOptions = (data: any) => {
 };
 export default React.memo((props: MessageProps) => {
   const componentProps = props.component?.props;
-  console.log(componentProps);
+  console.log(componentProps?.component);
   const COMPONENTS = {
+    LOG_IN: (
+      <LoginForm
+        openComponent={componentProps?.openComponent as { value: string; props: Obj }}
+        handleSuccessLogin={componentProps?.handleSuccessLogin as () => void}
+      />
+    ),
     SHOW_LIST_OPTIONS: componentProps && (
       <GridButtons onClickButton={onClickOptions} slidesToShow={2} buttons={componentProps.options as Obj[]} />
     ),
     SAVE_SEARCH: componentProps && (
-      <BrowserRouter>
-        <Link to="/#/filter" target="_blank">
+      <HashRouter>
+        <Link
+          to="/category/28"
+          // to={`/filter?arr=${(componentProps.options as string[]).join(',')}`}
+        >
           Xem thêm tại: đây
         </Link>
-      </BrowserRouter>
+      </HashRouter>
     ),
   };
 
@@ -51,7 +61,6 @@ export default React.memo((props: MessageProps) => {
     if (message.text) {
       arr_meesage = message.text.split('\n');
     }
-    console.log(arr_meesage);
     return (
       <div className={`${styles.Message} ${isUser === true ? styles.UserMessage : styles.BotMessage}`}>
         {message.showAvatar === true && avatarBot != null && (

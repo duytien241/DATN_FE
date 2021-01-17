@@ -2,27 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Obj } from 'interfaces/common';
 import styles from './styles.scss';
 import { formatNumber } from 'utils/common';
-import { Button, Form, Icon, InputOnChangeData, Modal, Popup, TextArea } from 'semantic-ui-react';
+import { Button, Form, InputOnChangeData, Modal, TextArea } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { placeOrder } from './actions';
 import { querySaleCodeList } from 'components/SaleManage/actions';
 // import { State } from 'redux-saga/reducers';
 import { getSaleCodeList } from 'components/SaleManage/reducers';
 import { State } from 'redux-saga/reducers';
-
-interface Discount {
-  text?: string;
-  value?: number;
-  code?: string;
-  type: string;
-}
-
-interface DiscountDetailProps {
-  id_user: string;
-  userDiscounts: Discount[];
-  shopDiscounts: Discount[];
-  onApply: (discount: Discount) => void;
-}
 
 interface PayMethod {
   text: string;
@@ -48,67 +34,6 @@ const DISCOUNTS = {
     text: 'Sale 5%',
     value: 0.05,
   },
-};
-
-const DiscountDetail = (props: DiscountDetailProps) => {
-  const onApply = (discount: Discount) => {
-    props.onApply(discount);
-  };
-  return (
-    <div className={styles.DiscountDetail}>
-      <div className={styles.Title}>Khuyến mãi của bạn</div>
-      <div className="UserDiscounts">
-        {props.userDiscounts.length === 0 ? (
-          <span>Bạn không có khuyến mãi</span>
-        ) : (
-          props.userDiscounts.map((discount) => (
-            <div className={styles.DiscountDetail}>
-              <div className={styles.Name}>
-                <Icon name="clipboard list" />
-                <span>{discount.code}</span>
-              </div>
-              <div className={styles.Value}>
-                <label>Giảm giá:</label>
-                <span>
-                  {formatNumber(discount.value)}
-                  <sup>đ</sup>
-                </span>
-              </div>
-              <div className={styles.Apply} onClick={() => onApply(discount)}>
-                Áp dụng
-              </div>
-            </div>
-          ))
-        )}
-      </div>
-      <div className={styles.Title}>Khuyến mãi của cửa hàng</div>
-      <div className="ShopDiscount">
-        {props.shopDiscounts.length === 0 ? (
-          <span>Cửa hàng không có khuyến mãi</span>
-        ) : (
-          props.shopDiscounts.map((discount) => (
-            <div className={styles.DiscountItem}>
-              <div className={styles.Name}>
-                <Icon name="clipboard list" />
-                <span>{discount.code}</span>
-              </div>
-              <div className={styles.Value}>
-                <label>Giảm giá:</label>
-                <span>
-                  {/* {formatNumber(discount.value)}
-                  <sup>đ</sup> */}
-                  {discount.text}
-                </span>
-              </div>
-              <div className={styles.Apply} onClick={() => onApply(discount)}>
-                Áp dụng
-              </div>
-            </div>
-          ))
-        )}
-      </div>
-    </div>
-  );
 };
 
 export default ({ orderDetail, id_user, step }: { orderDetail: Obj; id_user: any; step: number }) => {
@@ -199,11 +124,6 @@ export default ({ orderDetail, id_user, step }: { orderDetail: Obj; id_user: any
     if (event.keyCode === 13) {
       onBlur();
     }
-  };
-
-  const onApply = (discount: Discount) => {
-    ref.current.discountCode = discount;
-    redraw({});
   };
 
   const onChangeNote = (event: React.FormEvent<HTMLTextAreaElement>, data: Obj) => {
@@ -321,33 +241,9 @@ export default ({ orderDetail, id_user, step }: { orderDetail: Obj; id_user: any
             {ref.current.discountCode.text}
           </span>
         )}
-        <Popup
-          wide="very"
-          size="large"
-          className={'PopupSaleCode'}
-          trigger={<span className={styles.DiscountButton}>Xem mã khuyến mãi</span>}
-          on="click"
-          position="top center"
-        >
-          <Popup.Header> Khuyến mãi</Popup.Header>
-          <Popup.Content>
-            <DiscountDetail
-              id_user={id_user}
-              userDiscounts={[]}
-              // shopDiscounts={Object.values(DISCOUNTS)}
-              shopDiscounts={ref.current.saleList as any[]}
-              onApply={onApply}
-            />
-          </Popup.Content>
-        </Popup>
       </div>
       <div className={styles.Address}>
         <label>Thông tin giao hàng</label>
-        <span>
-          {`${ref.current.shipmentInfo.name}${ref.current.shipmentInfo.name && ','} ${ref.current.shipmentInfo.phone}${
-            ref.current.shipmentInfo.phone && ','
-          } ${ref.current.shipmentInfo.address}`}
-        </span>
         <Form>
           <Form.Group widths="equal">
             <Form.Input

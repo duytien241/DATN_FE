@@ -6,6 +6,7 @@ import {
   MENU_INSERT_FOOD_MENU_SHOP,
   MENU_DELETE_FOOD_MENU_SHOP,
   MENU_DELETE_MENU_SHOP,
+  MENU_QUERY_MENU_SHOP_USER,
 } from 'redux-saga/actions';
 import { FORM_TYPE } from 'utils/common';
 import {
@@ -23,6 +24,8 @@ import {
   MENU_DELETE_FOOD_MENU_SHOP_FAILED,
   MENU_DELETE_MENU_SHOP_SUCCESS,
   MENU_DELETE_MENU_SHOP_FAILED,
+  MENU_QUERY_MENU_SHOP_USER_SUCCESS,
+  MENU_QUERY_MENU_SHOP_USER_FAILED,
 } from './reducers';
 
 export const queryMenuShop = (data: any) => ({
@@ -32,6 +35,16 @@ export const queryMenuShop = (data: any) => ({
   response: {
     success: MENU_QUERY_MENU_SHOP_SUCCESS,
     failed: MENU_QUERY_MENU_SHOP_FAILED,
+  },
+});
+
+export const queryMenuShop2 = (data: any) => ({
+  type: MENU_QUERY_MENU_SHOP_USER,
+  data,
+  action: 'MENU',
+  response: {
+    success: MENU_QUERY_MENU_SHOP_USER_SUCCESS,
+    failed: MENU_QUERY_MENU_SHOP_USER_FAILED,
   },
 });
 

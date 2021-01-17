@@ -29,6 +29,7 @@ import {
   InsertFoodMenuResult,
   FoodInMenu,
   MenuList,
+  MenuListShop,
   DeleteMenuResult,
 } from 'components/MenuManage/reducers';
 import { ShopRegisterResult, ShopUpdateInfoResult } from 'components/RegisterShop/reducers';
@@ -46,7 +47,7 @@ import { OrderResult } from 'components/OrderDetail/reducers';
 import { HistoryList } from 'components/AdminHistory/reducers';
 import { ChangeFoodStatusResult } from 'components/FoodManage/reducers';
 import { FoodListSearch } from 'screens/RestaurantList/reducers';
-import { Messages } from 'components/Chatbot/reducers';
+import { LoginFormInfo, Messages } from 'components/Chatbot/reducers';
 
 export const state = combineReducers({
   //common
@@ -118,6 +119,8 @@ export const state = combineReducers({
   deleteCusResult: DeleteCusResult,
   historyList: HistoryList,
   messages: Messages,
+  loginFormInfo: LoginFormInfo,
+  menuListShop: MenuListShop,
 
   //shop
   shopListCategory: ShopListCategory,

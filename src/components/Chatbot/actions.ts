@@ -4,7 +4,13 @@ import { MESSAGE_SENDER } from './reducers';
 
 export const ADD_NEW_RESPONSE_MESSAGE = 'ADD_NEW_RESPONSE_MESSAGE';
 export const ADD_NEW_USER_MESSAGE = 'ADD_NEW_USER_MESSAGE';
+export const CHATBOT_SHOW_LOGIN_FORM = 'CHATBOT_SHOW_LOGIN_FORM';
+export const CHATBOT_SHOW_ORDER_FORM = 'CHATBOT_SHOW_ORDER_FORM';
+export const CHATBOT_SHOW_REGISTER_FORM = 'CHATBOT_SHOW_REGISTER_FORM';
 export const TRIGGER_LOADER = 'TRIGGER_LOADER';
+export const CHATBOT_SHOW_STOCK_INFO_LIST = 'CHATBOT_SHOW_STOCK_INFO_LIST';
+export const SHOW_STOCK_BALANCE = 'SHOW_STOCK_BALANCE';
+export const SHOW_SYMBOL_HEADER = 'SHOW_SYMBOL_HEADER';
 
 export const addUserMessage = (
   payload: Obj,
@@ -47,3 +53,12 @@ export const chatbotAddNewMessage = (payload: Obj, componentId?: string, type?: 
     componentId: componentId,
   };
 };
+
+export const CHANGE_USERNAME = 'CHANGE_USERNAME';
+export const CHANGE_PASSWORD = 'CHANGE_PASSWORD';
+
+export const changeLoginFormInfo = (type: string, payload: string, componentId?: string) => ({
+  type,
+  payload,
+  componentId,
+});

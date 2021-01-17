@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ErrorBoundary } from 'react-error-boundary';
 import DatePickerLib from 'react-datepicker';
 import { Column } from 'react-table';
-import Cookie from 'js-cookie';
 import { Dropdown, DropdownProps, Form } from 'semantic-ui-react';
 import { queryStatisticalOrder } from './actions';
 import { Obj } from 'interfaces/common';
@@ -36,7 +35,7 @@ export default (props: StatisticalContainerProps) => {
   const [quarter, setQuarter] = useState(quarterOfTheYear(new Date()));
   const [year, setYear] = useState(new Date().getFullYear());
   const [date, setDate] = useState(new Date());
-  const userLogin = Cookie.get('userInfo') ? JSON.parse(Cookie.get('userInfo') as string) : null;
+  const infoAccount = useSelector((state: State) => state.infoAccount);
   const statisticalOrderList = useSelector((state: State) => state.statisticalOrderList);
 
   const ref = useRef<{
@@ -137,7 +136,7 @@ export default (props: StatisticalContainerProps) => {
 
   const requestData = () => {
     const params = {
-      id_user: compType === COMP_TYPE.MODAL ? id_user : userLogin.data.id,
+      id_user: compType === COMP_TYPE.MODAL ? id_user : infoAccount?.id,
       ...(type === STATISTICAL_TYPE.MONTH
         ? { month: month, year: year }
         : type === STATISTICAL_TYPE.QUATER

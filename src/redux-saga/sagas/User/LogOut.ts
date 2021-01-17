@@ -1,7 +1,7 @@
 import { put, takeLatest } from 'redux-saga/effects';
 import { Obj, Request } from 'interfaces/common';
 import Axios from 'axios';
-import { BASE_URI } from 'utils/common';
+import { BASE_URI, removeKey } from 'utils/common';
 import { AUTHENTICATION_LOG_OUT } from 'redux-saga/actions';
 import { notificationSuccess } from 'utils/common';
 import Cookie from 'js-cookie';
@@ -17,6 +17,7 @@ function* doLogOut(request: Request<Obj>) {
       type: (request.response as any).success,
     });
     Cookie.remove('userInfo');
+    removeKey('userId');
     window.location = '/' as any;
     notificationSuccess({ content: 'Bạn đã đăng xuất' });
   } catch (error) {

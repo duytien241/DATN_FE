@@ -81,12 +81,12 @@ export const notificationErrorValidate = (
           pass = false;
         }
       } else if (type === FIELD_VALID.PHONE) {
-        if (phoneNumberRegex.test(value)) {
+        if (!phoneNumberRegex.test(value)) {
           notificationError({ content: `Sai đinh dạng SDT` }, 10000);
           pass = false;
         }
       } else if (type === FIELD_VALID.ID) {
-        if (idRegex.test(value)) {
+        if (!idRegex.test(value)) {
           notificationError({ content: `Sai đinh dạng CMND` }, 10000);
           pass = false;
         }

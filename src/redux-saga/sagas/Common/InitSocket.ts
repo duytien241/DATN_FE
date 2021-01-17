@@ -12,10 +12,12 @@ import Axios from 'axios';
 const subscribeChat = () => {
   if (Global.socketChatbot != null) {
     const channelName = `bot_uttered${getKey('chatbotId')}`;
+    console.log(channelName);
     const subscribeChannelStatus = Global.socketChatbot?.subscribe(channelName);
     subscribeChannelStatus.watch((res: Obj) => {
       // const text = res.text as string;
       let responseData = null as any;
+      console.log(res);
       if ((res.text as string).includes('action')) {
         responseData = JSON.parse(res.text as string);
       } else {
@@ -40,6 +42,7 @@ const subscribeChat = () => {
           });
         }
         if (responseData.action === 'SHOW_LIST_OPTIONS') {
+          console.log(arr_sym);
           store.dispatch({
             type: CHATBOT_ADD_USER_MESSAGE,
             payload: {
@@ -56,8 +59,38 @@ const subscribeChat = () => {
             },
           });
         }
+
+        if (responseData.action === 'LOG_IN') {
+          if (getKey('userId')) {
+            console.log(`Tài khoản ${getKey('userId')}`);
+            store.dispatch({
+              type: CHATBOT_ADD_NEW_USER_MESSAGE,
+              payload: {
+                sender: MESSAGE_SENDER.CLIENT,
+                text: `Tài khoản ${getKey('userId')}`,
+                showAvatar: false,
+                timestamp: new Date(),
+                type: MESSAGE_TYPE.COMPONENT,
+              },
+            });
+          } else {
+            console.log(`Tài khoản ${getKey('userId')}`);
+            store.dispatch({
+              type: CHATBOT_ADD_USER_MESSAGE,
+              payload: {
+                sender: MESSAGE_SENDER.RESPONSE,
+                showAvatar: true,
+                component: {
+                  value: 'LOG_IN',
+                },
+                timestamp: new Date(),
+                type: MESSAGE_TYPE.COMPONENT,
+              },
+            });
+          }
+        }
         if (responseData.action === 'SAVE_SEARCH') {
-          console.log(responseData);
+          console.log(arr_sym);
           store.dispatch({
             type: CHATBOT_ADD_USER_MESSAGE,
             payload: {
@@ -105,8 +138,13 @@ const subscribeChat = () => {
             });
           } else {
             navigator.geolocation.getCurrentPosition(function (position) {
+              console.log(position);
               return Axios.get(
-                `https://maps.googleapis.com/maps/api/geocode/json?latlng=20.9774367,105.78016009999999&sensor=true&key=AIzaSyCDFs3j4amVQv-mejlsdc-vw7-UtLiTL2g`
+                `https://maps.googleapis.com/maps/api/geocode/json?latlng=${
+                  position.coords.latitude ? position.coords.latitude : 20.9774118
+                },${
+                  position.coords.longitude ? position.coords.longitude : 105.78016009999999
+                }&sensor=true&key=AIzaSyCDFs3j4amVQv-mejlsdc-vw7-UtLiTL2g`
               )
                 .then((res) => {
                   const results = (res.data as Obj).results as Obj[];
@@ -115,7 +153,7 @@ const subscribeChat = () => {
                       type: CHATBOT_ADD_NEW_USER_MESSAGE,
                       payload: {
                         sender: MESSAGE_SENDER.CLIENT,
-                        text: results[0].formatted_address,
+                        text: 'Tạ Quang Bửu, Bách Khoa, Hai Bà Trưng Hà Nội',
                         showAvatar: false,
                         timestamp: new Date(),
                         type: MESSAGE_TYPE.TEXT,
@@ -163,9 +201,18 @@ const connect = async () => {
   });
 
   Global.socketChatbot.on('connect', async (status: SCClientSocket.ConnectStatus) => {
-    console.log(Global.socketChatbot.id);
-    setKey('chatbotId', Global.socketChatbot.id);
-    subscribeChat();
+    console.log(Global.socketChatbot.channels);
+    if (!Object.keys(Global.socketChatbot.channels).includes(getKey('chatbotId') as string)) {
+      setKey('chatbotId', Global.socketChatbot.id);
+      subscribeChat();
+    }
+  });
+
+  Global.socketChatbot.on('disconnect', async (status: SCClientSocket.ConnectStatus) => {
+    console.log(12121);
+    if (Object.keys(Global.socketChatbot.channels).includes(getKey('chatbotId') as string)) {
+      subscribeChat();
+    }
   });
 };
 

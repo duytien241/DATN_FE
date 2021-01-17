@@ -1,12 +1,23 @@
 import Axios from 'axios';
-import qs from 'querystring';
 import { put, takeLatest } from 'redux-saga/effects';
 import { Obj, Request } from 'interfaces/common';
 import { ORDER_UPDATE_ORDER } from 'redux-saga/actions';
-import { BASE_URI, configHeaderAxios, notificationError, notificationSuccess } from 'utils/common';
+import { BASE_URI, notificationError, notificationSuccess } from 'utils/common';
+import Cookies from 'js-cookie';
 
 const updateOrder = async (param: any) => {
-  return await Axios.put(`${BASE_URI}api/v1/order/update`, qs.stringify(param), configHeaderAxios);
+  console.log(param);
+  return Axios.put(
+    `${BASE_URI}api/orders/${param.id}/`,
+    {
+      status: param.status,
+    },
+    { headers: { Authorization: `Token  ${Cookies.get('userInfo')}` } }
+  )
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => console.log(error));
 };
 
 function* doUpdateOrder(request: Request<Obj>) {

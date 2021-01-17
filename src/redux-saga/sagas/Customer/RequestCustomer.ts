@@ -1,9 +1,9 @@
 import Axios from 'axios';
-import qs from 'querystring';
 import { put, takeLatest } from 'redux-saga/effects';
 import { Obj, Request } from 'interfaces/common';
 import { ADMIN_DELETE_CUS, QUERY_CUS_LIST, USER_QUERY_CUS_INFO, USER_UPDATE_INFO_CUS } from 'redux-saga/actions';
-import { BASE_URI, configHeaderAxios, notificationError, notificationSuccess } from 'utils/common';
+import { BASE_URI, notificationError, notificationSuccess } from 'utils/common';
+import Cookies from 'js-cookie';
 
 const uploadFile = (input: FileList, id: number) => {
   if (input != null) {
@@ -24,23 +24,50 @@ const uploadFile = (input: FileList, id: number) => {
 };
 
 const queryCusInfo = async (param: any) => {
-  return await Axios.get(`${BASE_URI}api/v1/cus`, {
-    params: param,
-  });
+  return Axios.get(`${BASE_URI}me`, { headers: { Authorization: `Token  ${Cookies.get('userInfo')}` } })
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => console.log(error));
 };
 
 const queryCusList = async (param: any) => {
-  return await Axios.get(`${BASE_URI}api/v1/cus/list`, {
-    params: param,
-  });
+  return await Axios.get(`${BASE_URI}users`)
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => console.log(error));
 };
 
 const queryDeleteCus = async (param: any) => {
-  return await Axios.put(`${BASE_URI}api/v1/admin/active`, qs.stringify(param), configHeaderAxios);
+  return await Axios.delete(`${BASE_URI}user/${param.id}/`, {
+    headers: { Authorization: `Token  ${Cookies.get('userInfo')}` },
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => console.log(error));
 };
 
 const updateCusInfo = async (param: any) => {
-  return await Axios.put(`${BASE_URI}api/v1/user/update`, qs.stringify(param), configHeaderAxios);
+  console.log(param);
+  return await Axios.put(
+    `${BASE_URI}user/${param.id}/`,
+    {
+      name: param.name,
+      address: param.Address_P,
+      phone: param.SDT,
+      birthday: param.Birth,
+      first_name: param.name,
+    },
+    {
+      headers: { Authorization: `Token  ${Cookies.get('userInfo')}` },
+    }
+  )
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => console.log(error));
 };
 
 function* doActionCus(request: Request<Obj>) {
@@ -50,10 +77,10 @@ function* doActionCus(request: Request<Obj>) {
     if (request.type === USER_QUERY_CUS_INFO) {
       payload = yield queryCusInfo(request.data);
     } else if (request.type === USER_UPDATE_INFO_CUS) {
-      if (request.data.image != null) {
+      if (request?.data.image != null) {
         res = yield uploadFile(request.data.image, request.data.id);
+        request.data.image = res.data.id;
       }
-      request.data.image = res.data.id;
       payload = yield updateCusInfo(request.data);
       notificationSuccess({ content: 'Cập nhật thành công' });
     } else if (request.type === QUERY_CUS_LIST) {

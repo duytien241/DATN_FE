@@ -1,4 +1,8 @@
-import { watchQueryFoodList as queryMenuList, watchQueryFoodInMenu as queryFoodInMenu } from './QueryMenuList';
+import {
+  watchQueryFoodList as queryMenuList,
+  watchQueryFoodInMenu as queryFoodInMenu,
+  watchQueryFoodListSHOP as queryMenuListShop,
+} from './QueryMenuList';
 import {
   watchCreateMenu as createMenu,
   watchUpdateMenu as updateMenu,
@@ -7,4 +11,13 @@ import {
   watchDeleteFoodInMenu as deleteFoodInMenu,
 } from './CreateMenu';
 
-export { queryMenuList, queryFoodInMenu, createMenu, deleteMenu, updateMenu, insertFoodInMenu, deleteFoodInMenu };
+export {
+  queryMenuList,
+  queryFoodInMenu,
+  createMenu,
+  deleteMenu,
+  updateMenu,
+  insertFoodInMenu,
+  deleteFoodInMenu,
+  queryMenuListShop,
+};

@@ -15,6 +15,7 @@ import {
   queryRating,
   requestRating,
   getInfoAccount,
+  loginForm,
 } from './sagas/User';
 import {
   changeStatusFood,
@@ -35,6 +36,7 @@ import {
   deleteFoodInMenu,
   queryFoodInMenu,
   deleteMenu,
+  queryMenuListShop,
 } from './sagas/Menu';
 import { queryStatisticalOrder } from './sagas/Statistical';
 import { placeOrder, queryOrder, queryOrderDetailShop, queryOrderStatus, updateOrder } from './sagas/Order';
@@ -124,5 +126,8 @@ export default function* () {
     queryListCategory(),
     queryListDistrict(),
     queryResultFilter(),
+
+    queryMenuListShop(),
+    loginForm(),
   ]);
 }

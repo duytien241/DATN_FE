@@ -221,8 +221,10 @@ export const OrderManageCus: React.FC<OrderManageCusProps> = (props: OrderManage
   };
 
   const showOrderDetail = (data: any) => {
+    console.log(data);
     console.log(ref.current.data);
-    ref.current.orderDetailList = ref.current.data[data.original.id]?.order_detail as Obj[];
+    ref.current.orderDetailList = ref.current.data[data.id]?.order_detail as Obj[];
+    console.log(ref.current.orderDetailList);
     setRedraw({});
   };
 

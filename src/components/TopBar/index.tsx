@@ -182,7 +182,7 @@ const TopBar = (props: TopbarProps) => {
               <Link to="/home">
                 <img
                   src={
-                    'https://scontent.fhan2-6.fna.fbcdn.net/v/t1.0-9/127194294_1630913430427913_3697172868772040508_n.jpg?_nc_cat=103&ccb=2&_nc_sid=730e14&_nc_ohc=9Qm-eTs2O88AX_Qn12R&_nc_ht=scontent.fhan2-6.fna&oh=bc594a38049a61bf70f1fa1b73ff9d99&oe=5FE59F96'
+                    'https://scontent.fhan5-7.fna.fbcdn.net/v/t1.0-9/127194294_1630913430427913_3697172868772040508_n.jpg?_nc_cat=103&ccb=2&_nc_sid=730e14&_nc_ohc=zI_bNd_0m_0AX9K-TNH&_nc_ht=scontent.fhan5-7.fna&oh=929882a4d8127adc724304820ef32a65&oe=602CD096'
                   }
                 />
               </Link>

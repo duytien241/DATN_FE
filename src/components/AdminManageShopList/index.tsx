@@ -12,7 +12,6 @@ import { COMP_TYPE, handleError } from 'utils/common';
 import { State } from 'redux-saga/reducers';
 import styles from './styles.scss';
 import { FoodManage } from 'components/FoodManage';
-import { UserInfoForm } from 'components/UserInfoForm';
 import { StatisticalManage } from 'components/StatisticalManage';
 
 export default () => {
@@ -38,7 +37,7 @@ export default () => {
 
   useEffect(() => {
     if (shopList && shopList.data) {
-      ref.current.data = shopList?.data as Obj[];
+      ref.current.data = (shopList?.data as Obj).results as Obj[];
     }
     setRedraw({});
   }, [shopList]);
@@ -62,39 +61,21 @@ export default () => {
       },
       {
         Header: 'Tên cửa hàng',
-        accessor: 'NameR',
+        accessor: 'name',
         className: 'Center',
         width: 170,
       },
       {
         Header: 'Địa chỉ',
-        accessor: 'Address_R',
+        accessor: 'address',
         className: 'Center',
         width: 170,
-      },
-      {
-        Header: 'Email',
-        accessor: 'Email_R',
-        className: 'Center',
-        width: 200,
       },
       {
         Header: 'Mô tả',
-        accessor: 'desc',
+        accessor: 'description',
         className: 'Center',
         width: 170,
-      },
-      {
-        Header: 'Ngân hàng thụ hưởng',
-        accessor: 'BankCore',
-        className: 'Center',
-        width: 170,
-      },
-      {
-        Header: 'Số tài khoản',
-        accessor: 'BankNum',
-        className: 'Center',
-        width: 100,
       },
       {
         Header: 'Ngày đăng ký',
@@ -110,7 +91,7 @@ export default () => {
       },
       {
         Header: 'Đánh giá',
-        accessor: 'avg_rating',
+        accessor: 'rating',
         className: 'Center',
         width: 70,
       },
@@ -221,14 +202,6 @@ export default () => {
           <div className={'FoodForm'}>
             <Tab
               panes={[
-                {
-                  menuItem: 'Thông tin cá nhân',
-                  render: () => (
-                    <Tab.Pane>
-                      <UserInfoForm compType={COMP_TYPE.MODAL} id_user={foodFormRef.current.id} />
-                    </Tab.Pane>
-                  ),
-                },
                 {
                   menuItem: 'Thông tin món ăn',
                   render: () => (

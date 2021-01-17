@@ -74,10 +74,27 @@ export default (props: RegisterAccountProps) => {
     shopTypeList: [],
     desc: '',
   });
+  const [, redraw] = useState();
+  const listCategory = useSelector((state: State) => state.listCategory);
+
+  useEffect(() => {
+    if (listCategory && listCategory.data) {
+      console.log(listCategory.data);
+      if (typeof listCategory?.data === 'object') {
+        (listCategory.data as Obj[]).forEach((item) =>
+          registerShopRef.current.shopTypeList.push({
+            value: item.id,
+            text: item.name,
+          })
+        );
+      }
+    }
+    redraw({});
+  }, [listCategory]);
 
   const registerShop = () => {
-    const isValidName = notificationErrorValidate(registerShopRef.current.name, undefined, 'họ tên', 50);
-    const isValidNameR = notificationErrorValidate(registerShopRef.current.NameR, undefined, 'tên cửa hàng', 50);
+    const isValidName = notificationErrorValidate(registerShopRef.current.name, undefined, 'họ tên', 8);
+    const isValidNameR = notificationErrorValidate(registerShopRef.current.NameR, undefined, 'tên cửa hàng', 8);
     const isValiDesc = notificationErrorValidate(registerShopRef.current.desc, undefined, 'mô tả chi tiết', 500, false);
     const isValidAddress = notificationErrorValidate(
       registerShopRef.current.Address_R,
@@ -91,7 +108,7 @@ export default (props: RegisterAccountProps) => {
       registerShopRef.current.username,
       FIELD_VALID.TEXT,
       'tên đăng nhập',
-      50
+      8
     );
     const isValidPass = notificationErrorValidate(registerShopRef.current.password, FIELD_VALID.TEXT, 'mật khẩu', 8);
     const isValidID = notificationErrorValidate(
@@ -165,14 +182,6 @@ export default (props: RegisterAccountProps) => {
 
   const onChangeEmail = (value: string) => {
     registerShopRef.current.Email_R = value;
-  };
-
-  const onChangeBankCore = (value: string) => {
-    registerShopRef.current.BankCore = value;
-  };
-
-  const onChangeBankNum = (value: string) => {
-    registerShopRef.current.BankNum = value;
   };
 
   const onChangeDesc = (value: string) => {
@@ -251,22 +260,6 @@ export default (props: RegisterAccountProps) => {
             iconPosition="left"
             type={TEXTBOX_TYPE.TEXT}
             onChangeText={onChangeEmail}
-          />
-          <TextBox
-            className={'UsernameInput'}
-            placeholder={'Ngân hàng'}
-            icon="money bill alternate"
-            iconPosition="left"
-            type={TEXTBOX_TYPE.TEXT}
-            onChangeText={onChangeBankCore}
-          />
-          <TextBox
-            className={'UsernameInput'}
-            placeholder={'STK Ngân hàng'}
-            icon="money bill alternate outline"
-            iconPosition="left"
-            type={TEXTBOX_TYPE.TEXT}
-            onChangeText={onChangeBankNum}
           />
           <TextArea placeholder="Nhập mô tả cửa hàng" onChangeText={onChangeDesc} />
           <TextBox

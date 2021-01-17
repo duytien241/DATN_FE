@@ -1,5 +1,5 @@
 import { queryShopInfo } from 'components/actions';
-import { queryMenuShop } from 'components/MenuManage/actions';
+import { queryMenuShop2 } from 'components/MenuManage/actions';
 import CommentSection, { Comment } from 'components/CommentSection';
 import RelativeFood from 'components/RelativeFood';
 import RestaurantInfo from 'components/RestaurantInfo';
@@ -20,7 +20,7 @@ export default () => {
   const { shopInfo, menu, foodInMenu, comments } = useSelector(
     (state: State) => ({
       shopInfo: state.userShopInfo,
-      menu: state.menuList,
+      menu: state.menuListShop,
       foodInMenu: state.foodInMenu,
       comments: state.comment,
     }),
@@ -32,7 +32,7 @@ export default () => {
 
   useEffect(() => {
     dispatch(queryShopInfo({ id: id }));
-    dispatch(queryMenuShop({ id: id }));
+    dispatch(queryMenuShop2({ id: id }));
     requestDataComment();
   }, []);
 

@@ -1,4 +1,9 @@
-import { AUTHENTICATION_LOGIN, AUTHENTICATION_LOG_OUT, AUTHENTICATION_LOGIN_ADMIN } from 'redux-saga/actions';
+import {
+  AUTHENTICATION_LOGIN,
+  AUTHENTICATION_LOG_OUT,
+  AUTHENTICATION_LOGIN_ADMIN,
+  AUTHENTICATION_LOGIN_FORM,
+} from 'redux-saga/actions';
 import {
   AUTHENTICATION_LOGIN_FAILED,
   AUTHENTICATION_LOGIN_SUCCESS,
@@ -8,6 +13,15 @@ import {
 
 export const login = (data: any) => ({
   type: AUTHENTICATION_LOGIN,
+  data,
+  response: {
+    success: AUTHENTICATION_LOGIN_SUCCESS,
+    failed: AUTHENTICATION_LOGIN_FAILED,
+  },
+});
+
+export const loginForm = (data: any) => ({
+  type: AUTHENTICATION_LOGIN_FORM,
   data,
   response: {
     success: AUTHENTICATION_LOGIN_SUCCESS,

@@ -2,10 +2,20 @@ import { Action, Obj } from 'interfaces/common';
 
 export const MENU_QUERY_MENU_SHOP_SUCCESS = 'MENU_QUERY_MENU_SHOP_SUCCESS';
 export const MENU_QUERY_MENU_SHOP_FAILED = 'MENU_QUERY_MENU_SHOP_FAILED';
+export const MENU_QUERY_MENU_SHOP_USER_SUCCESS = 'MENU_QUERY_MENU_SHOP_USER_SUCCESS';
+export const MENU_QUERY_MENU_SHOP_USER_FAILED = 'MENU_QUERY_MENU_SHOP_USER_FAILED';
 
 export function MenuList(state: Obj | null = null, action: Action<Obj>) {
   switch (action.type) {
     case MENU_QUERY_MENU_SHOP_SUCCESS:
+      return action.payload ? action.payload : null;
+    default:
+      return state;
+  }
+}
+export function MenuListShop(state: Obj | null = null, action: Action<Obj>) {
+  switch (action.type) {
+    case MENU_QUERY_MENU_SHOP_USER_SUCCESS:
       return action.payload ? action.payload : null;
     default:
       return state;

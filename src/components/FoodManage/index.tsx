@@ -9,7 +9,7 @@ import TextArea from 'elements/TextArea';
 import TextBox, { TEXTBOX_TYPE } from 'elements/TextBox';
 import DataTable from 'elements/Datatable';
 import { createFood, queryFoodList, updateFood, deleteFoodManage, queryFoodType } from 'components/actions';
-import { BASE_IMAGE_URL, FORM_TYPE, handleError, COMP_TYPE, isBlank, FIELD_VALID } from 'utils/common';
+import { FORM_TYPE, handleError, COMP_TYPE, isBlank, FIELD_VALID } from 'utils/common';
 import { State } from 'redux-saga/reducers';
 import styles from './styles.scss';
 import { changeStatusFood } from './actions';
@@ -180,7 +180,7 @@ export const FoodManage: React.FC<FoodManageProps> = (props: FoodManageProps) =>
               className: 'Center',
               width: 70,
               Cell: (data: any) => {
-                return <img src={`${BASE_IMAGE_URL}${data.row.original.image}`} className={styles.FoodImage} />;
+                return <img src={`${data.row.original.image_url}`} className={styles.FoodImage} />;
               },
             },
           ],

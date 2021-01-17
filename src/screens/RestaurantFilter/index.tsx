@@ -31,12 +31,16 @@ export default (props: RestaurantListProps) => {
     shopListCategory?: Obj[];
     listCategory?: Obj[];
     listDistrict?: Obj[];
+    listCategoryC: string[];
+    listDistrictC: string[];
     loading: boolean;
   }>({
     shopListCategory: [],
     listCategory: [],
     loading: false,
     listDistrict: [],
+    listCategoryC: [id],
+    listDistrictC: [],
   });
 
   useEffect(() => {
@@ -76,10 +80,10 @@ export default (props: RestaurantListProps) => {
   const requestData = (id_choose?: string, page?: number) => {
     ref.current.loading = true;
     redraw({});
-    const id_query = id_choose ? id_choose : id;
     dispatch(
       queryShopListCategory({
-        id: id_query,
+        category: ref.current.listCategoryC,
+        district: ref.current.listDistrictC,
         page: page ? page : 1,
       })
     );
@@ -98,7 +102,21 @@ export default (props: RestaurantListProps) => {
   };
 
   const onClickCategoryForm = (e: any, data: Obj) => {
-    requestData(data.value as string);
+    if (!ref.current.listCategoryC?.includes(data.value as string)) {
+      ref.current.listCategoryC.push(data.value as string);
+    } else {
+      ref.current.listCategoryC = ref.current.listCategoryC.filter((item) => item !== (data.value as string));
+    }
+    requestData();
+  };
+
+  const onClickDistrictForm = (e: any, data: Obj) => {
+    if (!ref.current.listDistrictC?.includes(data.value as string)) {
+      ref.current.listDistrictC.push(data.value as string);
+    } else {
+      ref.current.listDistrictC = ref.current.listDistrictC.filter((item) => item !== (data.value as string));
+    }
+    requestData();
   };
 
   const CategoryForm = (
@@ -109,6 +127,8 @@ export default (props: RestaurantListProps) => {
           ref.current.listCategory.map((shopItem: Obj, index: number) => (
             <Form.Checkbox
               onClick={onClickCategoryForm}
+              defaultChecked={shopItem.id === id}
+              checked={ref.current.listCategoryC.includes(shopItem.id as string)}
               label={shopItem.name}
               name="color"
               value={shopItem.id as string}
@@ -125,7 +145,7 @@ export default (props: RestaurantListProps) => {
           ref.current.listDistrict.length > 0 &&
           ref.current.listDistrict.map((shopItem: Obj, index: number) => (
             <Form.Checkbox
-              onClick={onClickCategoryForm}
+              onClick={onClickDistrictForm}
               label={shopItem.district}
               name="color"
               value={shopItem.id as string}

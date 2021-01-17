@@ -8,7 +8,7 @@ import { Obj } from 'interfaces/common';
 import Fallback from 'components/Fallback';
 import DataTable from 'elements/Datatable';
 import { queryCusList, deleteCus } from './actions';
-import { BASE_IMAGE_URL, COMP_TYPE, handleError } from 'utils/common';
+import { COMP_TYPE, handleError } from 'utils/common';
 import { State } from 'redux-saga/reducers';
 import styles from './styles.scss';
 import { UpdateInfoCus } from 'components/UpdateInfoCus';
@@ -47,8 +47,9 @@ export default () => {
   }, []);
 
   useEffect(() => {
+    console.log(cusList);
     if (cusList && cusList.data) {
-      ref.current.data = cusList?.data as Obj[];
+      ref.current.data = (cusList?.data as Obj).results as Obj[];
     }
     setRedraw({});
   }, [cusList]);
@@ -71,38 +72,38 @@ export default () => {
         },
       },
       {
+        Header: 'Tên đăng nhập',
+        accessor: 'username',
+        className: 'Center',
+        width: 170,
+      },
+      {
+        Header: 'Email',
+        accessor: 'email',
+        className: 'Center',
+        width: 170,
+      },
+      {
         Header: 'Tên khách hàng',
-        accessor: 'Name',
+        accessor: 'first_name',
         className: 'Center',
         width: 70,
       },
       {
         Header: 'SĐT',
-        accessor: 'SDT',
+        accessor: 'phone',
         className: 'Center',
         width: 70,
       },
       {
         Header: 'Ngày sinh',
-        accessor: 'Birth',
-        className: 'Center',
-        width: 70,
-      },
-      {
-        Header: 'CMND/CCCD',
-        accessor: 'IdNo',
+        accessor: 'birthday',
         className: 'Center',
         width: 70,
       },
       {
         Header: 'Địa chỉ',
-        accessor: 'Address',
-        className: 'Center',
-        width: 70,
-      },
-      {
-        Header: 'Thông tin thêm',
-        accessor: 'desc',
+        accessor: 'address',
         className: 'Center',
         width: 70,
       },
@@ -112,21 +113,8 @@ export default () => {
         className: 'Center',
         width: 70,
         Cell: (data: any) => {
-          return <img src={`${BASE_IMAGE_URL}${data.row.original.image}`} className={styles.FoodImage} />;
+          return <img src={`${data.row.original.image}`} className={styles.FoodImage} />;
         },
-      },
-      {
-        Header: 'Chi tiết',
-        accessor: 'detail',
-        Cell: (data: any) => {
-          return (
-            <Button className={styles.Hidden} positive onClick={() => showDetail(data.row.original)}>
-              {'Chi tiết'}
-            </Button>
-          );
-        },
-        className: 'Right',
-        width: 55,
       },
       {
         Header: 'Hủy kích hoạt',
@@ -152,11 +140,6 @@ export default () => {
   const showDeleteForm = (data: Obj) => {
     cusListRef.current.id = data.id as number;
     setOpenModal(true);
-  };
-
-  const showDetail = (data: Obj) => {
-    cusListRef.current.id = data.id as number;
-    setOpenDetailModal(true);
   };
 
   const submitDelete = () => {

@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Obj } from 'interfaces/common';
 import './styles.scss';
-import { BASE_IMAGE_URL } from 'utils/common';
 
 interface CategoryCardProps {
   categoryItem: Obj;
@@ -12,14 +11,14 @@ export default (props: CategoryCardProps) => {
   const { categoryItem } = props;
 
   return (
-    <div className="CategoryCard" style={{ width: '237.5px' }}>
+    <div className="CategoryCard" style={{ width: '250px' }}>
       <div className="item_version_2">
         <Link to={`/category/${categoryItem.id}`}>
           <figure>
             <span>{categoryItem.id}</span>
             <img
-              src={`${BASE_IMAGE_URL}${categoryItem.image as string}`}
-              data-src={`${BASE_IMAGE_URL}${categoryItem.image as string}`}
+              src={categoryItem.image_url as string}
+              data-src={categoryItem.image_url as string}
               alt=""
               className="owl-lazy"
               width={350}

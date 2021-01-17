@@ -1,0 +1,39 @@
+.LoginForm {
+  display: block;
+  margin-bottom: 10px;
+  width: 95%;
+  .TextBox {
+    .TextBoxInput {
+      .label {
+        color: #9297af;
+      }
+
+      .input {
+        input {
+          background-color: transparent;
+          border: 1px solid #d1d1d6;
+          color: #000;
+          background-color: transparent;
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+        }
+      }
+    }
+  }
+
+  .ButtonLogin {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e44542;
+    color: #fff;
+
+    .IconLogin {
+      width: 26px;
+      height: 26px;
+      display: block;
+      margin-right: 10px;
+    }
+  }
+}

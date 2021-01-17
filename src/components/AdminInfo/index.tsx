@@ -38,14 +38,14 @@ export default () => {
 
   useEffect(() => {
     if (adminInfo && adminInfo.data) {
-      if (typeof adminInfo?.data === 'object') {
-        userInfoRef.current.id = adminInfo.data[0].id;
-        userInfoRef.current.name = adminInfo.data[0].Name;
-        userInfoRef.current.SDT = adminInfo.data[0].SDT;
-        userInfoRef.current.Address_P = adminInfo.data[0].Address;
-        userInfoRef.current.Birth = formatStringToDate(adminInfo.data[0].Birth, 'dd/MM/yyyy');
-        userInfoRef.current.Email_P = adminInfo.data[0].Email;
-        userInfoRef.current.image = adminInfo.data[0].image;
+      if (infoAccount) {
+        userInfoRef.current.id = infoAccount.id as number;
+        userInfoRef.current.name = infoAccount.first_name as string;
+        userInfoRef.current.SDT = infoAccount.phone as string;
+        userInfoRef.current.Address_P = infoAccount.address as string;
+        userInfoRef.current.Birth = formatStringToDate(infoAccount.birthday as string);
+        userInfoRef.current.Email_P = infoAccount.email as string;
+        userInfoRef.current.image = infoAccount.avatar as FileList;
         setRedraw({});
       }
     }

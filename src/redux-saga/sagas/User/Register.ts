@@ -9,23 +9,46 @@ import { login } from './Login';
 
 const register = (param: any) => {
   console.log(param);
-  return Axios.post(`${BASE_URI}users`, {
-    id: param.email,
-    email: param.email,
-    password: param.password,
-    username: param.username,
-    role: param.role,
-    address: param.address,
-    phone: param.hone,
-  })
-    .then((res) => {
-      login({
-        username: param.email,
-        password: param.password,
-      });
-      return res;
+  if (param.role === 2) {
+    return Axios.post(`${BASE_URI}users`, {
+      id: param.email,
+      email: param.email,
+      password: param.password,
+      username: param.username,
+      role: param.role,
+      address: param.address,
+      phone: param.phone,
     })
-    .catch((error) => console.log(error));
+      .then((res) => {
+        login({
+          username: param.email,
+          password: param.password,
+        });
+        return res;
+      })
+      .catch((error) => console.log(error));
+  } else {
+    return Axios.post(`${BASE_URI}users`, {
+      id: param.email,
+      email: param.email,
+      password: param.password,
+      username: param.username,
+      role: param.role,
+      address: param.address,
+      phone: param.hone,
+      nameR: param.nameR,
+      idNo: param.idNo,
+      type: param.type,
+    })
+      .then((res) => {
+        login({
+          username: param.email,
+          password: param.password,
+        });
+        return res;
+      })
+      .catch((error) => console.log(error));
+  }
 };
 
 const updateInfoUser = async (param: any) => {

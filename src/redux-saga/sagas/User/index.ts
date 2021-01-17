@@ -1,4 +1,9 @@
-import { watchLogin as login, watchLoginAdmin as loginAdmin, watchGetInfo as getInfoAccount } from './Login';
+import {
+  watchLogin as login,
+  watchLoginAdmin as loginAdmin,
+  watchGetInfo as getInfoAccount,
+  watchLoginForm as loginForm,
+} from './Login';
 import {
   watchRegister as register,
   watchUpdateInfoUser as updateInfoUser,
@@ -30,4 +35,5 @@ export {
   queryShopList,
   order,
   getInfoAccount,
+  loginForm,
 };

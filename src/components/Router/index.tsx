@@ -89,7 +89,7 @@ const Router = React.memo(() => {
           />
           <Route path="/food/:id" component={FoodDetail} />
           <Route path="/category/:id" render={() => <RestaurantFilter type="FOOD" />} />
-          <Route path="/filter" render={() => <RestaurantFilterChat type="FILTER" />} />
+          <Route path="/filter/:arr" render={() => <RestaurantFilterChat type="FILTER" />} />
           <Route path="/res-list" component={RestaurantList} />
           <Route path="/shop/:id" component={ShopDetail} />
           <Route

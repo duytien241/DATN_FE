@@ -9,6 +9,7 @@ import Footer from 'components/Footer';
 import { Obj } from 'interfaces/common';
 import ShopCard from 'components/ShopCard';
 import ReactPaginate from 'react-paginate';
+import { useParams } from 'react-router';
 // import { searchRestaurantName } from './actions';
 
 interface RestaurantListProps {
@@ -21,7 +22,8 @@ export default (props: RestaurantListProps) => {
   const listDistrict = useSelector((state: State) => state.listDistrict);
   const shopListCategory = useSelector((state: State) => state.shopListCategory);
   const [, redraw] = useState();
-
+  const { arr } = useParams<{ arr: string }>();
+  console.log(arr);
   const ref = useRef<{
     shopListCategory?: Obj[];
     listCategory?: Obj[];

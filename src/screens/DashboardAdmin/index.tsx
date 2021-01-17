@@ -6,9 +6,8 @@ import { Segment } from 'semantic-ui-react';
 import styles from './styles.scss';
 
 const menus = [
-  { title: 'Danh sách đăng ký bán hàng chờ duyệt', target: 'manage_shop_pending_list', isLeaf: true },
-  { title: 'Quản lý danh sách đăng ký bán hàng', target: 'manage_shop_list', isLeaf: true },
-  { title: 'Quản lý khách đăng ký', target: 'manage_cus_list', isLeaf: true },
+  { title: 'Quản lý cửa hàng', target: 'manage_shop_list', isLeaf: true },
+  { title: 'Quản lý khách hàng', target: 'manage_cus_list', isLeaf: true },
   { title: 'Thông tin tài khoản', target: 'admin_info', isLeaf: true },
   { title: 'Đăng xuất', target: 'log_out', isLeaf: true },
 ];
